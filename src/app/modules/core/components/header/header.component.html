@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light" style="background: #76227D">
+<nav class="navbar navbar-expand-lg navbar-light" style="background: var(--primary-purple)">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/home">
       <img src="/aurorumclinic.png" width="50" height="50" class="d-inline-block align-top" alt="brand-logo">
       <span class="ms-2 text-white">Aurorum Clinic</span>
     </a>
@@ -10,23 +10,28 @@
     <div class="collapse navbar-collapse text-white" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-          <a class="nav-link d-flex align-items-center text-white" href="#">
+          <a *ngIf="user" class="nav-link d-flex align-items-center text-white" href="#">
             <mat-icon fontIcon="notifications" class="d-none d-lg-inline"></mat-icon>
             <span class="d-inline d-lg-none w-100 text-center">Notifications</span>
           </a>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" role="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <li *ngIf="user" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center text-white" role="button" id="accountDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
             <mat-icon fontIcon="account_box" class="d-none d-lg-inline"></mat-icon>
             <span class="d-inline d-lg-none w-100 text-center">Account</span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdown">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
+          <ul class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+            <li><a class="dropdown-item" href="/home">Profile</a></li>
+            <li><a class="dropdown-item" href="/home">Settings</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Log out</a></li>
+            <li><a class="dropdown-item" routerLink="/home" (click)="logout()" >Log out</a></li>
           </ul>
         </li>
+
+        <a *ngIf="!user" routerLink="/auth/login" class="nav-link d-flex align-items-center text-white" role="button" id="accountDropdownGuest" aria-expanded="false">
+          <mat-icon fontIcon="account_box" class="d-none d-lg-inline"></mat-icon>
+          <span class="d-inline d-lg-none w-100 text-center">Login</span>
+        </a>
       </ul>
 
     </div>
