@@ -1,8 +1,19 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 
-import { routes } from './app.routes';
+import { APP_ROUTES } from './app.routes';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { spinnerInterceptor } from './modules/core/interceptors/spinner.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [
+    importProvidersFrom(
+      BrowserAnimationsModule,
+    ),
+    provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
+    provideHttpClient(withInterceptors([spinnerInterceptor])),
+    {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
+  ]
 };

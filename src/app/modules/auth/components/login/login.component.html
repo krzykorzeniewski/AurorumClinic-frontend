@@ -1,0 +1,38 @@
+<div class="container d-flex align-items-center pt-5">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <h2 class="text-center mb-4">Zaloguj</h2>
+    <form class="d-flex flex-column align-items-center " [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input id="email-aurorum" matInput placeholder="jan.kowalski@przyklad.com" [formControl]="controls.email" (blur)="updateErrorMessageEmail()" required />
+          @if (controls.email.invalid) {
+            <mat-error>{{ errorMessageEmail() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Hasło</mat-label>
+          <input matInput id="password-aurorum" [type]="hidePassword() ? 'password' : 'text'" [formControl]="controls.password" (blur)="updateErrorMessagePassword()" required />
+          <button mat-icon-button matSuffix (click)="clickEventPassword($event)" [attr.aria-label]="'Ukryj hasło'" [attr.aria-pressed]="hidePassword()">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (controls.password.invalid) {
+            <mat-error>{{ errorMessagePassword() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-5 w-75 d-flex justify-content-end">
+        <a href="#" class="text-decoration-none text-dark">ZAPOMNIAŁEM HASŁA</a>
+      </div>
+      <div class="mb-3">
+        <button mat-flat-button type="submit" [disabled]="loginForm.invalid"
+                class="btn text-white border-0" style="background-color: var(--primary-purple)">Zaloguj się</button>
+      </div>
+      <div class="text-center">
+        <p class="mb-0">Nie masz konta? <a class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" routerLink="/auth/register">Załóż konto</a></p>
+      </div>
+    </form>
+  </div>
+</div>
