@@ -38,8 +38,7 @@ export class LoginComponent{
     email: new FormControl('', {
       validators: [
         Validators.email,
-        Validators.minLength(5),
-        Validators.maxLength(40),
+        Validators.maxLength(100),
         Validators.required
       ],
       nonNullable: true,

@@ -1,1 +1,88 @@
-<p>register works!</p>
+<div class="container d-flex align-items-center pt-5">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <h2 class="text-center mb-4">Załóż konto</h2>
+    <form class="d-flex flex-column align-items-center " [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię pacjenta</mat-label>
+          <input
+            id="firstname-patient-aurorum"
+            matInput
+            placeholder="Jan"
+            [formControl]="controls.firstName" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nazwisko pacjenta</mat-label>
+          <input
+            id="surname-patient-aurorum"
+            matInput
+            placeholder="Kowalski"
+            [formControl]="controls.surname" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>E-mail</mat-label>
+          <input
+            id="email-patient-aurorum"
+            matInput
+            placeholder="jan.kowalski@example.com"
+            [formControl]="controls.email" required />
+        </mat-form-field>
+      </div>
+      <div class="w-75 d-flex justify-content-end">
+        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">Nie posiadam PESEL</mat-checkbox>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Pesel</mat-label>
+          <input
+            id="pesel-patient-aurorum"
+            matInput
+            [formControl]="controls.pesel" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Telefon</mat-label>
+          <input
+            id="phone-patient-aurorum"
+            matInput
+            [formControl]="controls.phone" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Hasło</mat-label>
+          <input
+            id="password-patient-aurorum"
+            matInput
+            [formControl]="controls.password" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Powtórzone hasło</mat-label>
+          <input
+            id="password-repeated-patient-aurorum"
+            matInput
+            [formControl]="controls.repeatedPassword" required />
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data urodzenia</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" required />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <button mat-flat-button type="submit" [disabled]="registerForm.invalid"
+                class="btn text-white border-0" style="background-color: var(--primary-purple)">Zarejestruj się</button>
+      </div>
+    </form>
+  </div>
+</div>
