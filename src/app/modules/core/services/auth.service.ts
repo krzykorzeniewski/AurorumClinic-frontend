@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AccessTokenResponse, User, UserLoginDataRequest } from '../models/user.model';
+import { User, UserLoginDataRequest, UserLoginResponse } from '../models/user.model';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
@@ -17,42 +17,49 @@ export class AuthService {
 
   login(userData: UserLoginDataRequest): Observable<User>{
     return this._http
-      .post<AccessTokenResponse>(`${this._apiUrl}/login`, userData)
+      .post<UserLoginResponse>(
+        `${this._apiUrl}/login`,
+        userData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
       .pipe(
-        map((res) =>
-          new User(userData.email, res.accessToken, res.refreshToken)),
-        tap((user) => this.handleAuthentication(user)),
+        map(res => new User(Number.parseInt(res.userId))),
+        tap((user) => this._user.next(user)),
         catchError((err: HttpErrorResponse) => {
-          let errorMsg = "";
-
-          if(err.status === 0 ||err.status >= 500 && err.status < 600){
-            errorMsg = "Wystąpił błąd. Proszę spróbować później"
+          let errorMsg = '';
+          if(err.status === 0 || err.status >= 500 && err.status < 600){
+            errorMsg = 'Wystąpił błąd. Proszę spróbować później';
           } else {
-            errorMsg = "Niepoprawny email lub hasło";
+            errorMsg = 'Niepoprawny email lub hasło';
           }
           return throwError(() => new Error(errorMsg));
         })
     );
   }
 
-  private handleAuthentication(user: User) {
-    localStorage.setItem('user', JSON.stringify({
-      email: user.email,
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken
-    }));
-    this._user.next(user);
-  }
-
-  autoLogin() {
-    const userData = localStorage.getItem('user');
-    if (!userData) return;
-
-    const userJson = JSON.parse(userData);
-    const user =
-      new User(userJson.email, userJson.accessToken, userJson.refreshToken);
-
-    this._user.next(user);
+  autoLogin(): Observable<User | null> {
+    return this._http
+      .post<UserLoginResponse>(`${this._apiUrl}/refresh`, {},
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+        )
+      .pipe(
+        map(res => new User(Number.parseInt(res.userId))),
+        tap(user => this._user.next(user)),
+        catchError(() => {
+          this._user.next(null);
+          return throwError(() => new Error("Wystąpił błąd. Proszę spróbować później"));
+        })
+      );
   }
 
   isLoggedIn(): boolean {
@@ -60,7 +67,6 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('user');
     this._user.next(null);
     this._router.navigate(['/auth/login']);
   }
