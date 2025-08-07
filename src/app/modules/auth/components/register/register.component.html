@@ -9,7 +9,10 @@
             id="firstname-patient-aurorum"
             matInput
             placeholder="Jan"
-            [formControl]="controls.firstName" required />
+            [formControl]="controls.firstName" />
+          @if (controls.firstName.invalid) {
+            <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3 w-75">
@@ -19,7 +22,10 @@
             id="surname-patient-aurorum"
             matInput
             placeholder="Kowalski"
-            [formControl]="controls.surname" required />
+            [formControl]="controls.surname" />
+          @if (controls.surname.invalid) {
+            <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3 w-75">
@@ -29,11 +35,16 @@
             id="email-patient-aurorum"
             matInput
             placeholder="jan.kowalski@example.com"
-            [formControl]="controls.email" required />
+            [formControl]="controls.email" />
+          @if (controls.email.invalid) {
+            <mat-error>{{ getErrorMessage(controls.email) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="w-75 d-flex justify-content-end">
-        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">Nie posiadam PESEL</mat-checkbox>
+        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">
+          Nie posiadam PESEL
+        </mat-checkbox>
       </div>
       <div class="mb-3 w-75">
         <mat-form-field appearance="outline" class="w-100">
@@ -41,7 +52,11 @@
           <input
             id="pesel-patient-aurorum"
             matInput
-            [formControl]="controls.pesel" required />
+            autocomplete="off"
+            [formControl]="controls.pesel" />
+          @if (hasPesel() && controls.pesel.invalid) {
+            <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3 w-75">
@@ -50,7 +65,10 @@
           <input
             id="phone-patient-aurorum"
             matInput
-            [formControl]="controls.phone" required />
+            [formControl]="controls.phone" />
+          @if (controls.phone.invalid) {
+            <mat-error>{{ getErrorMessage(controls.phone) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3 w-75">
@@ -59,7 +77,15 @@
           <input
             id="password-patient-aurorum"
             matInput
-            [formControl]="controls.password" required />
+            autocomplete="off"
+            [type]="hidePassword() ? 'password' : 'text'"
+            [formControl]="controls.password" />
+          <button mat-icon-button matSuffix type="button" (click)="clickEventPassword($event)" [attr.aria-label]="'Ukryj hasło'" [attr.aria-pressed]="hidePassword()">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (controls.password.invalid) {
+            <mat-error>{{ getErrorMessage(controls.password) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3 w-75">
@@ -68,15 +94,23 @@
           <input
             id="password-repeated-patient-aurorum"
             matInput
-            [formControl]="controls.repeatedPassword" required />
+            autocomplete="off"
+            [type]="hidePassword() ? 'password' : 'text'"
+            [formControl]="controls.repeatedPassword" />
+            @if (controls.repeatedPassword.invalid) {
+            <mat-error>{{ getErrorMessage(controls.repeatedPassword) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-1 w-75">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Data urodzenia</mat-label>
-          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" required />
+          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" />
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          @if (controls.birthdate.invalid) {
+            <mat-error>{{ getErrorMessage(controls.birthdate) }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="mb-3">

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { User, UserLoginDataRequest, UserLoginResponse } from '../models/user.model';
+import { User, UserLoginDataRequest, UserLoginResponse, UserRegisterRequest } from '../models/user.model';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
@@ -62,13 +62,27 @@ export class AuthService {
       );
   }
 
-  isLoggedIn(): boolean {
-    return !!this._user.getValue();
-  }
-
   logout() {
     this._user.next(null);
     this._router.navigate(['/auth/login']);
+  }
+
+  registerPatient(patientData: UserRegisterRequest): Observable<void>{
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/register-patient`,
+        patientData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  }
+
+  isLoggedIn(): boolean {
+    return !!this._user.getValue();
   }
 
   get user(): BehaviorSubject<User | null> {

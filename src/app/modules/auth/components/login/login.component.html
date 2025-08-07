@@ -5,21 +5,21 @@
       <div class="mb-3 w-75">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
-          <input id="email-aurorum" matInput placeholder="jan.kowalski@przyklad.com" [formControl]="controls.email" (blur)="updateErrorMessageEmail()" required />
+          <input id="email-aurorum" matInput placeholder="jan.kowalski@przyklad.com" [formControl]="controls.email" />
           @if (controls.email.invalid) {
-            <mat-error>{{ errorMessageEmail() }}</mat-error>
+            <mat-error>{{ getErrorMessage(controls.email) }}</mat-error>
           }
         </mat-form-field>
       </div>
       <div class="mb-1 w-75">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Hasło</mat-label>
-          <input matInput id="password-aurorum" [type]="hidePassword() ? 'password' : 'text'" [formControl]="controls.password" (blur)="updateErrorMessagePassword()" required />
+          <input matInput id="password-aurorum" [type]="hidePassword() ? 'password' : 'text'" [formControl]="controls.password" />
           <button mat-icon-button matSuffix type="button" (click)="clickEventPassword($event)" [attr.aria-label]="'Ukryj hasło'" [attr.aria-pressed]="hidePassword()">
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (controls.password.invalid) {
-            <mat-error>{{ errorMessagePassword() }}</mat-error>
+            <mat-error>{{ getErrorMessage(controls.password) }}</mat-error>
           }
         </mat-form-field>
       </div>

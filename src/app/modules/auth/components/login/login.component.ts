@@ -9,6 +9,7 @@ import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/but
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsService } from '../../../core/services/forms.service';
 
 @Component({
   selector: 'app-login',
@@ -44,41 +45,20 @@ export class LoginComponent{
       nonNullable: true,
     }),
     password: new FormControl('', {
-      validators: [Validators.required],
+      validators: [
+        Validators.maxLength(200),
+        Validators.required
+      ],
       nonNullable: true,
     }),
   });
   private _authService = inject(AuthService);
   private _router = inject(Router);
-  errorMessageEmail = signal('');
-  errorMessagePassword = signal('');
+  private _formService = inject(FormsService);
   hidePassword = signal(true);
 
-  constructor() {
-    merge(this.controls.email.statusChanges, this.controls.email.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessageEmail());
-    merge(this.controls.password.statusChanges, this.controls.password.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessagePassword());
-  }
-
-  updateErrorMessageEmail() {
-    if (this.controls.email.hasError('required')) {
-      this.errorMessageEmail.set('Adres email jest wymagany');
-    } else if (this.controls.email.hasError('email')) {
-      this.errorMessageEmail.set('Niepoprawny email');
-    } else {
-      this.errorMessageEmail.set('');
-    }
-  }
-
-  updateErrorMessagePassword() {
-    if (this.controls.password.hasError('required')) {
-      this.errorMessagePassword.set('Hasło jest wymagane');
-    } else {
-      this.errorMessagePassword.set('');
-    }
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
   }
 
   clickEventPassword(event: MouseEvent) {

@@ -1,19 +1,18 @@
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { dateValidator } from '../../../shared/validators/date.validator';
 import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerModule,
-  MatDatepickerToggle
-} from '@angular/material/datepicker';
-import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { merge } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsService } from '../../../core/services/forms.service';
+import { passwordRepeatValidator } from '../../../shared/validators/password-repeat.validator';
+import { phoneValidator } from '../../../shared/validators/phone.validator';
+import { MatIcon } from '@angular/material/icon';
+import { UserRegisterRequest } from '../../../core/models/user.model';
+import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -27,7 +26,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatCheckbox,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatIconButton,
+    MatIcon,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
@@ -61,14 +62,14 @@ export class RegisterComponent {
       validators: [
         Validators.minLength(11),
         Validators.maxLength(11),
+        Validators.required
       ],
       nonNullable: false
     }),
     phone: new FormControl('', {
       validators: [
-        Validators.email,
-        Validators.maxLength(11),
-        Validators.required
+        Validators.required,
+        phoneValidator()
       ],
       nonNullable: true
     }),
@@ -86,27 +87,71 @@ export class RegisterComponent {
       ],
       nonNullable: true
     }),
-    birthdate: new FormControl('', {
+    birthdate: new FormControl<Date | null>(null, {
       validators: [
         dateValidator(),
         Validators.required
       ],
       nonNullable: true
     }),
-  });
-  hasPesel: WritableSignal<boolean> = signal(true);
+  },
+    { validators: passwordRepeatValidator() }
+  );
+  protected hasPesel: WritableSignal<boolean> = signal(true);
+  private _formService = inject(FormsService);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+  hidePassword = signal(true);
+
 
   onRegister(): void {
-    console.log('onRegister');
+    const formValue = this.registerForm.value;
+
+    const userData: UserRegisterRequest = {
+      name: formValue.firstName!,
+      surname: formValue.surname!,
+      pesel: formValue.pesel || null,
+      birthDate: formValue.birthdate!.toISOString().split('T')[0],
+      email: formValue.email!,
+      password: formValue.password!,
+      phoneNumber: formValue.phone!
+    };
+
+    this._authService.registerPatient(userData).subscribe({
+      next: () => {
+        this._router.navigate(["/auth/login"]);
+      },
+      error: (err) => console.log('REGISTER' + err),
+    });
+
+  }
+
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
+  }
+
+  clickEventPassword(event: MouseEvent) {
+    this.hidePassword.set(!this.hidePassword());
+    event.stopPropagation();
   }
 
   peselCheckbox(): void {
     this.hasPesel.set(!this.hasPesel());
+    const peselControl = this.registerForm.controls['pesel'];
+
     if (!this.hasPesel()){
-      this.registerForm.controls['pesel'].disable();
+      peselControl.disable();
+      peselControl.clearValidators();
     } else {
-      this.registerForm.controls['pesel'].enable();
+      peselControl.enable();
+      peselControl.setValidators([
+        Validators.minLength(11),
+        Validators.maxLength(11),
+        Validators.required
+      ]);
     }
+
+    peselControl.updateValueAndValidity();
   }
 
   get controls() {

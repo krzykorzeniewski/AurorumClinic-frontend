@@ -7,13 +7,13 @@ export function dateValidator(): ValidatorFn {
 
     const date = new Date(value);
     if (isNaN(date.getTime())) {
-      return { invalidDate: 'Niepoprawna data' };
+      return { invalidDate: true };
     }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (date > today) {
-      return { futureDate: 'Data urodzenia nie może być w przyszłości' };
+      return { futureDate: true };
     }
 
     return null;
