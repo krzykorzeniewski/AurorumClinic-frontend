@@ -78,6 +78,11 @@ export class AuthService {
             'Content-Type': 'application/json'
           }
         }
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
+        })
       );
   }
 

@@ -13,6 +13,8 @@ import { MatIcon } from '@angular/material/icon';
 import { UserRegisterRequest } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -29,6 +31,8 @@ import { Router } from '@angular/router';
     MatDatepickerModule,
     MatIconButton,
     MatIcon,
+    AlertComponent,
+    NgIf
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
@@ -102,6 +106,7 @@ export class RegisterComponent {
   private _authService = inject(AuthService);
   private _router = inject(Router);
   hidePassword = signal(true);
+  errorMessage = signal('');
 
 
   onRegister(): void {
@@ -121,7 +126,9 @@ export class RegisterComponent {
       next: () => {
         this._router.navigate(["/auth/login"]);
       },
-      error: (err) => console.log('REGISTER' + err),
+      error: (err) => {
+        this.errorMessage.set(err.message);
+      },
     });
 
   }
