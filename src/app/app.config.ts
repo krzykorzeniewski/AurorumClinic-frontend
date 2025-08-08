@@ -4,7 +4,7 @@ import { PreloadAllModules, provideRouter, withPreloading } from '@angular/route
 import { APP_ROUTES } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { spinnerInterceptor } from './modules/core/interceptors/spinner.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -14,6 +14,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([spinnerInterceptor])),
+    provideNativeDateAdapter(),
     {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
   ]
 };

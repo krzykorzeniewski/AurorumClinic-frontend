@@ -3,15 +3,22 @@ export interface UserLoginDataRequest {
   password: string
 }
 
-export interface AccessTokenResponse {
-  accessToken: string,
-  refreshToken: string
+export interface UserLoginResponse {
+  userId: string
 }
 
 export class User {
   constructor(
-    public email: string,
-    public accessToken: string,
-    public refreshToken: string
+    public userId: number,
   ) {}
+}
+
+export interface UserRegisterRequest {
+  name: string,
+  surname: string,
+  pesel: string | null,
+  birthDate: string,
+  email: string,
+  password: string,
+  phoneNumber: string
 }

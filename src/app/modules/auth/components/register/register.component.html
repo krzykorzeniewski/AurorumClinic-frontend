@@ -1,0 +1,123 @@
+<div class="container d-flex align-items-center pt-5">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <h2 class="text-center mb-4">Załóż konto</h2>
+    <form class="d-flex flex-column align-items-center " [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię pacjenta</mat-label>
+          <input
+            id="firstname-patient-aurorum"
+            matInput
+            placeholder="Jan"
+            [formControl]="controls.firstName" />
+          @if (controls.firstName.invalid) {
+            <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nazwisko pacjenta</mat-label>
+          <input
+            id="surname-patient-aurorum"
+            matInput
+            placeholder="Kowalski"
+            [formControl]="controls.surname" />
+          @if (controls.surname.invalid) {
+            <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>E-mail</mat-label>
+          <input
+            id="email-patient-aurorum"
+            matInput
+            placeholder="jan.kowalski@example.com"
+            [formControl]="controls.email" />
+          @if (controls.email.invalid) {
+            <mat-error>{{ getErrorMessage(controls.email) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="w-75 d-flex justify-content-end">
+        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">
+          Nie posiadam PESEL
+        </mat-checkbox>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Pesel</mat-label>
+          <input
+            id="pesel-patient-aurorum"
+            matInput
+            autocomplete="off"
+            [formControl]="controls.pesel" />
+          @if (hasPesel() && controls.pesel.invalid) {
+            <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Telefon</mat-label>
+          <input
+            id="phone-patient-aurorum"
+            matInput
+            [formControl]="controls.phone" />
+          @if (controls.phone.invalid) {
+            <mat-error>{{ getErrorMessage(controls.phone) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Hasło</mat-label>
+          <input
+            id="password-patient-aurorum"
+            matInput
+            autocomplete="off"
+            [type]="hidePassword() ? 'password' : 'text'"
+            [formControl]="controls.password" />
+          <button mat-icon-button matSuffix type="button" (click)="clickEventPassword($event)" [attr.aria-label]="'Ukryj hasło'" [attr.aria-pressed]="hidePassword()">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (controls.password.invalid) {
+            <mat-error>{{ getErrorMessage(controls.password) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Powtórzone hasło</mat-label>
+          <input
+            id="password-repeated-patient-aurorum"
+            matInput
+            autocomplete="off"
+            [type]="hidePassword() ? 'password' : 'text'"
+            [formControl]="controls.repeatedPassword" />
+            @if (controls.repeatedPassword.invalid) {
+            <mat-error>{{ getErrorMessage(controls.repeatedPassword) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data urodzenia</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (controls.birthdate.invalid) {
+            <mat-error>{{ getErrorMessage(controls.birthdate) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <app-alert class="mt-3 w-75" *ngIf="errorMessage()" [text]="errorMessage()"></app-alert>
+      <div class="mt-3 mb-3">
+        <button mat-flat-button type="submit" [disabled]="registerForm.invalid"
+                class="btn text-white border-0" style="background-color: var(--primary-purple)">Zarejestruj się</button>
+      </div>
+    </form>
+  </div>
+</div>

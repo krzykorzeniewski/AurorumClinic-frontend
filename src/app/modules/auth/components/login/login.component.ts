@@ -9,6 +9,9 @@ import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/but
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsService } from '../../../core/services/forms.service';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +29,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    AlertComponent,
+    NgIf
   ],
   standalone: true,
   templateUrl: './login.component.html',
@@ -38,48 +43,27 @@ export class LoginComponent{
     email: new FormControl('', {
       validators: [
         Validators.email,
-        Validators.minLength(5),
-        Validators.maxLength(40),
+        Validators.maxLength(100),
         Validators.required
       ],
       nonNullable: true,
     }),
     password: new FormControl('', {
-      validators: [Validators.required],
+      validators: [
+        Validators.maxLength(200),
+        Validators.required
+      ],
       nonNullable: true,
     }),
   });
   private _authService = inject(AuthService);
   private _router = inject(Router);
-  errorMessageEmail = signal('');
-  errorMessagePassword = signal('');
+  private _formService = inject(FormsService);
   hidePassword = signal(true);
+  errorMessage = signal('');
 
-  constructor() {
-    merge(this.controls.email.statusChanges, this.controls.email.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessageEmail());
-    merge(this.controls.password.statusChanges, this.controls.password.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessagePassword());
-  }
-
-  updateErrorMessageEmail() {
-    if (this.controls.email.hasError('required')) {
-      this.errorMessageEmail.set('Adres email jest wymagany');
-    } else if (this.controls.email.hasError('email')) {
-      this.errorMessageEmail.set('Niepoprawny email');
-    } else {
-      this.errorMessageEmail.set('');
-    }
-  }
-
-  updateErrorMessagePassword() {
-    if (this.controls.password.hasError('required')) {
-      this.errorMessagePassword.set('Hasło jest wymagane');
-    } else {
-      this.errorMessagePassword.set('');
-    }
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
   }
 
   clickEventPassword(event: MouseEvent) {
@@ -95,11 +79,12 @@ export class LoginComponent{
     const userData: UserLoginDataRequest = this.loginForm.value as UserLoginDataRequest;
 
     this._authService.login(userData).subscribe({
-      next: (user) => {
-        console.log(user);
+      next: () => {
         this._router.navigate(["/home"]);
       },
-      error: (err) => console.log(err),
+      error: (err) => {
+        this.errorMessage.set(err.message);
+      },
     });
   }
 }
