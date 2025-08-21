@@ -7,7 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class NewsletterService {
-  private _apiUrl = environment.apiUrl + "/";
+  private _apiUrl = environment.apiUrl;
   private _http = inject(HttpClient);
 
   signup(email: string): Observable<void> {

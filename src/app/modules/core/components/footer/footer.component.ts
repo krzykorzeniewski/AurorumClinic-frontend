@@ -48,6 +48,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   signup(){
+    if(this.email.value === '') return;
     this.isButtonClicked = true;
     this._newsletterService.signup(this.email.value)
       .pipe(finalize(() =>{
