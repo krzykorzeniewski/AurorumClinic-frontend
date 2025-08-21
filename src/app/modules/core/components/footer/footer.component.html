@@ -1,36 +1,70 @@
 <div class="container-fluid">
-  <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 pt-3 mt-4 border-top">
-    <div class="col mb-3">
+  <footer class="row pt-3 mt-4 border-top">
+    <div class="col-12 col-sm-6 col-md-3 mb-4">
       <h5>Dane kontaktowe</h5>
       <ul class="nav flex-column">
-        <li class="nav-item">
+        <li class="mb-1">
           <span class="text-body-secondary">ul. Stefana Żeromskiego 100</span>
         </li>
-        <li class="nav-item">
+        <li class="mb-1">
           <span class="text-body-secondary">00-123 Warszawa, Polska</span>
         </li>
-        <li class="nav-item">
+        <li class="mb-1">
           <span class="text-body-secondary">+48 123 456 789</span>
         </li>
       </ul>
     </div>
-    <div class="col mb-3">
+    <div class="col-12 col-sm-6 col-md-2 mb-4">
       <h5>Serwis</h5>
       <ul class="nav flex-column">
-        <li class="nav-item">
+        <li class="nav-item mb-1">
           <span class="text-body-secondary">Polityka prywatności</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mb-1">
           <span class="text-body-secondary">Cookies</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mb-1">
           <span class="text-body-secondary">Regulamin</span>
         </li>
       </ul>
     </div>
-    <div class="col mb-3"></div>
-    <div class="col mb-3"></div>
-    <div class="col mb-3">
+    <div class="col-12 col-md-5 mb-3">
+      <form (ngSubmit)="signup()" class="row gx-2 gy-0">
+        <div class="col">
+          <mat-form-field appearance="outline" class="w-100 mb-0">
+            <mat-label>Zapisz się do newslettera!</mat-label>
+            <input
+              id="newsletter-signup-user"
+              matInput
+              placeholder="jan.kowalski@example.com"
+              #newsletterSignup
+              [formControl]="email"
+            />
+            <mat-error *ngIf="email.invalid">
+              {{ getErrorMessage(email) }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-auto">
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="email.invalid || email.pristine"
+            class="btn text-white border-0"
+            style="background-color: var(--primary-purple); height: 40px; padding: 0 20px; margin-top: 7px">
+            Zapisz się
+          </button>
+        </div>
+      </form>
+      <div
+        *ngIf="message()"
+        class="alert alert-warning"
+        role="alert"
+        style="padding: 0.3rem 0.3rem; font-size: 0.75rem; text-align: center;"
+      >
+        {{ message() }}
+      </div>
     </div>
+    <div class="col-12 col-sm-6 col-md-2 mb-4"></div>
   </footer>
 </div>
