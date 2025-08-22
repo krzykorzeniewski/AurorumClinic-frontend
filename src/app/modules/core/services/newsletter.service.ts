@@ -7,12 +7,17 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class NewsletterService {
-  private _apiUrl = environment.apiUrl;
+  private _apiUrl = environment.apiUrl + '/newsletter';
   private _http = inject(HttpClient);
 
   signup(email: string): Observable<void> {
     return this._http
-      .post<void>(`${this._apiUrl}/subscribe`, { email })
+      .post<void>(`${this._apiUrl}/subscribe`, { email },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }})
       .pipe(
         catchError(() => {
           return throwError(() =>

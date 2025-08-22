@@ -10,7 +10,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 })
 export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
-  private _apiUrl = environment.apiUrl + "/users";
+  private _apiUrl = environment.apiUrl + "/auth";
   private _http = inject(HttpClient);
   private _router = inject(Router);
 

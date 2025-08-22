@@ -73,6 +73,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   private clearErrorAfterSend(){
     timer(5000).subscribe(() => {
       this.clearErrors();
+      this.isButtonClicked = false;
     })
   }
 
