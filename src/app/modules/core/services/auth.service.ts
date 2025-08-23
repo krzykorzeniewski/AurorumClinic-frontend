@@ -1,5 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { User, UserLoginDataRequest, UserLoginResponse, UserRegisterRequest } from '../models/user.model';
+import {
+  User,
+  UserLoginDataRequest,
+  UserLoginResponse,
+  UserPasswordRecoverEmail,
+  UserPasswordResetRequest,
+  UserRegisterRequest
+} from '../models/user.model';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
@@ -62,11 +69,6 @@ export class AuthService {
       );
   }
 
-  logout() {
-    this._user.next(null);
-    this._router.navigate(['/auth/login']);
-  }
-
   registerPatient(patientData: UserRegisterRequest): Observable<void>{
     return this._http
       .post<void>(
@@ -84,6 +86,37 @@ export class AuthService {
           return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
         })
       );
+  }
+
+  resetPassword(email: UserPasswordRecoverEmail): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/reset-password-token`,
+        email
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
+        })
+      );
+  }
+
+  changePassword(passwordData: UserPasswordResetRequest): Observable<void>{
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/reset-password`,
+        passwordData
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
+        })
+      );
+  }
+
+  logout() {
+    this._user.next(null);
+    this._router.navigate(['/auth/login']);
   }
 
   isLoggedIn(): boolean {
