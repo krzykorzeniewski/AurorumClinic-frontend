@@ -6,8 +6,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { merge } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsService } from '../../../core/services/forms.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
@@ -62,19 +60,6 @@ export class LoginComponent{
   hidePassword = signal(true);
   errorMessage = signal('');
 
-  getErrorMessage(control: FormControl) {
-    return this._formService.getErrorMessage(control);
-  }
-
-  clickEventPassword(event: MouseEvent) {
-    this.hidePassword.set(!this.hidePassword());
-    event.stopPropagation();
-  }
-
-  get controls() {
-    return this.loginForm.controls;
-  }
-
   onLogin(): void{
     const userData: UserLoginDataRequest = this.loginForm.value as UserLoginDataRequest;
 
@@ -86,5 +71,18 @@ export class LoginComponent{
         this.errorMessage.set(err.message);
       },
     });
+  }
+
+  clickEventPassword(event: MouseEvent) {
+    this.hidePassword.set(!this.hidePassword());
+    event.stopPropagation();
+  }
+
+  get controls() {
+    return this.loginForm.controls;
+  }
+
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
   }
 }

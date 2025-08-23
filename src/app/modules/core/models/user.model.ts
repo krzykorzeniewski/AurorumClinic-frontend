@@ -22,3 +22,12 @@ export interface UserRegisterRequest {
   password: string,
   phoneNumber: string
 }
+
+export interface UserPasswordRecovery {
+  email: string,
+  password: string,
+  repeatedPassword: string
+}
+
+export type UserPasswordRecoverEmail = Omit<UserPasswordRecovery, 'password' | 'repeatedPassword'>;
+export type UserPasswordRecoverPasswords = Omit<UserPasswordRecovery, 'email'>;

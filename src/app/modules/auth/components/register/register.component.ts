@@ -133,15 +133,6 @@ export class RegisterComponent {
 
   }
 
-  getErrorMessage(control: FormControl) {
-    return this._formService.getErrorMessage(control);
-  }
-
-  clickEventPassword(event: MouseEvent) {
-    this.hidePassword.set(!this.hidePassword());
-    event.stopPropagation();
-  }
-
   peselCheckbox(): void {
     this.hasPesel.set(!this.hasPesel());
     const peselControl = this.registerForm.controls['pesel'];
@@ -159,6 +150,15 @@ export class RegisterComponent {
     }
 
     peselControl.updateValueAndValidity();
+  }
+
+  clickEventPassword(event: MouseEvent) {
+    this.hidePassword.set(!this.hidePassword());
+    event.stopPropagation();
+  }
+
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
   }
 
   get controls() {
