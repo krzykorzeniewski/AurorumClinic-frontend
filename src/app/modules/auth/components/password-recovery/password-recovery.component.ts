@@ -47,7 +47,6 @@ export class PasswordRecoveryComponent {
     const userData: UserPasswordRecoverEmail = {
       email: this.email.value
     };
-    console.log(userData);
 
     this._authService.resetPassword(userData)
       .subscribe({
