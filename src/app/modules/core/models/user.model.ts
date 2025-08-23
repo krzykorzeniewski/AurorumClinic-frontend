@@ -4,12 +4,14 @@ export interface UserLoginDataRequest {
 }
 
 export interface UserLoginResponse {
-  userId: string
+  userId: number,
+  twoFactorAuth: boolean
 }
 
-export class User {
+export class User implements UserLoginResponse{
   constructor(
     public userId: number,
+    public twoFactorAuth: boolean
   ) {}
 }
 
@@ -22,16 +24,17 @@ export interface UserRegisterRequest {
   password: string,
   phoneNumber: string
 }
-
-export interface UserPasswordRecovery {
+export interface UserPasswordRecoverEmailRequest  {
   email: string,
-  password: string,
-  repeatedPassword: string
 }
-
-export type UserPasswordRecoverEmail = Omit<UserPasswordRecovery, 'password' | 'repeatedPassword'>;
 
 export interface UserPasswordResetRequest {
   token: string | null,
   password: string
+}
+
+export interface ApiResponse<T> {
+  status: string;
+  data: T;
+  message?: string;
 }

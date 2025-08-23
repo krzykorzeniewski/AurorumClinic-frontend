@@ -6,7 +6,7 @@ import { NgIf } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsService } from '../../../core/services/forms.service';
-import { UserPasswordRecoverEmail } from '../../../core/models/user.model';
+import { UserPasswordRecoverEmailRequest } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { timer } from 'rxjs';
 
@@ -44,7 +44,7 @@ export class PasswordRecoveryComponent {
   message = signal('');
 
   onRecover() {
-    const userData: UserPasswordRecoverEmail = {
+    const userData: UserPasswordRecoverEmailRequest = {
       email: this.email.value
     };
 

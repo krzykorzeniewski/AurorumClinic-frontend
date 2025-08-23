@@ -1,15 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  ApiResponse,
   User,
   UserLoginDataRequest,
   UserLoginResponse,
-  UserPasswordRecoverEmail,
+  UserPasswordRecoverEmailRequest,
   UserPasswordResetRequest,
   UserRegisterRequest
 } from '../models/user.model';
-import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
@@ -19,12 +19,10 @@ export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
   private _apiUrl = environment.apiUrl + "/auth";
   private _http = inject(HttpClient);
-  private _router = inject(Router);
-
 
   login(userData: UserLoginDataRequest): Observable<User>{
     return this._http
-      .post<UserLoginResponse>(
+      .post<ApiResponse<UserLoginResponse>>(
         `${this._apiUrl}/login`,
         userData,
         {
@@ -35,8 +33,14 @@ export class AuthService {
         }
       )
       .pipe(
-        map(res => new User(Number.parseInt(res.userId))),
-        tap((user) => this._user.next(user)),
+        map(res => {
+          const data = res.data;
+          return new User(data.userId, data.twoFactorAuth)}
+        ),
+        tap((user) => {
+          this._user.next(user);
+          localStorage.setItem('userId', user.userId.toString());
+        }),
         catchError((err: HttpErrorResponse) => {
           let errorMsg = '';
           if(err.status === 0 || err.status >= 500 && err.status < 600){
@@ -51,7 +55,7 @@ export class AuthService {
 
   autoLogin(): Observable<User | null> {
     return this._http
-      .post<UserLoginResponse>(`${this._apiUrl}/refresh`, {},
+      .post<ApiResponse<UserLoginResponse>>(`${this._apiUrl}/refresh`, {},
         {
           withCredentials: true,
           headers: {
@@ -60,11 +64,15 @@ export class AuthService {
         }
         )
       .pipe(
-        map(res => new User(Number.parseInt(res.userId))),
+        map(res => {
+           const data = res.data;
+          return new User(data.userId, data.twoFactorAuth)
+        }),
         tap(user => this._user.next(user)),
         catchError(() => {
           this._user.next(null);
-          return throwError(() => new Error("Wystąpił błąd. Proszę spróbować później"));
+          localStorage.removeItem('userId');
+          return of(null);
         })
       );
   }
@@ -88,7 +96,7 @@ export class AuthService {
       );
   }
 
-  resetPassword(email: UserPasswordRecoverEmail): Observable<void> {
+  resetPassword(email: UserPasswordRecoverEmailRequest): Observable<void> {
     return this._http
       .post<void>(
         `${this._apiUrl}/reset-password-token`,
@@ -114,16 +122,26 @@ export class AuthService {
       );
   }
 
-  logout() {
-    this._user.next(null);
-    this._router.navigate(['/auth/login']);
+  logout(): Observable<void> {
+    return this._http
+      .get<void>(
+        `${this._apiUrl}/logout`,
+        {
+          withCredentials: true,
+        })
+      .pipe(
+        tap(() => {
+          localStorage.removeItem('userId');
+          this._user.next(null);
+        })
+      );
   }
 
   isLoggedIn(): boolean {
     return !!this._user.getValue();
   }
 
-  get user(): BehaviorSubject<User | null> {
-    return this._user;
+  get user$(): Observable<User | null> {
+    return this._user.asObservable();
   }
 }

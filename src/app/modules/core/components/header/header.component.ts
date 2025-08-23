@@ -26,9 +26,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.checkScreen();
     window.addEventListener('resize', () => this.checkScreen());
-    this._sub = this._authService.user.subscribe({
-      next: (user) => this.user = user
-      });
+    this._sub = this._authService.user$.subscribe(user => this.user = user);
   }
 
   ngAfterViewInit(): void {
@@ -60,7 +58,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   logout() {
-    this._authService.logout();
+    this._authService.logout().subscribe({
+      next: () => {
+        this._router.navigate(['/auth/login']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
