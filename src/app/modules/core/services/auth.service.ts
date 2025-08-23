@@ -91,7 +91,7 @@ export class AuthService {
   resetPassword(email: UserPasswordRecoverEmail): Observable<void> {
     return this._http
       .post<void>(
-        `${this._apiUrl}/reset-password`,
+        `${this._apiUrl}/reset-password-token`,
         { email }
       )
       .pipe(

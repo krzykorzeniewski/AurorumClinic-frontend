@@ -30,7 +30,6 @@ export interface UserPasswordRecovery {
 }
 
 export type UserPasswordRecoverEmail = Omit<UserPasswordRecovery, 'password' | 'repeatedPassword'>;
-export type UserPasswordRecoverPasswords = Omit<UserPasswordRecovery, 'email'>;
 
 export interface UserPasswordResetRequest {
   token: string | null,
