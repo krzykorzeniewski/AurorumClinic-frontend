@@ -92,7 +92,7 @@ export class AuthService {
     return this._http
       .post<void>(
         `${this._apiUrl}/reset-password-token`,
-        { email }
+        email
       )
       .pipe(
         catchError(() => {
@@ -105,7 +105,7 @@ export class AuthService {
     return this._http
       .post<void>(
         `${this._apiUrl}/reset-password`,
-        { passwordData }
+        passwordData
       )
       .pipe(
         catchError(() => {
