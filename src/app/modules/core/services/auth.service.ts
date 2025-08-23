@@ -4,6 +4,7 @@ import {
   UserLoginDataRequest,
   UserLoginResponse,
   UserPasswordRecoverEmail,
+  UserPasswordResetRequest,
   UserRegisterRequest
 } from '../models/user.model';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
@@ -87,11 +88,24 @@ export class AuthService {
       );
   }
 
-  recover(email: UserPasswordRecoverEmail): Observable<void> {
+  resetPassword(email: UserPasswordRecoverEmail): Observable<void> {
     return this._http
       .post<void>(
         `${this._apiUrl}/reset-password`,
         { email }
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
+        })
+      );
+  }
+
+  changePassword(passwordData: UserPasswordResetRequest): Observable<void>{
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/reset-password`,
+        { passwordData }
       )
       .pipe(
         catchError(() => {

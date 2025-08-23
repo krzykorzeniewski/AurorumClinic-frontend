@@ -8,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsService } from '../../../core/services/forms.service';
 import { UserPasswordRecoverEmail } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { finalize, timer } from 'rxjs';
 
 @Component({
   selector: 'app-password-recovery',
@@ -47,14 +48,22 @@ export class PasswordRecoveryComponent {
       email: this.email.value
     };
 
-    this._authService.recover(userData)
+    this._authService.resetPassword(userData)
+      .pipe(finalize(() =>
+        this.informMessageAfterReset()))
       .subscribe({
       next: () => {
-        this._router.navigate(["/home"]);
+        this.message.set('Na podany adres e-mail został wysłany link');
       },
       error: (err) => {
         this.message.set(err.message);
       },
+    });
+  }
+
+  private informMessageAfterReset() {
+    timer(5000).subscribe(() => {
+      this._router.navigate(["/home"]);
     });
   }
 
