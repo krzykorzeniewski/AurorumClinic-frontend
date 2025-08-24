@@ -12,6 +12,7 @@ import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-password-recovery',
+  standalone: true,
   imports: [
     AlertComponent,
     MatButton,
@@ -62,7 +63,7 @@ export class PasswordRecoveryComponent {
 
   private informMessageAfterReset() {
     timer(5000).subscribe(() => {
-      this._router.navigate(["/home"]);
+      void this._router.navigate(["/home"]);
     });
   }
 

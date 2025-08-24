@@ -13,6 +13,7 @@ import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     FormsModule,
@@ -31,7 +32,6 @@ import { NgIf } from '@angular/common';
     AlertComponent,
     NgIf
   ],
-  standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,12 +60,19 @@ export class LoginComponent{
   hidePassword = signal(true);
   errorMessage = signal('');
 
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this.errorMessage.set(navigation.extras.state['message']);
+    }
+  }
+
   onLogin(): void{
     const userData: UserLoginDataRequest = this.loginForm.value as UserLoginDataRequest;
 
     this._authService.login(userData).subscribe({
       next: () => {
-        this._router.navigate(["/home"]);
+        void this._router.navigate(["/home"]);
       },
       error: (err) => {
         this.errorMessage.set(err.message);

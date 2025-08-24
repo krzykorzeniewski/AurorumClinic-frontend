@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   logout() {
     this._authService.logout().subscribe({
       next: () => {
-        this._router.navigate(['/auth/login']);
+        void this._router.navigate(['/auth/login']);
       }
     });
   }

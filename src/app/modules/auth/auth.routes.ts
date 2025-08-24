@@ -13,12 +13,17 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'recover',
-    loadComponent: () =>
+    loadChildren: () =>
       import('./components/password-recovery/password-recovery.component').then((c) => c.PasswordRecoveryComponent),
   },
   {
     path: 'recover/:uid',
-    loadComponent: () =>
+    loadChildren: () =>
       import('./components/password-recovery-form/password-recovery-form.component').then((c) => c.PasswordRecoveryFormComponent),
+  },
+  {
+    path: 'account-activate/:uid',
+    loadComponent: () =>
+      import('./components/account-activation/account-activation.component').then((c) => c.AccountActivationComponent),
   }
 ];

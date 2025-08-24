@@ -6,7 +6,7 @@ import {
   UserLoginResponse,
   UserPasswordRecoverEmailRequest,
   UserPasswordResetRequest,
-  UserRegisterRequest
+  UserRegisterRequest, VerifyEmailTokenRequest
 } from '../models/user.model';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -77,9 +77,22 @@ export class AuthService {
       );
   }
 
+  verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
+    return this._http.post<void>(
+      `${this._apiUrl}/verify-email-token`,
+      request
+    );
+  }
+
+  activateAccount(token: string): Observable<void> {
+    return this._http.get<void>(`${this._apiUrl}/verify-email`, {
+      params: { token }
+    });
+  }
+
   registerPatient(patientData: UserRegisterRequest): Observable<void>{
     return this._http
-      .post<void>(
+      .post<ApiResponse<Record<string, string>>>(
         `${this._apiUrl}/register-patient`,
         patientData,
         {
@@ -90,8 +103,21 @@ export class AuthService {
         }
       )
       .pipe(
-        catchError(() => {
-          return throwError(() => new Error('Wystąpił błąd. Proszę spróbować później'))
+        map(() => {
+          return;
+        }),
+        catchError(err => {
+          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+
+          if (err.error?.status === 'fail') {
+            const failError = Object.values(err.error.data || {})[0];
+            errorMsg = typeof failError === 'string' ? failError : errorMsg;
+          }
+          else if (err.error?.status === 'error') {
+            errorMsg = err.error.message || errorMsg;
+          }
+
+          return throwError(() => new Error(errorMsg));
         })
       );
   }

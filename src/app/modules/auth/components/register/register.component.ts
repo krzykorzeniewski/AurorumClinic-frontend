@@ -122,13 +122,14 @@ export class RegisterComponent {
       phoneNumber: formValue.phone!
     };
 
-    this._authService.registerPatient(userData).subscribe({
+    this._authService.registerPatient(userData)
+    .subscribe({
       next: () => {
-        this._router.navigate(["/auth/login"]);
+          void this._router.navigate(['/auth/login'], {
+            state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
+          });
       },
-      error: (err) => {
-        this.errorMessage.set(err.message);
-      },
+      error: (err) => this.errorMessage.set(err.message)
     });
 
   }
