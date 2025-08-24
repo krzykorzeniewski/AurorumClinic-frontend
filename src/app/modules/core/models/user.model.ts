@@ -33,6 +33,8 @@ export interface UserPasswordResetRequest {
   password: string
 }
 
+export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
+
 export interface ApiResponse<T> {
   status: string;
   data: T;

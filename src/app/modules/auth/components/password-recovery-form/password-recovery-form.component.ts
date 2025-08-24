@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-password-recovery-form',
+  standalone: true,
   imports: [
     AlertComponent,
     MatButton,

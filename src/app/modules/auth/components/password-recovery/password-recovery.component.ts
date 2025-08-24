@@ -12,6 +12,7 @@ import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-password-recovery',
+  standalone: true,
   imports: [
     AlertComponent,
     MatButton,
