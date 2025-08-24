@@ -10,12 +10,12 @@ import { FormsService } from '../../../core/services/forms.service';
 import { passwordRepeatValidator } from '../../../shared/validators/password-repeat.validator';
 import { phoneValidator } from '../../../shared/validators/phone.validator';
 import { MatIcon } from '@angular/material/icon';
-import { UserRegisterRequest, VerifyEmailTokenRequest } from '../../../core/models/user.model';
+import { UserRegisterRequest } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { NgIf } from '@angular/common';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -124,15 +124,10 @@ export class RegisterComponent {
     };
 
     this._authService.registerPatient(userData).pipe(
-      switchMap(() => {
-        const emailToVerify: VerifyEmailTokenRequest = { email: userData.email };
-        return this._authService.verifyEmail(emailToVerify).pipe(
-          finalize(() => {
-            void this._router.navigate(['/auth/login'], {
-              state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
-            });
-          })
-        );
+      finalize(() => {
+        void this._router.navigate(['/auth/login'], {
+          state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
+        });
       })
     ).subscribe({
       error: (err) => this.errorMessage.set(err.message)

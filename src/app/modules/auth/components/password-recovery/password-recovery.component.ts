@@ -63,7 +63,7 @@ export class PasswordRecoveryComponent {
 
   private informMessageAfterReset() {
     timer(5000).subscribe(() => {
-      this._router.navigate(["/home"]);
+      void this._router.navigate(["/home"]);
     });
   }
 

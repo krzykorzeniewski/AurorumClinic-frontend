@@ -73,7 +73,7 @@ export class PasswordRecoveryFormComponent implements OnInit{
 
     this._authService.changePassword(userData).subscribe({
       next: () => {
-        this._router.navigate(["/auth/login"]);
+        void this._router.navigate(["/auth/login"]);
       },
       error: (err) => {
         this.errorMessage.set(err.message);
