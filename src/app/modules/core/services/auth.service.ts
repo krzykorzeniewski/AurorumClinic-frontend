@@ -103,21 +103,21 @@ export class AuthService {
         }
       )
       .pipe(
-        map(response => {
-          if (response.status === 'success') return;
-          if (response.status === 'fail'){
-            const failError =
-              Object.values(response.data || {})[0] ||
-              'Wystąpił błąd walidacji. Proszę spróbować później';
-            throw new Error(failError);
-          }
-          if (response.status === 'error') {
-            throw new Error(response.message || 'Wystąpił błąd. Proszę spróbować później');
-          }
+        map(() => {
+          return;
         }),
         catchError(err => {
-          const message = err?.error?.message || err.message || 'Wystąpił błąd. Proszę spróbować później';
-          return throwError(() => new Error(message));
+          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+
+          if (err.error?.status === 'fail') {
+            const failError = Object.values(err.error.data || {})[0];
+            errorMsg = typeof failError === 'string' ? failError : errorMsg;
+          }
+          else if (err.error?.status === 'error') {
+            errorMsg = err.error.message || errorMsg;
+          }
+
+          return throwError(() => new Error(errorMsg));
         })
       );
   }

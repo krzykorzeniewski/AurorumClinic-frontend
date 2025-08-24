@@ -15,7 +15,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { NgIf } from '@angular/common';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -123,13 +122,13 @@ export class RegisterComponent {
       phoneNumber: formValue.phone!
     };
 
-    this._authService.registerPatient(userData).pipe(
-      finalize(() => {
-        void this._router.navigate(['/auth/login'], {
-          state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
-        });
-      })
-    ).subscribe({
+    this._authService.registerPatient(userData)
+    .subscribe({
+      next: () => {
+          void this._router.navigate(['/auth/login'], {
+            state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
+          });
+      },
       error: (err) => this.errorMessage.set(err.message)
     });
 
