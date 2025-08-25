@@ -10,9 +10,9 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './account-activation.component.css'
 })
 export class AccountActivationComponent implements OnInit {
-  private _route = inject(ActivatedRoute);
-  private _router = inject(Router);
   private _authService = inject(AuthService);
+  private _router = inject(Router);
+  private _route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this._route.paramMap.subscribe({

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { MatError, MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserLoginDataRequest } from '../../../core/models/user.model';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
@@ -37,26 +37,10 @@ import { NgIf } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent{
-  readonly loginForm = new FormGroup({
-    email: new FormControl('', {
-      validators: [
-        Validators.email,
-        Validators.maxLength(100),
-        Validators.required
-      ],
-      nonNullable: true,
-    }),
-    password: new FormControl('', {
-      validators: [
-        Validators.maxLength(200),
-        Validators.required
-      ],
-      nonNullable: true,
-    }),
-  });
   private _authService = inject(AuthService);
-  private _router = inject(Router);
   private _formService = inject(FormsService);
+  private _router = inject(Router);
+  readonly loginForm = this._formService.getLoginForm();
   hidePassword = signal(true);
   errorMessage = signal('');
 

@@ -3,11 +3,10 @@ import { AlertComponent } from '../../../shared/components/alert/alert.component
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatError, MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
 import { NgIf } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormsService } from '../../../core/services/forms.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { passwordRepeatValidator } from '../../../shared/validators/password-repeat.validator';
 import { UserPasswordResetRequest } from '../../../core/models/user.model';
 import { MatIcon } from '@angular/material/icon';
 
@@ -31,28 +30,11 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './password-recovery-form.component.css'
 })
 export class PasswordRecoveryFormComponent implements OnInit{
-  readonly passwordResetForm = new FormGroup({
-      password: new FormControl('', {
-        validators: [
-          Validators.maxLength(200),
-          Validators.required
-        ],
-        nonNullable: true
-      }),
-      repeatedPassword: new FormControl('', {
-        validators: [
-          Validators.maxLength(200),
-          Validators.required
-        ],
-        nonNullable: true
-      }),
-    },
-    { validators: passwordRepeatValidator() }
-  );
-  private _formService = inject(FormsService);
   private _authService = inject(AuthService);
+  private _formService = inject(FormsService);
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
+  passwordResetForm = this._formService.getPasswordResetForm();
   private _token: string | null = null;
   hidePassword = signal(true);
   errorMessage = signal('');

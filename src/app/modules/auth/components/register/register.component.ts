@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { dateValidator } from '../../../shared/validators/date.validator';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsService } from '../../../core/services/forms.service';
-import { passwordRepeatValidator } from '../../../shared/validators/password-repeat.validator';
-import { phoneValidator } from '../../../shared/validators/phone.validator';
 import { MatIcon } from '@angular/material/icon';
 import { UserRegisterRequest } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -39,72 +36,11 @@ import { NgIf } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  readonly registerForm = new FormGroup({
-    firstName: new FormControl('', {
-      validators: [
-        Validators.maxLength(50),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-    surname: new FormControl('', {
-      validators: [
-        Validators.maxLength(50),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-    email: new FormControl('', {
-      validators: [
-        Validators.email,
-        Validators.maxLength(100),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-    pesel: new FormControl('', {
-      validators: [
-        Validators.minLength(11),
-        Validators.maxLength(11),
-        Validators.required
-      ],
-      nonNullable: false
-    }),
-    phone: new FormControl('', {
-      validators: [
-        Validators.required,
-        phoneValidator()
-      ],
-      nonNullable: true
-    }),
-    password: new FormControl('', {
-      validators: [
-        Validators.maxLength(200),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-    repeatedPassword: new FormControl('', {
-      validators: [
-        Validators.maxLength(200),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-    birthdate: new FormControl<Date | null>(null, {
-      validators: [
-        dateValidator(),
-        Validators.required
-      ],
-      nonNullable: true
-    }),
-  },
-    { validators: passwordRepeatValidator() }
-  );
-  protected hasPesel: WritableSignal<boolean> = signal(true);
-  private _formService = inject(FormsService);
   private _authService = inject(AuthService);
+  private _formService = inject(FormsService);
   private _router = inject(Router);
+  readonly registerForm = this._formService.getRegisterForm();
+  hasPesel: WritableSignal<boolean> = signal(true);
   hidePassword = signal(true);
   errorMessage = signal('');
 

@@ -1,9 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { NgIf } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsService } from '../../../core/services/forms.service';
 import { UserPasswordRecoverEmailRequest } from '../../../core/models/user.model';
@@ -28,25 +28,19 @@ import { timer } from 'rxjs';
     FormsModule
   ],
   templateUrl: './password-recovery.component.html',
-  styleUrl: './password-recovery.component.css'
+  styleUrl: './password-recovery.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordRecoveryComponent {
-  email = new FormControl('', {
-    validators: [
-      Validators.required,
-      Validators.email,
-      Validators.maxLength(100)
-    ],
-    nonNullable: true
-  });
-  private _formService = inject(FormsService);
   private _authService = inject(AuthService);
+  private _formService = inject(FormsService);
   private _router = inject(Router);
+  readonly emailForm = this._formService.getEmailForm();
   message = signal('');
 
   onRecover() {
     const userData: UserPasswordRecoverEmailRequest = {
-      email: this.email.value
+      email: this.emailForm.value
     };
 
     this._authService.resetPassword(userData)
