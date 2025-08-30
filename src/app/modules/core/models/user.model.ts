@@ -1,36 +1,38 @@
 export interface UserLoginDataRequest {
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface UserLoginResponse {
-  userId: number,
-  twoFactorAuth: boolean
+  userId: number;
+  twoFactorAuth: boolean;
+  role: string;
 }
 
-export class User implements UserLoginResponse{
+export class User implements UserLoginResponse {
   constructor(
-    public userId: number,
-    public twoFactorAuth: boolean
+    readonly userId: number,
+    readonly twoFactorAuth: boolean,
+    readonly role: string,
   ) {}
 }
 
 export interface UserRegisterRequest {
-  name: string,
-  surname: string,
-  pesel: string | null,
-  birthDate: string,
-  email: string,
-  password: string,
-  phoneNumber: string
+  name: string;
+  surname: string;
+  pesel: string | null;
+  birthDate: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
 }
-export interface UserPasswordRecoverEmailRequest  {
-  email: string,
+export interface UserPasswordRecoverEmailRequest {
+  email: string;
 }
 
 export interface UserPasswordResetRequest {
-  token: string | null,
-  password: string
+  token: string | null;
+  password: string;
 }
 
 export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
