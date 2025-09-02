@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -18,7 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsService } from '../../../core/services/forms.service';
 import { MatIcon } from '@angular/material/icon';
-import { UserRegisterRequest } from '../../../core/models/user.model';
+import { UserRegisterRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
@@ -44,7 +38,6 @@ import { NgIf } from '@angular/common';
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   private _authService = inject(AuthService);
@@ -62,7 +55,7 @@ export class RegisterComponent {
       name: formValue.firstName!,
       surname: formValue.surname!,
       pesel: formValue.pesel || null,
-      birthDate: formValue.birthdate!.toISOString().split('T')[0],
+      birthDate: formValue.birthdate!.toLocaleDateString('sv-SE'),
       email: formValue.email!,
       password: formValue.password!,
       phoneNumber: formValue.phone!,

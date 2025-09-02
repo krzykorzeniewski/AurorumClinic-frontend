@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   MatError,
   MatFormField,
@@ -12,7 +7,7 @@ import {
   MatLabel,
 } from '@angular/material/input';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserLoginDataRequest } from '../../../core/models/user.model';
+import { UserLoginDataRequest } from '../../../core/models/auth.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
@@ -52,7 +47,6 @@ import { NgIf } from '@angular/common';
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   private _authService = inject(AuthService);

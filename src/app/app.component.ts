@@ -8,21 +8,14 @@ import { AuthService } from './modules/core/services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    HeaderComponent,
-    RouterOutlet,
-    SpinnerComponent,
-    FooterComponent
-  ],
+  imports: [HeaderComponent, RouterOutlet, SpinnerComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   private _authService = inject(AuthService);
 
-    ngOnInit(): void {
-      if(localStorage.getItem('userId')) {
-        this._authService.autoLogin().subscribe();
-      }
-    }
+  ngOnInit(): void {
+    this._authService.autoLogin().subscribe();
+  }
 }

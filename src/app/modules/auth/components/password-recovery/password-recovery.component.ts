@@ -1,12 +1,17 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { MatButton } from '@angular/material/button';
-import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import {
+  MatError,
+  MatFormField,
+  MatInput,
+  MatLabel,
+} from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsService } from '../../../core/services/forms.service';
-import { UserPasswordRecoverEmailRequest } from '../../../core/models/user.model';
+import { UserPasswordRecoverEmailRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { timer } from 'rxjs';
 
@@ -25,11 +30,10 @@ import { timer } from 'rxjs';
     RouterLink,
     MatFormField,
     MatError,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './password-recovery.component.html',
   styleUrl: './password-recovery.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordRecoveryComponent {
   private _authService = inject(AuthService);
@@ -40,11 +44,10 @@ export class PasswordRecoveryComponent {
 
   onRecover() {
     const userData: UserPasswordRecoverEmailRequest = {
-      email: this.emailForm.value
+      email: this.emailForm.value,
     };
 
-    this._authService.resetPassword(userData)
-      .subscribe({
+    this._authService.resetPassword(userData).subscribe({
       next: () => {
         this.message.set('Na podany adres e-mail został wysłany link');
         this.informMessageAfterReset();
@@ -57,7 +60,7 @@ export class PasswordRecoveryComponent {
 
   private informMessageAfterReset() {
     timer(5000).subscribe(() => {
-      void this._router.navigate(["/home"]);
+      void this._router.navigate(['/home']);
     });
   }
 
