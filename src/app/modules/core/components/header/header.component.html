@@ -12,26 +12,26 @@
 
           <a *ngIf="user" class="nav-link d-flex align-items-center text-white" href="#">
             <mat-icon fontIcon="notifications" class="d-none d-lg-inline"></mat-icon>
-            <span class="d-inline d-lg-none w-100 text-center">Notifications</span>
+            <span class="d-inline d-lg-none w-100 text-center">Powiadomienia</span>
           </a>
 
         <li *ngIf="user" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle d-flex align-items-center text-white" role="button" id="accountDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
             <mat-icon fontIcon="account_box" class="d-none d-lg-inline"></mat-icon>
-            <span class="d-inline d-lg-none w-100 text-center">Account</span>
+            <span class="d-inline d-lg-none w-100 text-center">Konto</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
             <li><a class="dropdown-item" routerLink="/profile">Profil</a></li>
             <li><a class="dropdown-item" href="/home">Wizyty</a></li>
             <li><a class="dropdown-item" href="/home">Wiadomości</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" routerLink="/home" (click)="logout()" >Log out</a></li>
+            <li><a class="dropdown-item" routerLink="/home" (click)="logout()" >Wyloguj</a></li>
           </ul>
         </li>
 
         <a *ngIf="!user" routerLink="/auth/login" class="nav-link d-flex align-items-center text-white" role="button" id="accountDropdownGuest" aria-expanded="false">
           <mat-icon fontIcon="account_box" class="d-none d-lg-inline"></mat-icon>
-          <span class="d-inline d-lg-none w-100 text-center">Login</span>
+          <span class="d-inline d-lg-none w-100 text-center">Zaloguj</span>
         </a>
       </ul>
 

@@ -49,7 +49,6 @@ export class AuthService {
         }),
         tap((user) => {
           this._user.next(user);
-          localStorage.setItem('userId', user.userId.toString());
         }),
         catchError((err: HttpErrorResponse) => {
           let errorMsg = '';
@@ -69,7 +68,7 @@ export class AuthService {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
-          'Auto-login': 'true',
+          'Auto-Login': 'true',
         },
       })
       .pipe(
@@ -81,11 +80,12 @@ export class AuthService {
             this.mapRole(data.role),
           );
         }),
-        tap((user) => this._user.next(user)),
-        catchError(() => {
+        tap((user) => {
+          this._user.next(user);
+        }),
+        catchError((err) => {
           this._user.next(null);
-          localStorage.removeItem('userId');
-          return of(null);
+          return throwError(() => err);
         }),
       );
   }
@@ -114,7 +114,6 @@ export class AuthService {
         tap((user) => this._user.next(user)),
         catchError(() => {
           this._user.next(null);
-          localStorage.removeItem('userId');
           return of(null);
         }),
       );
@@ -192,10 +191,13 @@ export class AuthService {
       })
       .pipe(
         tap(() => {
-          localStorage.removeItem('userId');
           this._user.next(null);
         }),
       );
+  }
+
+  forceLogout() {
+    this._user.next(null);
   }
 
   isLoggedIn(): boolean {

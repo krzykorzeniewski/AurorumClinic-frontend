@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Cześć {{ data.userData.name }} {{ data.userData.surname }}</h2>
+
+<mat-dialog-content>
+  <p>Czy chcesz na pewno usunąć swoje konto?</p>
+  <p>
+    Proszę wpisać poniżej
+    <br>
+    <b>{{DELETE_ACCOUNT_CONFIRM_MESSAGE}}</b>
+  </p>
+
+  <mat-form-field class="w-100" appearance="fill">
+    <input matInput [formControl]="confirmForm" />
+    @if (confirmForm.invalid) {
+      <mat-error>{{ getErrorMessage(confirmForm) }}</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
+  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onDelete()" [disabled]="confirmForm.invalid">
+    Trwale usuń konto
+  </button>
+</mat-dialog-actions>

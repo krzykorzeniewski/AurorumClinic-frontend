@@ -1,44 +1,29 @@
-export interface UserLoginDataRequest {
-  email: string;
-  password: string;
+export enum communicationPreferences {
+  EMAIL = 'EMAIL',
+  PHONE_NUMBER = 'PHONE_NUMBER',
 }
 
-export interface UserLoginResponse {
-  userId: number;
-  twoFactorAuth: boolean;
-  role: string;
-}
-
-export class User implements UserLoginResponse {
-  constructor(
-    readonly userId: number,
-    readonly twoFactorAuth: boolean,
-    readonly role: string,
-  ) {}
-}
-
-export interface UserRegisterRequest {
+export interface GetPatientApiResponse {
+  id: number;
   name: string;
   surname: string;
-  pesel: string | null;
+  pesel: string;
   birthDate: string;
   email: string;
-  password: string;
   phoneNumber: string;
-}
-export interface UserPasswordRecoverEmailRequest {
-  email: string;
-}
-
-export interface UserPasswordResetRequest {
-  token: string | null;
-  password: string;
+  twoFactorAuth: boolean;
+  newsletter: boolean;
+  communicationPreferences: communicationPreferences;
 }
 
-export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
-
-export interface ApiResponse<T> {
-  status: string;
-  data: T;
-  message?: string;
-}
+export type GetPatientResponse = Omit<GetPatientApiResponse, 'id'>;
+export type UpdatePatientRequest = Partial<
+  Pick<
+    GetPatientApiResponse,
+    | 'email'
+    | 'phoneNumber'
+    | 'twoFactorAuth'
+    | 'newsletter'
+    | 'communicationPreferences'
+  >
+>;

@@ -4,7 +4,7 @@ import { finalize } from 'rxjs';
 import { SpinnerService } from '../services/spinner.service';
 
 export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
-  if (req.headers.has('Auto-login')) {
+  if (req.headers.has('Auto-Login')) {
     return next(req);
   }
   const spinner = inject(SpinnerService);

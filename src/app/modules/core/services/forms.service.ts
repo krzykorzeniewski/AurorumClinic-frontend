@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {passwordRepeatValidator} from '../../shared/validators/password-repeat.validator';
-import {phoneValidator} from '../../shared/validators/phone.validator';
-import {dateValidator} from '../../shared/validators/date.validator';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { passwordRepeatValidator } from '../../shared/validators/password-repeat.validator';
+import { phoneValidator } from '../../shared/validators/phone.validator';
+import { dateValidator } from '../../shared/validators/date.validator';
+import {
+  communicationPreferences,
+  GetPatientResponse,
+} from '../models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FormsService {
-
   getLoginForm() {
     return new FormGroup({
       email: new FormControl('', {
         validators: [
           Validators.email,
           Validators.maxLength(100),
-          Validators.required
+          Validators.required,
         ],
         nonNullable: true,
       }),
       password: new FormControl('', {
-        validators: [
-          Validators.maxLength(200),
-          Validators.required
-        ],
+        validators: [Validators.maxLength(200), Validators.required],
         nonNullable: true,
       }),
     });
@@ -34,100 +34,121 @@ export class FormsService {
       validators: [
         Validators.required,
         Validators.email,
-        Validators.maxLength(100)
+        Validators.maxLength(100),
       ],
-      nonNullable: true
+      nonNullable: true,
     });
   }
 
   getPasswordResetForm() {
-    return new FormGroup({
+    return new FormGroup(
+      {
         password: new FormControl('', {
-          validators: [
-            Validators.maxLength(200),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(200), Validators.required],
+          nonNullable: true,
         }),
         repeatedPassword: new FormControl('', {
-          validators: [
-            Validators.maxLength(200),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(200), Validators.required],
+          nonNullable: true,
         }),
       },
-      { validators: passwordRepeatValidator() }
+      { validators: passwordRepeatValidator() },
     );
   }
 
   getRegisterForm() {
-    return new FormGroup({
+    return new FormGroup(
+      {
         firstName: new FormControl('', {
-          validators: [
-            Validators.maxLength(50),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
         }),
         surname: new FormControl('', {
-          validators: [
-            Validators.maxLength(50),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
         }),
         email: new FormControl('', {
           validators: [
             Validators.email,
             Validators.maxLength(100),
-            Validators.required
+            Validators.required,
           ],
-          nonNullable: true
+          nonNullable: true,
         }),
         pesel: new FormControl('', {
           validators: [
             Validators.minLength(11),
             Validators.maxLength(11),
-            Validators.required
+            Validators.required,
           ],
-          nonNullable: false
+          nonNullable: false,
         }),
         phone: new FormControl('', {
-          validators: [
-            Validators.required,
-            phoneValidator()
-          ],
-          nonNullable: true
+          validators: [Validators.required, phoneValidator()],
+          nonNullable: true,
         }),
         password: new FormControl('', {
-          validators: [
-            Validators.maxLength(200),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(200), Validators.required],
+          nonNullable: true,
         }),
         repeatedPassword: new FormControl('', {
-          validators: [
-            Validators.maxLength(200),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [Validators.maxLength(200), Validators.required],
+          nonNullable: true,
         }),
         birthdate: new FormControl<Date | null>(null, {
-          validators: [
-            dateValidator(),
-            Validators.required
-          ],
-          nonNullable: true
+          validators: [dateValidator(), Validators.required],
+          nonNullable: true,
         }),
       },
-      { validators: passwordRepeatValidator() }
+      { validators: passwordRepeatValidator() },
     );
   }
 
+  getFulfilledProfileForm(userData: GetPatientResponse | null) {
+    return new FormGroup({
+      email: new FormControl<string>(userData ? userData.email : '', {
+        validators: [
+          Validators.email,
+          Validators.maxLength(100),
+          Validators.required,
+        ],
+        nonNullable: true,
+      }),
+      phoneNumber: new FormControl<string>(
+        userData ? userData.phoneNumber : '',
+        {
+          validators: [Validators.required, phoneValidator()],
+          nonNullable: true,
+        },
+      ),
+      communicationPreferences: new FormControl<communicationPreferences>(
+        userData
+          ? userData.communicationPreferences
+          : communicationPreferences.EMAIL,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      newsletter: new FormControl<boolean>(
+        userData ? userData.newsletter : false,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      twoFactorAuth: new FormControl<boolean>(
+        userData ? userData.twoFactorAuth : false,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
-    if(control.hasError('required')){
+    if (control.hasError('required')) {
       return 'To pole jest wymagane.';
     }
     if (control.hasError('email')) {
@@ -149,6 +170,9 @@ export class FormsService {
     }
     if (control.hasError('passwordMismatch')) {
       return 'Hasła się nie zgadzają.';
+    }
+    if (control.hasError('textMismatch')) {
+      return 'Tekst się nie zgadza.';
     }
     if (control.hasError('invalidDate')) {
       return 'Niepoprawna data.';
