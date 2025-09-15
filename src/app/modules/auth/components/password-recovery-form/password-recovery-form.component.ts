@@ -1,13 +1,19 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatError, MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
+import {
+  MatError,
+  MatFormField,
+  MatInput,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormsService } from '../../../core/services/forms.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserPasswordResetRequest } from '../../../core/models/user.model';
+import { UserPasswordResetRequest } from '../../../core/models/auth.model';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -24,12 +30,12 @@ import { MatIcon } from '@angular/material/icon';
     MatLabel,
     MatSuffix,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './password-recovery-form.component.html',
-  styleUrl: './password-recovery-form.component.css'
+  styleUrl: './password-recovery-form.component.css',
 })
-export class PasswordRecoveryFormComponent implements OnInit{
+export class PasswordRecoveryFormComponent implements OnInit {
   private _authService = inject(AuthService);
   private _formService = inject(FormsService);
   private _router = inject(Router);
@@ -43,19 +49,19 @@ export class PasswordRecoveryFormComponent implements OnInit{
     this._route.paramMap.subscribe({
       next: (param) => {
         this._token = param.get('uid');
-      }
+      },
     });
   }
 
   onPasswordReset(): void {
     const userData: UserPasswordResetRequest = {
       password: this.passwordResetForm.value.password!,
-      token: this._token
-    }
+      token: this._token,
+    };
 
     this._authService.changePassword(userData).subscribe({
       next: () => {
-        void this._router.navigate(["/auth/login"]);
+        void this._router.navigate(['/auth/login']);
       },
       error: (err) => {
         this.errorMessage.set(err.message);

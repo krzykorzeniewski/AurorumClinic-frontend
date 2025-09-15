@@ -1,13 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
+import {
+  MatFormField,
+  MatInput,
+  MatInputModule,
+  MatLabel,
+} from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsService } from '../../../core/services/forms.service';
 import { MatIcon } from '@angular/material/icon';
-import { UserRegisterRequest } from '../../../core/models/user.model';
+import { UserRegisterRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
@@ -29,11 +34,10 @@ import { NgIf } from '@angular/common';
     MatIconButton,
     MatIcon,
     AlertComponent,
-    NgIf
+    NgIf,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   private _authService = inject(AuthService);
@@ -44,7 +48,6 @@ export class RegisterComponent {
   hidePassword = signal(true);
   errorMessage = signal('');
 
-
   onRegister(): void {
     const formValue = this.registerForm.value;
 
@@ -52,29 +55,31 @@ export class RegisterComponent {
       name: formValue.firstName!,
       surname: formValue.surname!,
       pesel: formValue.pesel || null,
-      birthDate: formValue.birthdate!.toISOString().split('T')[0],
+      birthDate: formValue.birthdate!.toLocaleDateString('sv-SE'),
       email: formValue.email!,
       password: formValue.password!,
-      phoneNumber: formValue.phone!
+      phoneNumber: formValue.phone!,
     };
 
-    this._authService.registerPatient(userData)
-    .subscribe({
+    this._authService.registerPatient(userData).subscribe({
       next: () => {
-          void this._router.navigate(['/auth/login'], {
-            state: { message: 'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.' }
-          });
+        void this._router.navigate(['/auth/login'], {
+          state: {
+            message:
+              'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.',
+            variant: 'info',
+          },
+        });
       },
-      error: (err) => this.errorMessage.set(err.message)
+      error: (err) => this.errorMessage.set(err.message),
     });
-
   }
 
   peselCheckbox(): void {
     this.hasPesel.set(!this.hasPesel());
     const peselControl = this.registerForm.controls['pesel'];
 
-    if (!this.hasPesel()){
+    if (!this.hasPesel()) {
       peselControl.disable();
       peselControl.clearValidators();
     } else {
@@ -82,7 +87,7 @@ export class RegisterComponent {
       peselControl.setValidators([
         Validators.minLength(11),
         Validators.maxLength(11),
-        Validators.required
+        Validators.required,
       ]);
     }
 

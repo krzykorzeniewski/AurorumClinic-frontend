@@ -1,20 +1,28 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+import {
+  PreloadAllModules,
+  provideRouter,
+  withPreloading,
+} from '@angular/router';
 
 import { APP_ROUTES } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { spinnerInterceptor } from './modules/core/interceptors/spinner.interceptor';
+import { autologinInterceptor } from './modules/core/interceptors/autologin.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(
-      BrowserAnimationsModule,
-    ),
+    importProvidersFrom(BrowserAnimationsModule),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
-    provideHttpClient(withInterceptors([spinnerInterceptor])),
+    provideHttpClient(
+      withInterceptors([spinnerInterceptor, autologinInterceptor]),
+    ),
     provideNativeDateAdapter(),
-    {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
-  ]
+    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+  ],
 };

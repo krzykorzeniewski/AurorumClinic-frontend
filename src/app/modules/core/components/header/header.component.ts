@@ -1,7 +1,14 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass, NgIf } from '@angular/common';
-import { User } from '../../models/user.model';
+import { User } from '../../models/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -22,18 +29,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   user: User | null = null;
   isLargeScreen = false;
 
-
   ngOnInit(): void {
     this.checkScreen();
     window.addEventListener('resize', () => this.checkScreen());
-    this._sub = this._authService.user$.subscribe(user => this.user = user);
+    this._sub = this._authService.user$.subscribe((user) => (this.user = user));
   }
 
   ngAfterViewInit(): void {
     this._routeSub = this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const dropdownToggle = this._element.nativeElement.querySelector('#accountDropdownUser');
-        const dropdownMenu = this._element.nativeElement.querySelector('.dropdown-menu.show');
+        const dropdownToggle = this._element.nativeElement.querySelector(
+          '#accountDropdownUser',
+        );
+        const dropdownMenu = this._element.nativeElement.querySelector(
+          '.dropdown-menu.show',
+        );
 
         if (dropdownToggle && dropdownMenu) {
           dropdownMenu.classList.remove('show');
@@ -45,7 +55,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           dropdownToggle.setAttribute('aria-expanded', 'false');
         }
 
-        const navbarCollapse = this._element.nativeElement.querySelector('#navbarSupportedContent');
+        const navbarCollapse = this._element.nativeElement.querySelector(
+          '#navbarSupportedContent',
+        );
         if (navbarCollapse?.classList.contains('show')) {
           navbarCollapse.classList.remove('show');
         }
@@ -61,12 +73,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this._authService.logout().subscribe({
       next: () => {
         void this._router.navigate(['/auth/login']);
-      }
+      },
     });
   }
 
   ngOnDestroy(): void {
-    if(this._sub) this._sub.unsubscribe();
-    if(this._routeSub) this._routeSub.unsubscribe();
+    if (this._sub) this._sub.unsubscribe();
+    if (this._routeSub) this._routeSub.unsubscribe();
   }
 }

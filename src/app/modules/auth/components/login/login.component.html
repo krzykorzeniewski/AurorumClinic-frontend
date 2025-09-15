@@ -26,8 +26,8 @@
       <div class="w-75 d-flex justify-content-end">
         <a routerLink="/auth/recover" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Nie pamiętasz hasła?</a>
       </div>
-      <app-alert class="mt-3 w-75" *ngIf="errorMessage()" [text]="errorMessage()"></app-alert>
-      <div [class]="errorMessage() ? 'mb-3' : 'mt-5 mb-3'">
+      <app-alert class="mt-3 w-75" *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
+      <div [class]="infoMessage() ? 'mb-3' : 'mt-5 mb-3'">
         <button mat-flat-button type="submit" [disabled]="loginForm.invalid"
                 class="btn text-white border-0" style="background-color: var(--primary-purple)">Zaloguj się</button>
       </div>
