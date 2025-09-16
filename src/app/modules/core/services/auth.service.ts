@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
   ApiResponse,
+  TokenVerifyRequest,
   User,
   UserLoginDataRequest,
   UserLoginResponse,
@@ -43,6 +44,7 @@ export class AuthService {
           const data = res.data;
           return new User(
             data.userId,
+            data.email,
             data.twoFactorAuth,
             this.mapRole(data.role),
           );
@@ -62,35 +64,7 @@ export class AuthService {
       );
   }
 
-  autoLogin(): Observable<User | null> {
-    return this._http
-      .get<ApiResponse<UserLoginResponse>>(`${this._apiUrl}/basic-info`, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'Auto-Login': 'true',
-        },
-      })
-      .pipe(
-        map((res) => {
-          const data = res.data;
-          return new User(
-            data.userId,
-            data.twoFactorAuth,
-            this.mapRole(data.role),
-          );
-        }),
-        tap((user) => {
-          this._user.next(user);
-        }),
-        catchError((err) => {
-          this._user.next(null);
-          return throwError(() => err);
-        }),
-      );
-  }
-
-  refreshToken(): Observable<User | null> {
+  refreshCookies(): Observable<User | null> {
     return this._http
       .post<ApiResponse<UserLoginResponse>>(
         `${this._apiUrl}/refresh`,
@@ -99,6 +73,7 @@ export class AuthService {
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
+            'Auto-Login': 'true',
           },
         },
       )
@@ -107,6 +82,7 @@ export class AuthService {
           const data = res.data;
           return new User(
             data.userId,
+            data.email,
             data.twoFactorAuth,
             this.mapRole(data.role),
           );
@@ -123,10 +99,8 @@ export class AuthService {
     return this._http.post<void>(`${this._apiUrl}/verify-email-token`, request);
   }
 
-  activateAccount(token: string): Observable<void> {
-    return this._http.get<void>(`${this._apiUrl}/verify-email`, {
-      params: { token },
-    });
+  activateAccount(tokenRequest: TokenVerifyRequest): Observable<void> {
+    return this._http.post<void>(`${this._apiUrl}/verify-email`, tokenRequest);
   }
 
   registerPatient(patientData: UserRegisterRequest): Observable<void> {

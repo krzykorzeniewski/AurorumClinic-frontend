@@ -32,7 +32,7 @@ export const autologinInterceptor: HttpInterceptorFn = (req, next) => {
         if (!isCurrentlyRefreshing) {
           isCurrentlyRefreshing = true;
           refreshSubject.next(false);
-          return authService.refreshToken().pipe(
+          return authService.refreshCookies().pipe(
             switchMap((user) => {
               isCurrentlyRefreshing = false;
               refreshSubject.next(true);

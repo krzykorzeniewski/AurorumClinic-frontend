@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { TokenVerifyRequest } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-account-activation',
@@ -19,7 +20,8 @@ export class AccountActivationComponent implements OnInit {
       next: (param) => {
         const token = param.get('uid');
         if (token) {
-          this._authService.activateAccount(token).subscribe({
+          const tokenRequest: TokenVerifyRequest = { token };
+          this._authService.activateAccount(tokenRequest).subscribe({
             next: () => {
               void this._router.navigate(['/auth/login'], {
                 state: {
