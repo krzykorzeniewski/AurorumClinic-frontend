@@ -39,7 +39,10 @@ export interface UserPasswordResetRequest {
 
 export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
 
-export type TokenVerifyRequest = Omit<UserPasswordResetRequest, 'password'>;
+export interface TokenVerifyRequest {
+  token: string;
+  email: string;
+}
 
 export interface ApiResponse<T> {
   status: string;
