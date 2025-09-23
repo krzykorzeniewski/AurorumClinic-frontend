@@ -37,6 +37,7 @@ export class AccountActivationComponent implements OnInit {
               );
             },
           });
+          localStorage.removeItem('email');
         } else {
           this.redirectAndShowMessage(
             'Twój link weryfikacyjny jest nieprawidłowy.',

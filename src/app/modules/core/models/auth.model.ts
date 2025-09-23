@@ -33,8 +33,9 @@ export interface UserPasswordRecoverEmailRequest {
 }
 
 export interface UserPasswordResetRequest {
-  token: string | null;
+  token: string;
   password: string;
+  email: string;
 }
 
 export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;

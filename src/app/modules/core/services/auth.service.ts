@@ -54,8 +54,20 @@ export class AuthService {
         }),
         catchError((err: HttpErrorResponse) => {
           let errorMsg = '';
+
           if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
             errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.email === 'Email is not verified') {
+              errorMsg =
+                'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.';
+            } else if (errorData.credentials === 'Invalid credentials') {
+              errorMsg = 'Niepoprawny email lub hasło';
+            } else {
+              errorMsg = 'Wystąpił błąd podczas logowania';
+            }
           } else {
             errorMsg = 'Niepoprawny email lub hasło';
           }
