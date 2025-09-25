@@ -1,0 +1,84 @@
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../../../core/services/auth.service';
+import { UserService } from '../../../../core/services/user.service';
+import { FormsService } from '../../../../core/services/forms.service';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatError, MatFormField, MatInput } from '@angular/material/input';
+import { distinctUntilChanged, of, switchMap } from 'rxjs';
+import {
+  UpdateEmailRequest,
+  UpdateEmailTokenRequest,
+} from '../../../../core/models/user.model';
+import { MatButton } from '@angular/material/button';
+
+@Component({
+  selector: 'app-edit-email-dialog',
+  standalone: true,
+  imports: [
+    MatFormField,
+    MatError,
+    MatDialogContent,
+    MatInput,
+    ReactiveFormsModule,
+    MatDialogActions,
+    MatButton,
+    MatDialogTitle,
+  ],
+  templateUrl: './edit-email-dialog.component.html',
+  styleUrl: './edit-email-dialog.component.css',
+})
+export class EditEmailDialogComponent {
+  private _authService = inject(AuthService);
+  private _userService = inject(UserService);
+  private _formService = inject(FormsService);
+  private _dialogRef = inject(MatDialogRef<EditEmailDialogComponent>);
+  readonly data = inject<{
+    oldEmail: string;
+    updatedEmail: UpdateEmailTokenRequest;
+  }>(MAT_DIALOG_DATA);
+  readonly confirmForm = this._formService.getCodeVerificationForm();
+
+  onSubmit() {
+    if (this.confirmForm.invalid) return;
+
+    const token: UpdateEmailRequest = {
+      token: this.confirmForm.value,
+    };
+
+    this._authService.user$
+      .pipe(
+        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
+        switchMap((user) => {
+          if (user?.userId) {
+            return this._userService.updateUserEmail(user.userId, token);
+          } else {
+            return of(null);
+          }
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this._dialogRef.close({
+            success: true,
+            message: 'Twój email został zmieniony',
+          });
+        },
+        error: (err) => {
+          this._dialogRef.close({ success: false, error: err.message });
+        },
+      });
+  }
+  onNoClick() {
+    this._dialogRef.close({ success: false });
+  }
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
+  }
+}

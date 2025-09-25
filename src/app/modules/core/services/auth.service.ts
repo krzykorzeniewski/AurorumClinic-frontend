@@ -27,7 +27,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthService {
-  private _user = new BehaviorSubject<User | null>(null);
+  #user = new BehaviorSubject<User | null>(null);
   private _apiUrl = environment.apiUrl + '/auth';
   private _http = inject(HttpClient);
 
@@ -50,7 +50,7 @@ export class AuthService {
           );
         }),
         tap((user) => {
-          this._user.next(user);
+          this.#user.next(user);
         }),
         catchError((err: HttpErrorResponse) => {
           let errorMsg = '';
@@ -99,9 +99,9 @@ export class AuthService {
             this.mapRole(data.role),
           );
         }),
-        tap((user) => this._user.next(user)),
+        tap((user) => this.#user.next(user)),
         catchError(() => {
-          this._user.next(null);
+          this.#user.next(null);
           return of(null);
         }),
       );
@@ -177,21 +177,21 @@ export class AuthService {
       })
       .pipe(
         tap(() => {
-          this._user.next(null);
+          this.#user.next(null);
         }),
       );
   }
 
   forceLogout() {
-    this._user.next(null);
+    this.#user.next(null);
   }
 
   isLoggedIn(): boolean {
-    return !!this._user.getValue();
+    return !!this.#user.getValue();
   }
 
   get user$(): Observable<User | null> {
-    return this._user.asObservable();
+    return this.#user.asObservable();
   }
 
   private mapRole(roleFromApi: string): UserRole {

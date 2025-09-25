@@ -17,13 +17,12 @@ export interface GetPatientApiResponse {
 }
 
 export type GetPatientResponse = Omit<GetPatientApiResponse, 'id'>;
-export type UpdatePatientRequest = Partial<
-  Pick<
-    GetPatientApiResponse,
-    | 'email'
-    | 'phoneNumber'
-    | 'twoFactorAuth'
-    | 'newsletter'
-    | 'communicationPreferences'
-  >
+export type UpdateEmailTokenRequest = Partial<
+  Pick<GetPatientApiResponse, 'email'>
+>;
+export interface UpdateEmailRequest {
+  token: string;
+}
+export type PatchUserRequest = Partial<
+  Pick<GetPatientApiResponse, 'newsletter' | 'communicationPreferences'>
 >;

@@ -1,11 +1,9 @@
-<h2 mat-dialog-title>Cześć {{ data.userData.name }} {{ data.userData.surname }}</h2>
+<h2 mat-dialog-title>Uwaga!<br> Utracisz dostęp do twojego starego maila {{ data.oldEmail }}</h2>
 
 <mat-dialog-content>
-  <p>Czy chcesz na pewno usunąć swoje konto?</p>
   <p>
-    Proszę wpisać poniżej:
+    Proszę wpisać poniżej kod wysłany na <b>{{ data.updatedEmail.email }} </b>:
     <br>
-    <b>{{DELETE_ACCOUNT_CONFIRM_MESSAGE}}</b>
   </p>
 
   <mat-form-field class="w-100" appearance="fill">
@@ -18,7 +16,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
-  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onDelete()" [disabled]="confirmForm.invalid">
-    Trwale usuń konto
+  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
+    Zmień adres email
   </button>
 </mat-dialog-actions>

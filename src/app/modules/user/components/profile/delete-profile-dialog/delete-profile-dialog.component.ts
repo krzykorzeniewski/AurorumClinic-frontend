@@ -23,6 +23,7 @@ import { FormsService } from '../../../../core/services/forms.service';
 
 @Component({
   selector: 'app-delete-profile-dialog',
+  standalone: true,
   imports: [
     MatDialogContent,
     MatDialogTitle,
@@ -63,7 +64,7 @@ export class DeleteProfileDialogComponent {
         distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
         switchMap((user) => {
           if (user?.userId) {
-            return this._userService.deletePatient(user.userId);
+            return this._userService.deleteUser(user.userId);
           } else {
             return of(null);
           }

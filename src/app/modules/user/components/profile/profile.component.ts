@@ -9,16 +9,12 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardTitle,
-} from '@angular/material/card';
+import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
 import {
   communicationPreferences,
   GetPatientResponse,
-  UpdatePatientRequest,
+  PatchUserRequest,
+  UpdateEmailTokenRequest,
 } from '../../../core/models/user.model';
 import { DatePipe, NgIf } from '@angular/common';
 import { distinctUntilChanged, switchMap, throwError } from 'rxjs';
@@ -39,6 +35,8 @@ import {
 } from '../../../shared/components/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteProfileDialogComponent } from './delete-profile-dialog/delete-profile-dialog.component';
+import { EditEmailDialogComponent } from './edit-email-dialog/edit-email-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -65,7 +63,6 @@ import { DeleteProfileDialogComponent } from './delete-profile-dialog/delete-pro
     MatSelect,
     MatOption,
     MatButton,
-    MatCardActions,
     AlertComponent,
   ],
   templateUrl: './profile.component.html',
@@ -75,21 +72,42 @@ export class ProfileComponent implements OnInit {
   private _authService = inject(AuthService);
   private _userService = inject(UserService);
   private _formService = inject(FormsService);
+  private _router = inject(Router);
   private _dialog = inject(MatDialog);
-  profileForm = this._formService.getFulfilledProfileForm(null);
+  emailProfileForm = this._formService.getFulfilledEmailProfileForm(null);
+  phoneProfileForm = this._formService.getFulfilledPhoneProfileForm(null);
+  additionalInformationProfileForm =
+    this._formService.getFulfilledAdditionalInformationProfileForm(null);
   userResponse!: GetPatientResponse | null;
   protected readonly communicationPreferences = communicationPreferences;
   infoMessage = signal('');
   variant = signal<AlertVariant>('warning');
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  ngOnInit(): void {
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this.variant.set(navigation.extras.state['variant']);
+      this.infoMessage.set(navigation.extras.state['message']);
+    }
+  }
+
+  ngOnInit() {
+    this.getUserProfileInformation();
+  }
+
+  onUpdateEmail() {
+    const updatedEmail = this.emailProfileForm.value as UpdateEmailTokenRequest;
+
     this._authService.user$
       .pipe(
         distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
         switchMap((user) => {
           if (user?.userId) {
-            return this._userService.getPatient(user.userId);
+            return this._userService.updateUserEmailToken(
+              user.userId,
+              updatedEmail,
+            );
           } else {
             return throwError(
               () =>
@@ -101,39 +119,40 @@ export class ProfileComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (userResponse) => {
-          this.profileForm =
-            this._formService.getFulfilledProfileForm(userResponse);
-          this.userResponse = userResponse;
+        next: () => {
+          const dialogRef = this._dialog.open(EditEmailDialogComponent, {
+            data: {
+              oldEmail: this.userResponse?.email,
+              updatedEmail: updatedEmail,
+            },
+            disableClose: true,
+          });
+
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result?.success) {
+              this.getUserProfileInformation();
+              this.variant.set('success');
+              this.infoMessage.set(result.message);
+            }
+          });
         },
         error: (err) => {
-          this.userResponse = null;
+          this.accordion.closeAll();
           this.infoMessage.set(err.message);
         },
       });
   }
 
-  onClear() {
-    if (!this.userResponse) return;
-    this.profileForm.reset({
-      email: this.userResponse.email,
-      phoneNumber: this.userResponse.phoneNumber,
-      newsletter: this.userResponse.newsletter,
-      communicationPreferences: this.userResponse.communicationPreferences,
-    });
-  }
-
-  onUpdate() {
-    if (!this.isFormChanged) return;
-
-    const updatedData = this.profileForm.value as UpdatePatientRequest;
+  onUpdateAdditional() {
+    const updatedData = this.additionalInformationProfileForm
+      .value as PatchUserRequest;
 
     this._authService.user$
       .pipe(
         distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
         switchMap((user) => {
           if (user?.userId) {
-            return this._userService.updatePatient(user.userId, updatedData);
+            return this._userService.patchUser(user.userId, updatedData);
           } else {
             return throwError(
               () =>
@@ -146,9 +165,7 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe({
         next: (userResponse) => {
-          this.profileForm =
-            this._formService.getFulfilledProfileForm(userResponse);
-          this.userResponse = userResponse;
+          this.completeAllForm(userResponse);
         },
         error: (err) => {
           this.accordion.closeAll();
@@ -163,37 +180,59 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  get isFormChanged(): boolean {
-    if (!this.userResponse || !this.profileForm) return false;
-
-    const formValues = this.profileForm.value;
-    return (
-      formValues.email !== this.userResponse.email ||
-      formValues.phoneNumber !== this.userResponse.phoneNumber ||
-      formValues.newsletter !== this.userResponse.newsletter ||
-      formValues.communicationPreferences !==
-        this.userResponse.communicationPreferences
-    );
+  private getUserProfileInformation() {
+    this._authService.user$
+      .pipe(
+        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
+        switchMap((user) => {
+          if (user?.userId) {
+            return this._userService.getUser(user.userId);
+          } else {
+            return throwError(
+              () =>
+                new Error(
+                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
+                ),
+            );
+          }
+        }),
+      )
+      .subscribe({
+        next: (userResponse) => {
+          this.completeAllForm(userResponse);
+        },
+        error: (err) => {
+          this.userResponse = null;
+          this.infoMessage.set(err.message);
+        },
+      });
   }
 
   getErrorMessage(control: FormControl) {
     return this._formService.getErrorMessage(control);
   }
 
-  get controls() {
-    return this.profileForm.controls;
+  get emailControl() {
+    return this.emailProfileForm.controls;
   }
 
-  getCommunicationPreferenceLabel(
-    pref: communicationPreferences | null,
-  ): string {
-    switch (pref) {
-      case communicationPreferences.EMAIL:
-        return 'Email';
-      case communicationPreferences.PHONE_NUMBER:
-        return 'Telefon';
-      default:
-        return '';
-    }
+  get phoneControl() {
+    return this.phoneProfileForm.controls;
+  }
+
+  get additionalInfoControls() {
+    return this.additionalInformationProfileForm.controls;
+  }
+
+  private completeAllForm(userResponse: GetPatientResponse) {
+    this.emailProfileForm =
+      this._formService.getFulfilledEmailProfileForm(userResponse);
+    this.phoneProfileForm =
+      this._formService.getFulfilledPhoneProfileForm(userResponse);
+    this.additionalInformationProfileForm =
+      this._formService.getFulfilledAdditionalInformationProfileForm(
+        userResponse,
+      );
+    this.userResponse = userResponse;
   }
 }
