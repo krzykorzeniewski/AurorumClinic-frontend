@@ -15,6 +15,7 @@ import {
   GetPatientResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
+  UpdatePhoneTokenRequest,
 } from '../../../core/models/user.model';
 import { DatePipe, NgIf } from '@angular/common';
 import { distinctUntilChanged, switchMap, throwError } from 'rxjs';
@@ -37,6 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteProfileDialogComponent } from './delete-profile-dialog/delete-profile-dialog.component';
 import { EditEmailDialogComponent } from './edit-email-dialog/edit-email-dialog.component';
 import { Router } from '@angular/router';
+import { EditPhoneDialogComponent } from './edit-phone-dialog/edit-phone-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -124,6 +126,53 @@ export class ProfileComponent implements OnInit {
             data: {
               oldEmail: this.userResponse?.email,
               updatedEmail: updatedEmail,
+            },
+            disableClose: true,
+          });
+
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result?.success) {
+              this.getUserProfileInformation();
+              this.variant.set('success');
+              this.infoMessage.set(result.message);
+            }
+          });
+        },
+        error: (err) => {
+          this.accordion.closeAll();
+          this.infoMessage.set(err.message);
+        },
+      });
+  }
+
+  onUpdatePhone() {
+    const updatedPhone = this.phoneProfileForm.value as UpdatePhoneTokenRequest;
+
+    this._authService.user$
+      .pipe(
+        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
+        switchMap((user) => {
+          if (user?.userId) {
+            return this._userService.updateUserPhoneToken(
+              user.userId,
+              updatedPhone,
+            );
+          } else {
+            return throwError(
+              () =>
+                new Error(
+                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
+                ),
+            );
+          }
+        }),
+      )
+      .subscribe({
+        next: () => {
+          const dialogRef = this._dialog.open(EditPhoneDialogComponent, {
+            data: {
+              oldPhone: this.userResponse?.phoneNumber,
+              updatedPhone: updatedPhone,
             },
             disableClose: true,
           });

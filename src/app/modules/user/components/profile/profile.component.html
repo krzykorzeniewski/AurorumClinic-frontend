@@ -43,12 +43,15 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
+
             <mat-expansion-panel class="disabled" hideToggle>
               <mat-expansion-panel-header>
                 <mat-panel-title> Data urodzenia </mat-panel-title>
                 <mat-panel-description> {{userResponse.birthDate | date:'dd-MM-yyyy'}} </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
+
+          <form id="phone-number" [formGroup]="phoneProfileForm" (ngSubmit)="onUpdatePhone()">
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title> Numer telefonu </mat-panel-title>
@@ -64,7 +67,14 @@
                   <mat-error>{{ getErrorMessage(phoneControl.phoneNumber) }}</mat-error>
                 }
               </mat-form-field>
+              <div class="d-flex justify-content-between mt-4">
+                <button form="phone-number" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumber === phoneControl.phoneNumber.value || phoneProfileForm.invalid">
+                  Zaktualizuj
+                </button>
+              </div>
             </mat-expansion-panel>
+          </form>
+
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title> Weryfikacja dwuetapowa </mat-panel-title>

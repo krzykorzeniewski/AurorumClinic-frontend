@@ -9,39 +9,41 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormField, MatInput } from '@angular/material/input';
-import { distinctUntilChanged, of, switchMap } from 'rxjs';
 import {
   UpdateContactRequest,
-  UpdateEmailTokenRequest,
+  UpdatePhoneTokenRequest,
 } from '../../../../core/models/user.model';
+import { distinctUntilChanged, of, switchMap } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
+import { MatError, MatFormField, MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'app-edit-email-dialog',
+  selector: 'app-edit-phone-dialog',
   standalone: true,
   imports: [
-    MatFormField,
-    MatError,
+    MatButton,
+    MatDialogActions,
     MatDialogContent,
+    MatDialogTitle,
+    MatError,
+    MatFormField,
     MatInput,
     ReactiveFormsModule,
-    MatDialogActions,
-    MatButton,
-    MatDialogTitle,
+    MatFormField,
+    MatError,
   ],
-  templateUrl: './edit-email-dialog.component.html',
-  styleUrl: './edit-email-dialog.component.css',
+  templateUrl: './edit-phone-dialog.component.html',
+  styleUrl: './edit-phone-dialog.component.css',
 })
-export class EditEmailDialogComponent {
+export class EditPhoneDialogComponent {
   private _authService = inject(AuthService);
   private _userService = inject(UserService);
   private _formService = inject(FormsService);
-  private _dialogRef = inject(MatDialogRef<EditEmailDialogComponent>);
+  private _dialogRef = inject(MatDialogRef<EditPhoneDialogComponent>);
   readonly data = inject<{
-    oldEmail: string;
-    updatedEmail: UpdateEmailTokenRequest;
+    oldPhone: string;
+    updatedPhone: UpdatePhoneTokenRequest;
   }>(MAT_DIALOG_DATA);
   readonly confirmForm = this._formService.getCodeVerificationForm();
 
@@ -57,7 +59,7 @@ export class EditEmailDialogComponent {
         distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
         switchMap((user) => {
           if (user?.userId) {
-            return this._userService.updateUserEmail(user.userId, token);
+            return this._userService.updateUserPhone(user.userId, token);
           } else {
             return of(null);
           }
@@ -67,7 +69,7 @@ export class EditEmailDialogComponent {
         next: () => {
           this._dialogRef.close({
             success: true,
-            message: 'Twój email został zmieniony',
+            message: 'Twój numer telefonu został zmieniony',
           });
         },
         error: (err) => {

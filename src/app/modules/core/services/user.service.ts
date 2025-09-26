@@ -5,8 +5,9 @@ import {
   GetPatientApiResponse,
   GetPatientResponse,
   PatchUserRequest,
-  UpdateEmailRequest,
+  UpdateContactRequest,
   UpdateEmailTokenRequest,
+  UpdatePhoneTokenRequest,
 } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../models/auth.model';
@@ -104,10 +105,54 @@ export class UserService {
 
   updateUserEmail(
     userId: number,
-    userToken: UpdateEmailRequest,
+    userToken: UpdateContactRequest,
   ): Observable<void> {
     return this._http
       .put<void>(`${this._apiUrl}/users/${userId}/email`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhoneToken(
+    userId: number,
+    userPhone: UpdatePhoneTokenRequest,
+  ): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/users/${userId}/phone-number-update-token`,
+        userPhone,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhone(
+    userId: number,
+    userToken: UpdateContactRequest,
+  ): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/${userId}/phone-number`, userToken, {
         withCredentials: true,
       })
       .pipe(

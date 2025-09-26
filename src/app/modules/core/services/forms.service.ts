@@ -154,7 +154,11 @@ export class FormsService {
 
   getCodeVerificationForm() {
     return new FormControl('', {
-      validators: [Validators.required],
+      validators: [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6),
+      ],
       nonNullable: true,
     });
   }

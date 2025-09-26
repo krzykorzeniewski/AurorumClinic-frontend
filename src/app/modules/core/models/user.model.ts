@@ -20,7 +20,10 @@ export type GetPatientResponse = Omit<GetPatientApiResponse, 'id'>;
 export type UpdateEmailTokenRequest = Partial<
   Pick<GetPatientApiResponse, 'email'>
 >;
-export interface UpdateEmailRequest {
+export type UpdatePhoneTokenRequest = Partial<
+  Pick<GetPatientApiResponse, 'phoneNumber'>
+>;
+export interface UpdateContactRequest {
   token: string;
 }
 export type PatchUserRequest = Partial<
