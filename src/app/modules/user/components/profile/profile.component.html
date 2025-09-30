@@ -98,7 +98,10 @@
                   <span *ngIf="!userResponse.twoFactorAuth" class="badge bg-warning">NIEAKTYWNE</span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <p>ZAŁÓŻ WERYFIKACJE DWUETAPOWA</p>
+              <p *ngIf="userResponse.twoFactorAuth">Kliknij poniżej, aby usunąć weryfikację dwuetapową<br> UWAGA! To działanie jest niezalecane. Chroni to konto przed nieautoryzowanym dostępem!</p>
+              <p *ngIf="!userResponse.twoFactorAuth">Kliknij poniżej, aby założyć weryfikację dwuetapową<br>Dzięki weryfikacji dwuetapowej twoje konto ma dodatkową warstwę bezpieczeństwa przed nieautoryzowanym dostępem</p>
+              <button *ngIf="userResponse.twoFactorAuth" mat-raised-button style="background-color: #ac2626" (click)="onTwoFactorDelete()">Usuń weryfikację dwuetapową</button>
+              <button *ngIf="!userResponse.twoFactorAuth" mat-raised-button style="background-color: #ffc107" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
             </mat-expansion-panel>
 
           <form id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">

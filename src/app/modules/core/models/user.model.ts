@@ -25,7 +25,7 @@ export type UpdateEmailTokenRequest = Partial<
 export type UpdatePhoneTokenRequest = Partial<
   Pick<GetPatientApiResponse, 'phoneNumber'>
 >;
-export interface UpdateContactRequest {
+export interface UpdateTokenRequest {
   token: string;
 }
 export type PatchUserRequest = Partial<

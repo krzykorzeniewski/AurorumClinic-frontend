@@ -11,7 +11,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import {
-  UpdateContactRequest,
+  UpdateTokenRequest,
   UpdateEmailTokenRequest,
 } from '../../../../core/models/user.model';
 import { MatButton } from '@angular/material/button';
@@ -54,7 +54,7 @@ export class EditEmailDialogComponent {
   onSubmit() {
     if (this.confirmForm.invalid) return;
 
-    const token: UpdateContactRequest = {
+    const token: UpdateTokenRequest = {
       token: this.confirmForm.value,
     };
 

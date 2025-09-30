@@ -70,8 +70,17 @@ export class LoginComponent {
       .value as UserLoginDataRequest;
 
     this._authService.login(userData).subscribe({
-      next: () => {
-        void this._router.navigate(['/']);
+      next: (user) => {
+        if (user.twoFactorAuth) {
+          this._router.navigate(['/auth/twoFactorAuthorization'], {
+            state: {
+              fromLogin: true,
+              email: userData.email,
+            },
+          });
+        } else {
+          void this._router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.variant.set('warning');

@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 import {
   BehaviorSubject,
   catchError,
@@ -16,7 +15,6 @@ let isCurrentlyRefreshing = false;
 
 export const autologinInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
 
   const isRetryReq = req.headers.has('Aurorum-Auth-Retry');
 
@@ -24,7 +22,6 @@ export const autologinInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401 && req.url.includes('/refresh')) {
         isCurrentlyRefreshing = false;
-        void router.navigate(['/auth/login']);
         return throwError(() => err);
       }
 
@@ -43,14 +40,12 @@ export const autologinInterceptor: HttpInterceptorFn = (req, next) => {
                 });
                 return next(retryReq);
               } else {
-                void router.navigate(['/auth/login']);
                 return throwError(() => err);
               }
             }),
             catchError((refreshErr) => {
               isCurrentlyRefreshing = false;
               refreshSubject.next(false);
-              void router.navigate(['/auth/login']);
               return throwError(() => refreshErr);
             }),
           );

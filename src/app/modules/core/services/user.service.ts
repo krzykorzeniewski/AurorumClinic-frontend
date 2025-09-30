@@ -5,7 +5,7 @@ import {
   GetPatientApiResponse,
   GetPatientResponse,
   PatchUserRequest,
-  UpdateContactRequest,
+  UpdateTokenRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
 } from '../models/user.model';
@@ -90,7 +90,7 @@ export class UserService {
       );
   }
 
-  updateUserEmail(userToken: UpdateContactRequest): Observable<void> {
+  updateUserEmail(userToken: UpdateTokenRequest): Observable<void> {
     return this._http
       .put<void>(`${this._apiUrl}/users/me/email`, userToken, {
         withCredentials: true,
@@ -107,6 +107,8 @@ export class UserService {
 
             if (errorData.token === 'Invalid token') {
               errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.token === 'Token is expired') {
+              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
             } else {
               errorMsg =
                 'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
@@ -141,7 +143,7 @@ export class UserService {
       );
   }
 
-  updateUserPhone(userToken: UpdateContactRequest): Observable<void> {
+  updateUserPhone(userToken: UpdateTokenRequest): Observable<void> {
     return this._http
       .put<void>(`${this._apiUrl}/users/me/phone-number`, userToken, {
         withCredentials: true,
@@ -158,6 +160,8 @@ export class UserService {
 
             if (errorData.token === 'Invalid token') {
               errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.token === 'Token is expired') {
+              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
             } else {
               errorMsg =
                 'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
@@ -167,6 +171,59 @@ export class UserService {
               'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
           }
           return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  setupTwoFactorAuthorizationToken(): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/users/me/2fa-token`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.phoneNumber === 'Invalid credentials') {
+              errorMsg = 'Niepoprawny email lub hasło';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  setupTwoFactorAuthorization(userToken: UpdateTokenRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/2fa`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie zakładania weryfikacji dwuetapowej. Spróbuj ponownie później.',
+              ),
+          );
         }),
       );
   }

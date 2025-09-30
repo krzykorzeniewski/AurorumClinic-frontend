@@ -39,6 +39,7 @@ import { Router } from '@angular/router';
 import { EditPhoneDialogComponent } from './edit-phone-dialog/edit-phone-dialog.component';
 import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+import { SetupTwoFactorDialogComponent } from './setup-two-factor-dialog/setup-two-factor-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -83,8 +84,8 @@ export class ProfileComponent implements OnInit {
     this._formService.getFulfilledAdditionalInformationProfileForm(null);
   userResponse!: GetPatientResponse | null;
   protected readonly communicationPreferences = communicationPreferences;
-  infoMessage = signal('');
   variant = signal<AlertVariant>('warning');
+  infoMessage = signal('');
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   constructor() {
@@ -188,6 +189,33 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
+
+  onTwoFactorSetup() {
+    this._userService.setupTwoFactorAuthorizationToken().subscribe({
+      next: () => {
+        const dialogRef = this._dialog.open(SetupTwoFactorDialogComponent, {
+          data: {
+            phoneNumber: this.userResponse?.phoneNumber,
+          },
+          disableClose: true,
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.success) {
+            this.getUserProfileInformation();
+            this.variant.set('success');
+            this.infoMessage.set(result.message);
+          }
+        });
+      },
+      error: (err) => {
+        this.accordion.closeAll();
+        this.infoMessage.set(err.message);
+      },
+    });
+  }
+
+  onTwoFactorDelete() {}
 
   onUpdateAdditional() {
     const updatedData = this.additionalInformationProfileForm

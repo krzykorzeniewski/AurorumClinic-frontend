@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
 import { FormsService } from '../../../../core/services/forms.service';
 import {
@@ -10,22 +9,21 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
-  UpdateTokenRequest,
-  UpdatePhoneTokenRequest,
-} from '../../../../core/models/user.model';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatError, MatFormField, MatInput } from '@angular/material/input';
-import {
   AlertComponent,
   AlertVariant,
 } from '../../../../shared/components/alert/alert.component';
+import { UpdateTokenRequest } from '../../../../core/models/user.model';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-phone-dialog',
+  selector: 'app-setup-two-factor-dialog',
   standalone: true,
   imports: [
+    AlertComponent,
+    FormsModule,
     MatButton,
     MatDialogActions,
     MatDialogContent,
@@ -33,27 +31,22 @@ import { NgIf } from '@angular/common';
     MatError,
     MatFormField,
     MatInput,
-    ReactiveFormsModule,
-    MatFormField,
-    MatError,
-    AlertComponent,
     NgIf,
+    MatFormField,
+    ReactiveFormsModule,
+    MatError,
   ],
-  templateUrl: './edit-phone-dialog.component.html',
-  styleUrl: './edit-phone-dialog.component.css',
+  templateUrl: './setup-two-factor-dialog.component.html',
+  styleUrl: './setup-two-factor-dialog.component.css',
 })
-export class EditPhoneDialogComponent {
-  private _authService = inject(AuthService);
+export class SetupTwoFactorDialogComponent {
   private _userService = inject(UserService);
   private _formService = inject(FormsService);
-  private _dialogRef = inject(MatDialogRef<EditPhoneDialogComponent>);
-  readonly data = inject<{
-    oldPhone: string;
-    updatedPhone: UpdatePhoneTokenRequest;
-  }>(MAT_DIALOG_DATA);
+  private _dialogRef = inject(MatDialogRef<SetupTwoFactorDialogComponent>);
+  readonly data = inject<{ phoneNumber: string }>(MAT_DIALOG_DATA);
   readonly confirmForm = this._formService.getCodeVerificationForm();
-  infoMessage = signal('');
   variant = signal<AlertVariant>('warning');
+  infoMessage = signal('');
 
   onSubmit() {
     if (this.confirmForm.invalid) return;
@@ -62,22 +55,11 @@ export class EditPhoneDialogComponent {
       token: this.confirmForm.value,
     };
 
-    const useAuthService =
-      this.data.oldPhone === this.data.updatedPhone.phoneNumber;
-
-    const updatePhoneFn = useAuthService
-      ? this._authService.updateUserPhone.bind(this._authService)
-      : this._userService.updateUserPhone.bind(this._userService);
-
-    const successMessage = useAuthService
-      ? 'Twój numer został zweryfikowany'
-      : 'Twój numer został zmieniony i zweryfikowany';
-
-    updatePhoneFn(token).subscribe({
+    this._userService.setupTwoFactorAuthorization(token).subscribe({
       next: () => {
         this._dialogRef.close({
           success: true,
-          message: successMessage,
+          message: 'Pomyślne założenie weryfikacji dwuetapowej',
         });
       },
       error: (err) => {

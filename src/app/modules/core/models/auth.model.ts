@@ -3,6 +3,12 @@ export interface UserLoginDataRequest {
   password: string;
 }
 
+export type UserLoginDataTwoFactorTokenRequest = Omit<
+  UserLoginDataRequest,
+  'password'
+>;
+export type UserLoginDataTwoFactorRequest = TokenVerifyRequest;
+
 export interface UserLoginResponse {
   twoFactorAuth: boolean;
   role: string;
