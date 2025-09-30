@@ -96,13 +96,26 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania adresu email. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
         }),
       );
   }
@@ -134,13 +147,26 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
         }),
       );
   }

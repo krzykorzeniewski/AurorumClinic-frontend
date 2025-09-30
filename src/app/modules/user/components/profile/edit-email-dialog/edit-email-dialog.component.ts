@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { UserService } from '../../../../core/services/user.service';
 import { FormsService } from '../../../../core/services/forms.service';
 import {
@@ -15,6 +15,11 @@ import {
   UpdateEmailTokenRequest,
 } from '../../../../core/models/user.model';
 import { MatButton } from '@angular/material/button';
+import {
+  AlertComponent,
+  AlertVariant,
+} from '../../../../shared/components/alert/alert.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-edit-email-dialog',
@@ -28,6 +33,8 @@ import { MatButton } from '@angular/material/button';
     MatDialogActions,
     MatButton,
     MatDialogTitle,
+    AlertComponent,
+    NgIf,
   ],
   templateUrl: './edit-email-dialog.component.html',
   styleUrl: './edit-email-dialog.component.css',
@@ -41,6 +48,8 @@ export class EditEmailDialogComponent {
     updatedEmail: UpdateEmailTokenRequest;
   }>(MAT_DIALOG_DATA);
   readonly confirmForm = this._formService.getCodeVerificationForm();
+  infoMessage = signal('');
+  variant = signal<AlertVariant>('warning');
 
   onSubmit() {
     if (this.confirmForm.invalid) return;
@@ -57,7 +66,7 @@ export class EditEmailDialogComponent {
         });
       },
       error: (err) => {
-        this._dialogRef.close({ success: false, error: err.message });
+        this.infoMessage.set(err.message);
       },
     });
   }

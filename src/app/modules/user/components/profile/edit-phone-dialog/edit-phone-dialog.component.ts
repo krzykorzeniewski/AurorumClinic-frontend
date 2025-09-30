@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
 import { FormsService } from '../../../../core/services/forms.service';
@@ -16,6 +16,11 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
+import {
+  AlertComponent,
+  AlertVariant,
+} from '../../../../shared/components/alert/alert.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-edit-phone-dialog',
@@ -31,6 +36,8 @@ import { MatError, MatFormField, MatInput } from '@angular/material/input';
     ReactiveFormsModule,
     MatFormField,
     MatError,
+    AlertComponent,
+    NgIf,
   ],
   templateUrl: './edit-phone-dialog.component.html',
   styleUrl: './edit-phone-dialog.component.css',
@@ -45,6 +52,8 @@ export class EditPhoneDialogComponent {
     updatedPhone: UpdatePhoneTokenRequest;
   }>(MAT_DIALOG_DATA);
   readonly confirmForm = this._formService.getCodeVerificationForm();
+  infoMessage = signal('');
+  variant = signal<AlertVariant>('warning');
 
   onSubmit() {
     if (this.confirmForm.invalid) return;
@@ -72,7 +81,7 @@ export class EditPhoneDialogComponent {
         });
       },
       error: (err) => {
-        this._dialogRef.close({ success: false, error: err.message });
+        this.infoMessage.set(err.message);
       },
     });
   }

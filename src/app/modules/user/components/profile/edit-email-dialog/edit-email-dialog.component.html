@@ -13,8 +13,10 @@
     }
   </mat-form-field>
 </mat-dialog-content>
-
-<mat-dialog-actions align="end">
+<div class="container">
+  <app-alert *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
+</div>
+<mat-dialog-actions [class]="infoMessage() ? '' : 'mt-5'" align="end">
   <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
   <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
     Zmień adres email
