@@ -13,6 +13,8 @@ export interface GetPatientApiResponse {
   phoneNumber: string;
   twoFactorAuth: boolean;
   newsletter: boolean;
+  emailVerified: boolean;
+  phoneNumberVerified: boolean;
   communicationPreferences: communicationPreferences;
 }
 

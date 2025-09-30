@@ -13,7 +13,6 @@ import {
   UpdateContactRequest,
   UpdatePhoneTokenRequest,
 } from '../../../../core/models/user.model';
-import { distinctUntilChanged, of, switchMap } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
@@ -54,28 +53,28 @@ export class EditPhoneDialogComponent {
       token: this.confirmForm.value,
     };
 
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.updateUserPhone(user.userId, token);
-          } else {
-            return of(null);
-          }
-        }),
-      )
-      .subscribe({
-        next: () => {
-          this._dialogRef.close({
-            success: true,
-            message: 'Twój numer telefonu został zmieniony',
-          });
-        },
-        error: (err) => {
-          this._dialogRef.close({ success: false, error: err.message });
-        },
-      });
+    const useAuthService =
+      this.data.oldPhone === this.data.updatedPhone.phoneNumber;
+
+    const updatePhoneFn = useAuthService
+      ? this._authService.updateUserPhone.bind(this._authService)
+      : this._userService.updateUserPhone.bind(this._userService);
+
+    const successMessage = useAuthService
+      ? 'Twój numer został zweryfikowany'
+      : 'Twój numer został zmieniony i zweryfikowany';
+
+    updatePhoneFn(token).subscribe({
+      next: () => {
+        this._dialogRef.close({
+          success: true,
+          message: successMessage,
+        });
+      },
+      error: (err) => {
+        this._dialogRef.close({ success: false, error: err.message });
+      },
+    });
   }
   onNoClick() {
     this._dialogRef.close({ success: false });

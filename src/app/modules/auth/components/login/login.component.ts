@@ -71,7 +71,7 @@ export class LoginComponent {
 
     this._authService.login(userData).subscribe({
       next: () => {
-        void this._router.navigate(['/home']);
+        void this._router.navigate(['/']);
       },
       error: (err) => {
         this.variant.set('warning');

@@ -22,6 +22,10 @@ import {
 } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  UpdateContactRequest,
+  UpdatePhoneTokenRequest,
+} from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,12 +46,7 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(
-            data.userId,
-            data.email,
-            data.twoFactorAuth,
-            this.mapRole(data.role),
-          );
+          return new User(data.twoFactorAuth, this.mapRole(data.role));
         }),
         tap((user) => {
           this.#user.next(user);
@@ -92,12 +91,7 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(
-            data.userId,
-            data.email,
-            data.twoFactorAuth,
-            this.mapRole(data.role),
-          );
+          return new User(data.twoFactorAuth, this.mapRole(data.role));
         }),
         tap((user) => this.#user.next(user)),
         catchError(() => {
@@ -109,6 +103,40 @@ export class AuthService {
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
     return this._http.post<void>(`${this._apiUrl}/verify-email-token`, request);
+  }
+
+  verifyUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/me/verify-phone-number-token`, userPhone, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhone(userToken: UpdateContactRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/me/verify-phone-number`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
   }
 
   activateAccount(tokenRequest: TokenVerifyRequest): Observable<void> {
@@ -180,10 +208,6 @@ export class AuthService {
           this.#user.next(null);
         }),
       );
-  }
-
-  forceLogout() {
-    this.#user.next(null);
   }
 
   isLoggedIn(): boolean {

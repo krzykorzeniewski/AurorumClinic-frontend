@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
 import { FormsService } from '../../../core/services/forms.service';
 import { UserService } from '../../../core/services/user.service';
 import {
@@ -18,7 +17,6 @@ import {
   UpdatePhoneTokenRequest,
 } from '../../../core/models/user.model';
 import { DatePipe, NgIf } from '@angular/common';
-import { distinctUntilChanged, switchMap, throwError } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatError,
@@ -39,6 +37,8 @@ import { DeleteProfileDialogComponent } from './delete-profile-dialog/delete-pro
 import { EditEmailDialogComponent } from './edit-email-dialog/edit-email-dialog.component';
 import { Router } from '@angular/router';
 import { EditPhoneDialogComponent } from './edit-phone-dialog/edit-phone-dialog.component';
+import { MatIcon } from '@angular/material/icon';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -66,6 +66,7 @@ import { EditPhoneDialogComponent } from './edit-phone-dialog/edit-phone-dialog.
     MatOption,
     MatButton,
     AlertComponent,
+    MatIcon,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -99,128 +100,108 @@ export class ProfileComponent implements OnInit {
   }
 
   onUpdateEmail() {
-    const updatedEmail = this.emailProfileForm.value as UpdateEmailTokenRequest;
+    const updatedEmail: UpdateEmailTokenRequest = {
+      email: this.emailProfileForm.value.email,
+    };
 
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.updateUserEmailToken(
-              user.userId,
-              updatedEmail,
-            );
-          } else {
-            return throwError(
-              () =>
-                new Error(
-                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
-                ),
-            );
+    this._userService.updateUserEmailToken(updatedEmail).subscribe({
+      next: () => {
+        const dialogRef = this._dialog.open(EditEmailDialogComponent, {
+          data: {
+            oldEmail: this.userResponse?.email,
+            updatedEmail: updatedEmail,
+          },
+          disableClose: true,
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.success) {
+            this.getUserProfileInformation();
+            this.variant.set('success');
+            this.infoMessage.set(result.message);
           }
-        }),
-      )
-      .subscribe({
-        next: () => {
-          const dialogRef = this._dialog.open(EditEmailDialogComponent, {
-            data: {
-              oldEmail: this.userResponse?.email,
-              updatedEmail: updatedEmail,
-            },
-            disableClose: true,
-          });
-
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result?.success) {
-              this.getUserProfileInformation();
-              this.variant.set('success');
-              this.infoMessage.set(result.message);
-            }
-          });
-        },
-        error: (err) => {
-          this.accordion.closeAll();
-          this.infoMessage.set(err.message);
-        },
-      });
+        });
+      },
+      error: (err) => {
+        this.accordion.closeAll();
+        this.infoMessage.set(err.message);
+      },
+    });
   }
 
   onUpdatePhone() {
-    const updatedPhone = this.phoneProfileForm.value as UpdatePhoneTokenRequest;
+    const updatedPhone: UpdatePhoneTokenRequest = {
+      phoneNumber: this.phoneProfileForm.value.phoneNumber,
+    };
 
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.updateUserPhoneToken(
-              user.userId,
-              updatedPhone,
-            );
-          } else {
-            return throwError(
-              () =>
-                new Error(
-                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
-                ),
-            );
+    this._userService.updateUserPhoneToken(updatedPhone).subscribe({
+      next: () => {
+        const dialogRef = this._dialog.open(EditPhoneDialogComponent, {
+          data: {
+            oldPhone: this.userResponse?.phoneNumber,
+            updatedPhone: updatedPhone,
+          },
+          disableClose: true,
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.success) {
+            this.getUserProfileInformation();
+            this.variant.set('success');
+            this.infoMessage.set(result.message);
           }
-        }),
-      )
-      .subscribe({
-        next: () => {
-          const dialogRef = this._dialog.open(EditPhoneDialogComponent, {
-            data: {
-              oldPhone: this.userResponse?.phoneNumber,
-              updatedPhone: updatedPhone,
-            },
-            disableClose: true,
-          });
+        });
+      },
+      error: (err) => {
+        this.accordion.closeAll();
+        this.infoMessage.set(err.message);
+      },
+    });
+  }
 
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result?.success) {
-              this.getUserProfileInformation();
-              this.variant.set('success');
-              this.infoMessage.set(result.message);
-            }
-          });
-        },
-        error: (err) => {
-          this.accordion.closeAll();
-          this.infoMessage.set(err.message);
-        },
-      });
+  onVerifyPhone() {
+    const currentPhone: UpdatePhoneTokenRequest = {
+      phoneNumber: this.phoneProfileForm.value.phoneNumber,
+    };
+
+    this._authService.verifyUserPhoneToken(currentPhone).subscribe({
+      next: () => {
+        const dialogRef = this._dialog.open(EditPhoneDialogComponent, {
+          data: {
+            oldPhone: this.userResponse?.phoneNumber,
+            updatedPhone: currentPhone,
+          },
+          disableClose: true,
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.success) {
+            this.getUserProfileInformation();
+            this.variant.set('success');
+            this.infoMessage.set(result.message);
+          }
+        });
+      },
+      error: (err) => {
+        this.accordion.closeAll();
+        this.infoMessage.set(err.message);
+      },
+    });
   }
 
   onUpdateAdditional() {
     const updatedData = this.additionalInformationProfileForm
       .value as PatchUserRequest;
 
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.patchUser(user.userId, updatedData);
-          } else {
-            return throwError(
-              () =>
-                new Error(
-                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
-                ),
-            );
-          }
-        }),
-      )
-      .subscribe({
-        next: (userResponse) => {
-          this.completeAllForm(userResponse);
-        },
-        error: (err) => {
-          this.accordion.closeAll();
-          this.infoMessage.set(err.message);
-        },
-      });
+    this._userService.patchUser(updatedData).subscribe({
+      next: (userResponse) => {
+        this.completeAllForm(userResponse);
+      },
+      error: (err) => {
+        this.accordion.closeAll();
+        this.infoMessage.set(err.message);
+      },
+    });
   }
 
   openDeleteDialog() {
@@ -230,31 +211,15 @@ export class ProfileComponent implements OnInit {
   }
 
   private getUserProfileInformation() {
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.getUser(user.userId);
-          } else {
-            return throwError(
-              () =>
-                new Error(
-                  'Wystąpił błąd autoryzacji. Spróbuj ponownie później.',
-                ),
-            );
-          }
-        }),
-      )
-      .subscribe({
-        next: (userResponse) => {
-          this.completeAllForm(userResponse);
-        },
-        error: (err) => {
-          this.userResponse = null;
-          this.infoMessage.set(err.message);
-        },
-      });
+    this._userService.getUser().subscribe({
+      next: (userResponse) => {
+        this.completeAllForm(userResponse);
+      },
+      error: (err) => {
+        this.userResponse = null;
+        this.infoMessage.set(err.message);
+      },
+    });
   }
 
   getErrorMessage(control: FormControl) {

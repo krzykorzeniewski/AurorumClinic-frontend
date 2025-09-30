@@ -14,7 +14,12 @@
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title> Email </mat-panel-title>
-                <mat-panel-description> {{userResponse.email}} </mat-panel-description>
+                <mat-panel-description class="justify-content-between align-content-center">
+                  {{userResponse.email}}
+                  <mat-icon *ngIf="userResponse.emailVerified">
+                    verified
+                  </mat-icon>
+                </mat-panel-description>
               </mat-expansion-panel-header>
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Podaj nowy adres email</mat-label>
@@ -52,10 +57,16 @@
             </mat-expansion-panel>
 
           <form id="phone-number" [formGroup]="phoneProfileForm" (ngSubmit)="onUpdatePhone()">
+          <form id="phone-number-verify" [formGroup]="phoneProfileForm" (ngSubmit)="onVerifyPhone()">
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title> Numer telefonu </mat-panel-title>
-                <mat-panel-description> {{userResponse.phoneNumber}} </mat-panel-description>
+                <mat-panel-description class="justify-content-between align-content-center">
+                  {{userResponse.phoneNumber}}
+                  <mat-icon *ngIf="userResponse.phoneNumberVerified">
+                    verified
+                  </mat-icon>
+                </mat-panel-description>
               </mat-expansion-panel-header>
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Podaj nowy numer telefonu</mat-label>
@@ -68,11 +79,15 @@
                 }
               </mat-form-field>
               <div class="d-flex justify-content-between mt-4">
+                <button *ngIf="!userResponse.phoneNumberVerified" form="phone-number-verify" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumberVerified || phoneProfileForm.invalid">
+                  Zweryfikuj
+                </button>
                 <button form="phone-number" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumber === phoneControl.phoneNumber.value || phoneProfileForm.invalid">
                   Zaktualizuj
                 </button>
               </div>
             </mat-expansion-panel>
+            </form>
           </form>
 
             <mat-expansion-panel>
@@ -100,11 +115,11 @@
                   <mat-label> Preferencje komunikacyjne </mat-label>
                   <mat-select [formControl]="additionalInfoControls.communicationPreferences">
                     <mat-option [value]="communicationPreferences.EMAIL">Email</mat-option>
-                    <mat-option [value]="communicationPreferences.PHONE_NUMBER">Telefon</mat-option>
+                    <mat-option *ngIf="userResponse.phoneNumberVerified" [value]="communicationPreferences.PHONE_NUMBER">Telefon</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <div class="d-flex justify-content-between mt-4">
-                  <button form="additionalInfo" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="additionalInformationProfileForm.invalid">
+                  <button form="additionalInfo" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.communicationPreferences === additionalInfoControls.communicationPreferences.value && userResponse.newsletter === additionalInfoControls.newsletter.value || additionalInformationProfileForm.invalid">
                     Zaktualizuj
                   </button>
                 </div>
@@ -116,7 +131,7 @@
               <mat-expansion-panel-header>
                 <mat-panel-title> Usunięcie konta </mat-panel-title>
               </mat-expansion-panel-header>
-              <button mat-raised-button (click)="openDeleteDialog()">USUŃ KONTO</button>
+              <button mat-raised-button style="background-color: #ac2626" (click)="openDeleteDialog()">USUŃ KONTO</button>
             </mat-expansion-panel>
       </mat-accordion>
     </mat-card-content>

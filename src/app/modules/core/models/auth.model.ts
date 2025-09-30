@@ -4,16 +4,12 @@ export interface UserLoginDataRequest {
 }
 
 export interface UserLoginResponse {
-  userId: number;
-  email: string;
   twoFactorAuth: boolean;
   role: string;
 }
 
 export class User implements UserLoginResponse {
   constructor(
-    readonly userId: number,
-    readonly email: string,
     readonly twoFactorAuth: boolean,
     readonly role: UserRole,
   ) {}

@@ -19,14 +19,11 @@ export class UserService {
   private _http = inject(HttpClient);
   private _apiUrl = environment.apiUrl;
 
-  getUser(userId: number): Observable<GetPatientResponse> {
+  getUser(): Observable<GetPatientResponse> {
     return this._http
-      .get<ApiResponse<GetPatientApiResponse>>(
-        `${this._apiUrl}/patients/${userId}`,
-        {
-          withCredentials: true,
-        },
-      )
+      .get<ApiResponse<GetPatientApiResponse>>(`${this._apiUrl}/patients/me`, {
+        withCredentials: true,
+      })
       .pipe(
         map(
           (apiResponse): GetPatientResponse => ({
@@ -47,13 +44,10 @@ export class UserService {
       );
   }
 
-  patchUser(
-    userId: number,
-    userData: PatchUserRequest,
-  ): Observable<GetPatientResponse> {
+  patchUser(userData: PatchUserRequest): Observable<GetPatientResponse> {
     return this._http
       .patch<ApiResponse<GetPatientApiResponse>>(
-        `${this._apiUrl}/patients/${userId}`,
+        `${this._apiUrl}/patients/me`,
         userData,
         {
           withCredentials: true,
@@ -79,36 +73,9 @@ export class UserService {
       );
   }
 
-  updateUserEmailToken(
-    userId: number,
-    userEmail: UpdateEmailTokenRequest,
-  ): Observable<void> {
+  updateUserEmailToken(userEmail: UpdateEmailTokenRequest): Observable<void> {
     return this._http
-      .post<void>(
-        `${this._apiUrl}/users/${userId}/email-update-token`,
-        userEmail,
-        {
-          withCredentials: true,
-        },
-      )
-      .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
-        }),
-      );
-  }
-
-  updateUserEmail(
-    userId: number,
-    userToken: UpdateContactRequest,
-  ): Observable<void> {
-    return this._http
-      .put<void>(`${this._apiUrl}/users/${userId}/email`, userToken, {
+      .post<void>(`${this._apiUrl}/users/me/email-update-token`, userEmail, {
         withCredentials: true,
       })
       .pipe(
@@ -123,13 +90,27 @@ export class UserService {
       );
   }
 
-  updateUserPhoneToken(
-    userId: number,
-    userPhone: UpdatePhoneTokenRequest,
-  ): Observable<void> {
+  updateUserEmail(userToken: UpdateContactRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/email`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {
     return this._http
       .post<void>(
-        `${this._apiUrl}/users/${userId}/phone-number-update-token`,
+        `${this._apiUrl}/users/me/phone-number-update-token`,
         userPhone,
         {
           withCredentials: true,
@@ -147,12 +128,9 @@ export class UserService {
       );
   }
 
-  updateUserPhone(
-    userId: number,
-    userToken: UpdateContactRequest,
-  ): Observable<void> {
+  updateUserPhone(userToken: UpdateContactRequest): Observable<void> {
     return this._http
-      .put<void>(`${this._apiUrl}/users/${userId}/phone-number`, userToken, {
+      .put<void>(`${this._apiUrl}/users/me/phone-number`, userToken, {
         withCredentials: true,
       })
       .pipe(
@@ -167,9 +145,9 @@ export class UserService {
       );
   }
 
-  deleteUser(userId: number): Observable<void> {
+  deleteUser(): Observable<void> {
     return this._http
-      .delete<void>(`${this._apiUrl}/patients/${userId}`, {
+      .delete<void>(`${this._apiUrl}/patients/me`, {
         withCredentials: true,
       })
       .pipe(
