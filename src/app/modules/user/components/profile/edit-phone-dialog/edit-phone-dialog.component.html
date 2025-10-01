@@ -1,4 +1,12 @@
-<h2 mat-dialog-title>Uwaga!<br> Utracisz dostęp do swojego starego numeru telefonu {{ data.oldPhone }}</h2>
+<h2 mat-dialog-title>
+  Uwaga!<br>
+  <span *ngIf="data.oldPhone === data.updatedPhone.phoneNumber">
+    Weryfikacja numeru telefonu
+  </span>
+  <span *ngIf="data.oldPhone !== data.updatedPhone.phoneNumber">
+    Utracisz dostęp do swojego starego numeru telefonu {{ data.oldPhone }}
+  </span>
+</h2>
 
 <mat-dialog-content>
   <p>
