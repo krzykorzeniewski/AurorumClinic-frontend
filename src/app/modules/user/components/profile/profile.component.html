@@ -79,7 +79,7 @@
                 }
               </mat-form-field>
               <div class="d-flex justify-content-between mt-4">
-                <button *ngIf="!userResponse.phoneNumberVerified" form="phone-number-verify" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumberVerified || phoneProfileForm.invalid">
+                <button *ngIf="!userResponse.phoneNumberVerified" form="phone-number-verify" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumber !== phoneControl.phoneNumber.value ||  phoneProfileForm.invalid">
                   Zweryfikuj
                 </button>
                 <button form="phone-number" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.phoneNumber === phoneControl.phoneNumber.value || phoneProfileForm.invalid">

@@ -28,10 +28,10 @@
   <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
   <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
     <span *ngIf="data.oldPhone === data.updatedPhone.phoneNumber">
-    Zweryfikuj numeru telefonu
+    Zweryfikuj
   </span>
     <span *ngIf="data.oldPhone !== data.updatedPhone.phoneNumber">
-    Zmień numer telefonu
+    Zmień
   </span>
   </button>
 </mat-dialog-actions>

@@ -162,7 +162,7 @@ export class ProfileComponent implements OnInit {
 
   onVerifyPhone() {
     const currentPhone: UpdatePhoneTokenRequest = {
-      phoneNumber: this.phoneProfileForm.value.phoneNumber,
+      phoneNumber: this.userResponse?.phoneNumber,
     };
 
     this._authService.verifyUserPhoneToken(currentPhone).subscribe({
