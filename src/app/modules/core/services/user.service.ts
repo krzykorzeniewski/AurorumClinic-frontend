@@ -198,6 +198,11 @@ export class UserService {
               errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
             } else if (errorData.phoneNumber === 'Invalid credentials') {
               errorMsg = 'Niepoprawny email lub hasło';
+            } else if (
+              errorData.phoneNumber === 'Phone number is not verified'
+            ) {
+              errorMsg =
+                'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
             } else {
               errorMsg =
                 'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
