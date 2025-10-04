@@ -13,17 +13,21 @@ export interface GetPatientApiResponse {
   phoneNumber: string;
   twoFactorAuth: boolean;
   newsletter: boolean;
+  emailVerified: boolean;
+  phoneNumberVerified: boolean;
   communicationPreferences: communicationPreferences;
 }
 
 export type GetPatientResponse = Omit<GetPatientApiResponse, 'id'>;
-export type UpdatePatientRequest = Partial<
-  Pick<
-    GetPatientApiResponse,
-    | 'email'
-    | 'phoneNumber'
-    | 'twoFactorAuth'
-    | 'newsletter'
-    | 'communicationPreferences'
-  >
+export type UpdateEmailTokenRequest = Partial<
+  Pick<GetPatientApiResponse, 'email'>
+>;
+export type UpdatePhoneTokenRequest = Partial<
+  Pick<GetPatientApiResponse, 'phoneNumber'>
+>;
+export interface UpdateTokenRequest {
+  token: string;
+}
+export type PatchUserRequest = Partial<
+  Pick<GetPatientApiResponse, 'newsletter' | 'communicationPreferences'>
 >;

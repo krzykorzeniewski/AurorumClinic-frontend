@@ -48,7 +48,8 @@ export class PasswordRecoveryComponent {
 
     this._authService.resetPassword(userData).subscribe({
       next: () => {
-        this._router.navigate(['/auth/login'], {
+        localStorage.setItem('email', userData.email);
+        void this._router.navigate(['/auth/login'], {
           state: {
             message:
               'Na podany adres e-mail został wysłany link do resetu hasła',

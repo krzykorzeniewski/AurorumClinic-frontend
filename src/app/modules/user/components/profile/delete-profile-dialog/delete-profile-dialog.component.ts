@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
-import { distinctUntilChanged, of, switchMap } from 'rxjs';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -20,9 +19,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { FormsService } from '../../../../core/services/forms.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-delete-profile-dialog',
+  standalone: true,
   imports: [
     MatDialogContent,
     MatDialogTitle,
@@ -58,20 +59,11 @@ export class DeleteProfileDialogComponent {
 
   onDelete() {
     if (this.confirmForm.invalid) return;
-    this._authService.user$
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId),
-        switchMap((user) => {
-          if (user?.userId) {
-            return this._userService.deletePatient(user.userId);
-          } else {
-            return of(null);
-          }
-        }),
-      )
+    this._userService
+      .deleteUser()
+      .pipe(switchMap(() => this._authService.refreshCookies()))
       .subscribe({
         next: () => {
-          this._authService.forceLogout();
           void this._router.navigate(['auth/login'], {
             state: {
               message: 'Twoje konto zostało usunięte',

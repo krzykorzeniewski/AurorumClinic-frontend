@@ -19,27 +19,40 @@ export class AccountActivationComponent implements OnInit {
     this._route.paramMap.subscribe({
       next: (param) => {
         const token = param.get('uid');
-        if (token) {
-          const tokenRequest: TokenVerifyRequest = { token };
+        const email = localStorage.getItem('email');
+
+        if (token && email) {
+          const tokenRequest: TokenVerifyRequest = { token, email };
           this._authService.activateAccount(tokenRequest).subscribe({
             next: () => {
-              void this._router.navigate(['/auth/login'], {
-                state: {
-                  message: 'Konto aktywowane pomyślnie!',
-                  variant: 'success',
-                },
-              });
+              this.redirectAndShowMessage(
+                'Konto aktywowane pomyślnie!',
+                'success',
+              );
             },
             error: () => {
-              void this._router.navigate(['/auth/login'], {
-                state: {
-                  message: 'Twój link weryfikacyjny jest nieprawidłowy.',
-                  variant: 'warning',
-                },
-              });
+              this.redirectAndShowMessage(
+                'Twój link weryfikacyjny jest nieprawidłowy.',
+                'warning',
+              );
             },
           });
+          localStorage.removeItem('email');
+        } else {
+          this.redirectAndShowMessage(
+            'Twój link weryfikacyjny jest nieprawidłowy.',
+            'warning',
+          );
         }
+      },
+    });
+  }
+
+  private redirectAndShowMessage(message: string, variant: string) {
+    void this._router.navigate(['/auth/login'], {
+      state: {
+        message: message,
+        variant: variant,
       },
     });
   }

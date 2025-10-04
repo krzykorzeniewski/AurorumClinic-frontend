@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>
+  <span *ngIf="data.oldPhone === data.updatedPhone.phoneNumber">
+    Weryfikacja numeru telefonu
+  </span>
+  <span *ngIf="data.oldPhone !== data.updatedPhone.phoneNumber">
+    Uwaga!<br>
+    Utracisz dostęp do swojego starego numeru telefonu {{ data.oldPhone }}
+  </span>
+</h2>
+
+<mat-dialog-content>
+  <p>
+    Proszę wpisać poniżej kod wysłany na numer <b>{{ data.updatedPhone.phoneNumber }}</b>:
+    <br>
+  </p>
+
+  <mat-form-field class="w-100" appearance="fill">
+    <input matInput [formControl]="confirmForm" />
+    @if (confirmForm.invalid) {
+      <mat-error>{{ getErrorMessage(confirmForm) }}</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<div class="container">
+  <app-alert *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
+</div>
+<mat-dialog-actions [class]="infoMessage() ? '' : 'mt-5'" align="end">
+  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
+  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
+    <span *ngIf="data.oldPhone === data.updatedPhone.phoneNumber">
+    Zweryfikuj
+  </span>
+    <span *ngIf="data.oldPhone !== data.updatedPhone.phoneNumber">
+    Zmień
+  </span>
+  </button>
+</mat-dialog-actions>

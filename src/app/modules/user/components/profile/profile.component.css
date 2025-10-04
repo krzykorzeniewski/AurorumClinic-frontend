@@ -2,3 +2,13 @@
   pointer-events: none !important;
   cursor: default !important;
 }
+.profile-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 15px;
+}
+@media (max-width: 576px) {
+.profile-card {
+  margin: 0;
+  }
+}

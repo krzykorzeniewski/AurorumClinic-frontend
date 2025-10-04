@@ -54,24 +54,50 @@ export class PasswordRecoveryFormComponent implements OnInit {
   }
 
   onPasswordReset(): void {
-    const userData: UserPasswordResetRequest = {
-      password: this.passwordResetForm.value.password!,
-      token: this._token,
-    };
+    const email = localStorage.getItem('email');
 
-    this._authService.changePassword(userData).subscribe({
-      next: () => {
-        void this._router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        this.errorMessage.set(err.message);
-      },
-    });
+    if (this._token && email) {
+      const userData: UserPasswordResetRequest = {
+        password: this.passwordResetForm.value.password!,
+        token: this._token,
+        email: email,
+      };
+
+      this._authService.changePassword(userData).subscribe({
+        next: () => {
+          this.redirectAndShowMessage(
+            'Twoje nowe hasło zostało ustawione pomyślnie!',
+            'success',
+          );
+        },
+        error: () => {
+          this.redirectAndShowMessage(
+            'Wystąpił błąd w trakcie ustawiania nowego hasła. Proszę spróbować później.',
+            'warning',
+          );
+        },
+      });
+      localStorage.removeItem('email');
+    } else {
+      this.redirectAndShowMessage(
+        'Wystąpił błąd w trakcie ustawiania nowego hasła. Proszę spróbować później.',
+        'warning',
+      );
+    }
   }
 
   clickEventPassword(event: MouseEvent) {
     this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
+  }
+
+  private redirectAndShowMessage(message: string, variant: string) {
+    void this._router.navigate(['/auth/login'], {
+      state: {
+        message: message,
+        variant: variant,
+      },
+    });
   }
 
   getErrorMessage(control: FormControl) {

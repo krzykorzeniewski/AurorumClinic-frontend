@@ -3,17 +3,19 @@ export interface UserLoginDataRequest {
   password: string;
 }
 
+export type UserLoginDataTwoFactorTokenRequest = Omit<
+  UserLoginDataRequest,
+  'password'
+>;
+export type UserLoginDataTwoFactorRequest = TokenVerifyRequest;
+
 export interface UserLoginResponse {
-  userId: number;
-  email: string;
   twoFactorAuth: boolean;
   role: string;
 }
 
 export class User implements UserLoginResponse {
   constructor(
-    readonly userId: number,
-    readonly email: string,
     readonly twoFactorAuth: boolean,
     readonly role: UserRole,
   ) {}
@@ -33,13 +35,17 @@ export interface UserPasswordRecoverEmailRequest {
 }
 
 export interface UserPasswordResetRequest {
-  token: string | null;
+  token: string;
   password: string;
+  email: string;
 }
 
 export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
 
-export type TokenVerifyRequest = Omit<UserPasswordResetRequest, 'password'>;
+export interface TokenVerifyRequest {
+  token: string;
+  email: string;
+}
 
 export interface ApiResponse<T> {
   status: string;

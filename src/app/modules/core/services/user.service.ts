@@ -4,7 +4,10 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import {
   GetPatientApiResponse,
   GetPatientResponse,
-  UpdatePatientRequest,
+  PatchUserRequest,
+  UpdateTokenRequest,
+  UpdateEmailTokenRequest,
+  UpdatePhoneTokenRequest,
 } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../models/auth.model';
@@ -16,14 +19,11 @@ export class UserService {
   private _http = inject(HttpClient);
   private _apiUrl = environment.apiUrl;
 
-  getPatient(userId: number): Observable<GetPatientResponse> {
+  getUser(): Observable<GetPatientResponse> {
     return this._http
-      .get<ApiResponse<GetPatientApiResponse>>(
-        `${this._apiUrl}/patients/${userId}`,
-        {
-          withCredentials: true,
-        },
-      )
+      .get<ApiResponse<GetPatientApiResponse>>(`${this._apiUrl}/patients/me`, {
+        withCredentials: true,
+      })
       .pipe(
         map(
           (apiResponse): GetPatientResponse => ({
@@ -44,13 +44,10 @@ export class UserService {
       );
   }
 
-  updatePatient(
-    userId: number,
-    userData: UpdatePatientRequest,
-  ): Observable<GetPatientResponse> {
+  patchUser(userData: PatchUserRequest): Observable<GetPatientResponse> {
     return this._http
       .patch<ApiResponse<GetPatientApiResponse>>(
-        `${this._apiUrl}/patients/${userId}`,
+        `${this._apiUrl}/patients/me`,
         userData,
         {
           withCredentials: true,
@@ -76,9 +73,169 @@ export class UserService {
       );
   }
 
-  deletePatient(userId: number): Observable<void> {
+  updateUserEmailToken(userEmail: UpdateEmailTokenRequest): Observable<void> {
     return this._http
-      .delete<void>(`${this._apiUrl}/patients/${userId}`, {
+      .post<void>(`${this._apiUrl}/users/me/email-update-token`, userEmail, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserEmail(userToken: UpdateTokenRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/email`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania adresu email. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.token === 'Token is expired') {
+              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  updateUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/users/me/phone-number-update-token`,
+        userPhone,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhone(userToken: UpdateTokenRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/phone-number`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.token === 'Token is expired') {
+              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  setupTwoFactorAuthorizationToken(): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/users/me/2fa-token`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.phoneNumber === 'Invalid credentials') {
+              errorMsg = 'Niepoprawny email lub hasło';
+            } else if (
+              errorData.phoneNumber === 'Phone number is not verified'
+            ) {
+              errorMsg =
+                'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  setupTwoFactorAuthorization(userToken: UpdateTokenRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/2fa`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie zakładania weryfikacji dwuetapowej. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  deleteUser(): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/patients/me`, {
         withCredentials: true,
       })
       .pipe(

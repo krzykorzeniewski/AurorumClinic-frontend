@@ -4,6 +4,8 @@ import {
   TokenVerifyRequest,
   User,
   UserLoginDataRequest,
+  UserLoginDataTwoFactorRequest,
+  UserLoginDataTwoFactorTokenRequest,
   UserLoginResponse,
   UserPasswordRecoverEmailRequest,
   UserPasswordResetRequest,
@@ -22,12 +24,16 @@ import {
 } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  UpdateTokenRequest,
+  UpdatePhoneTokenRequest,
+} from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private _user = new BehaviorSubject<User | null>(null);
+  #user = new BehaviorSubject<User | null>(null);
   private _apiUrl = environment.apiUrl + '/auth';
   private _http = inject(HttpClient);
 
@@ -42,24 +48,50 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(
-            data.userId,
-            data.email,
-            data.twoFactorAuth,
-            this.mapRole(data.role),
-          );
+          return new User(data.twoFactorAuth, this.mapRole(data.role));
         }),
         tap((user) => {
-          this._user.next(user);
+          if (!user.twoFactorAuth) this.#user.next(user);
         }),
         catchError((err: HttpErrorResponse) => {
-          let errorMsg = '';
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg = 'Wystąpił błąd. Proszę spróbować później';
-          } else {
-            errorMsg = 'Niepoprawny email lub hasło';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
+        }),
+      );
+  }
+
+  loginTwoFactorToken(
+    userEmail: UserLoginDataTwoFactorTokenRequest,
+  ): Observable<void> {
+    return this._http.post<void>(`${this._apiUrl}/login-2fa-token`, userEmail, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  loginTwoFactor(userData: UserLoginDataTwoFactorRequest): Observable<User> {
+    return this._http
+      .post<ApiResponse<UserLoginResponse>>(
+        `${this._apiUrl}/login-2fa`,
+        userData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .pipe(
+        map((res) => {
+          const data = res.data;
+          return new User(data.twoFactorAuth, this.mapRole(data.role));
+        }),
+        tap((user) => {
+          this.#user.next(user);
+        }),
+        catchError((err: HttpErrorResponse) => {
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -80,16 +112,11 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(
-            data.userId,
-            data.email,
-            data.twoFactorAuth,
-            this.mapRole(data.role),
-          );
+          return new User(data.twoFactorAuth, this.mapRole(data.role));
         }),
-        tap((user) => this._user.next(user)),
+        tap((user) => this.#user.next(user)),
         catchError(() => {
-          this._user.next(null);
+          this.#user.next(null);
           return of(null);
         }),
       );
@@ -97,6 +124,55 @@ export class AuthService {
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
     return this._http.post<void>(`${this._apiUrl}/verify-email-token`, request);
+  }
+
+  verifyUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/me/verify-phone-number-token`, userPhone, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUserPhone(userToken: UpdateTokenRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/me/verify-phone-number`, userToken, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.token === 'Token is expired') {
+              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
   }
 
   activateAccount(tokenRequest: TokenVerifyRequest): Observable<void> {
@@ -165,21 +241,45 @@ export class AuthService {
       })
       .pipe(
         tap(() => {
-          this._user.next(null);
+          this.#user.next(null);
         }),
       );
   }
 
-  forceLogout() {
-    this._user.next(null);
-  }
-
   isLoggedIn(): boolean {
-    return !!this._user.getValue();
+    return !!this.#user.getValue();
   }
 
   get user$(): Observable<User | null> {
-    return this._user.asObservable();
+    return this.#user.asObservable();
+  }
+
+  private getLoginErrorMessage(err: HttpErrorResponse) {
+    let errorMsg: string;
+
+    if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+      errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+    } else if (err.error?.status === 'fail' && err.error?.data) {
+      const errorData = err.error.data;
+
+      if (errorData.email === 'Email is not verified') {
+        errorMsg =
+          'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.';
+      } else if (errorData.credentials === 'Invalid credentials') {
+        errorMsg = 'Niepoprawny email lub hasło';
+      } else if (errorData.token === 'Token is expired') {
+        errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+      } else if (
+        ['Token is invalid', 'Invalid token'].includes(errorData.token)
+      ) {
+        errorMsg = 'Podany kod jest nieprawidłowy. Spróbuj ponownie.';
+      } else {
+        errorMsg = 'Wystąpił błąd podczas logowania';
+      }
+    } else {
+      errorMsg = 'Niepoprawny email lub hasło';
+    }
+    return errorMsg;
   }
 
   private mapRole(roleFromApi: string): UserRole {

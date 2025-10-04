@@ -104,7 +104,7 @@ export class FormsService {
     );
   }
 
-  getFulfilledProfileForm(userData: GetPatientResponse | null) {
+  getFulfilledEmailProfileForm(userData: GetPatientResponse | null) {
     return new FormGroup({
       email: new FormControl<string>(userData ? userData.email : '', {
         validators: [
@@ -114,6 +114,11 @@ export class FormsService {
         ],
         nonNullable: true,
       }),
+    });
+  }
+
+  getFulfilledPhoneProfileForm(userData: GetPatientResponse | null) {
+    return new FormGroup({
       phoneNumber: new FormControl<string>(
         userData ? userData.phoneNumber : '',
         {
@@ -121,6 +126,13 @@ export class FormsService {
           nonNullable: true,
         },
       ),
+    });
+  }
+
+  getFulfilledAdditionalInformationProfileForm(
+    userData: GetPatientResponse | null,
+  ) {
+    return new FormGroup({
       communicationPreferences: new FormControl<communicationPreferences>(
         userData
           ? userData.communicationPreferences
@@ -137,13 +149,17 @@ export class FormsService {
           nonNullable: true,
         },
       ),
-      twoFactorAuth: new FormControl<boolean>(
-        userData ? userData.twoFactorAuth : false,
-        {
-          validators: [Validators.required],
-          nonNullable: true,
-        },
-      ),
+    });
+  }
+
+  getCodeVerificationForm() {
+    return new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6),
+      ],
+      nonNullable: true,
     });
   }
 

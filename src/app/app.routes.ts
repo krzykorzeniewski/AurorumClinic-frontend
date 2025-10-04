@@ -4,11 +4,6 @@ import { authActivateGuard } from './modules/core/guards/auth-activate.guard';
 export const APP_ROUTES: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'home',
-  },
-  {
-    path: 'home',
     loadComponent: () =>
       import('./modules/home/home.component').then((c) => c.HomeComponent),
   },
