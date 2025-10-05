@@ -224,6 +224,8 @@ export class ProfileComponent implements OnInit {
     this._userService.patchUser(updatedData).subscribe({
       next: (userResponse) => {
         this.completeAllForm(userResponse);
+        this.variant.set('success');
+        this.infoMessage.set('Twoje preferencje zostały zmienione');
       },
       error: (err) => {
         this.accordion.closeAll();
