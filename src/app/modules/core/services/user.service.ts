@@ -2,15 +2,19 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import {
+  Appointment,
+  Doctor,
+  GetAppointmentInfo,
   GetPatientApiResponse,
   GetPatientResponse,
   PatchUserRequest,
-  UpdateTokenRequest,
+  Service,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
+  UpdateTokenRequest,
 } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../models/auth.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { ApiResponse, PageableResponse } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -228,6 +232,53 @@ export class UserService {
               new Error(
                 'Wystąpił błąd w trakcie zakładania weryfikacji dwuetapowej. Spróbuj ponownie później.',
               ),
+          );
+        }),
+      );
+  }
+
+  getUserAppointments(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this._http
+      .get<ApiResponse<PageableResponse<GetAppointmentInfo>>>(
+        `${this._apiUrl}/appointments/me`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            appointments: res.data.content.map(
+              (value) =>
+                new Appointment(
+                  value.id,
+                  value.startedAt,
+                  value.status,
+                  new Doctor(
+                    value.doctor.id,
+                    value.doctor.name,
+                    value.doctor.surname,
+                    value.doctor.specialization,
+                    value.doctor.profilePicture,
+                  ),
+                  new Service(
+                    value.service.id,
+                    value.service.name,
+                    value.service.price,
+                  ),
+                ),
+            ),
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
           );
         }),
       );

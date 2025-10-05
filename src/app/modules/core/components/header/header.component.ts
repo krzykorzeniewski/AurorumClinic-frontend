@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { User } from '../../models/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -16,7 +16,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, NgClass, NgIf, RouterLink],
+  imports: [MatIconModule, NgClass, NgIf, RouterLink, NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

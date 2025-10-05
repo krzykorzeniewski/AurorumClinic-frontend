@@ -53,6 +53,16 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export interface PageableResponse<T> {
+  content: T[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
 export enum UserRole {
   DOCTOR = 'doctor',
   PATIENT = 'patient',
