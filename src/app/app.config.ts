@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  LOCALE_ID,
+} from '@angular/core';
 import {
   PreloadAllModules,
   provideRouter,
@@ -14,6 +18,10 @@ import {
 } from '@angular/material/core';
 import { spinnerInterceptor } from './modules/core/interceptors/spinner.interceptor';
 import { autologinInterceptor } from './modules/core/interceptors/autologin.interceptor';
+import { registerLocaleData } from '@angular/common';
+import localePl from '@angular/common/locales/pl';
+
+registerLocaleData(localePl, 'pl');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +32,6 @@ export const appConfig: ApplicationConfig = {
     ),
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+    { provide: LOCALE_ID, useValue: 'pl' },
   ],
 };

@@ -18,5 +18,6 @@ export class DoctorCardComponent {
   profilePicture = input<string>('');
   date = input<string>('');
   price = input<number>(-1);
+  serviceName = input<string>('');
   mode = input<'doctor' | 'visit'>('doctor');
 }
