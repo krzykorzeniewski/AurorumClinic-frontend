@@ -4,7 +4,7 @@
 
     <div class="flex-grow-1">
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">lek. {{ name() }} {{ surname() }}</h5>
+        <h5 class="mb-0">{{ name() }} {{ surname() }}</h5>
         <div class="d-flex ms-4">
             <span *ngFor="let _ of [1,2,3,4,5]; let i = index">
               <mat-icon class="{{ i+1 <= +rating() ? 'text-warning' : 'text-secondary' }}">star</mat-icon>
@@ -21,7 +21,7 @@
 
     <div class="flex-grow-1">
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">lek. {{ name() }} {{ surname() }}</h5>
+        <h5 class="mb-0">{{ name() }} {{ surname() }}</h5>
         <div class="d-flex ms-3">
           {{ date() | date: 'hh:mm, d/M/yyyy'}}
         </div>

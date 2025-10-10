@@ -20,8 +20,8 @@
     </div>
   </div>
   <h4 class="text-center fw-light mb-4">Poprzednie wizyty</h4>
-  <h5 *ngIf="appointmentsFuture.length === 0" class="text-center fw-light mb-4">Brak poprzednich wizyt</h5>
-  <div *ngIf="appointmentsFuture.length !== 0" class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto w-75">
+  <h5 *ngIf="appointmentsDone.length === 0" class="text-center fw-light mb-4">Brak poprzednich wizyt</h5>
+  <div *ngIf="appointmentsDone.length !== 0" class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto w-75">
     <div class="mb-3" *ngFor="let value of appointmentsDone">
       <app-doctor-card
         [id]="value.id"

@@ -1,15 +1,15 @@
 <div class="container pt-3">
-  <h2 class="pb-4 text-center">Wyszukaj lekarza</h2>
+  <h2 class="pb-4 text-center">Wyszukaj specjalistę</h2>
   <div class="d-flex justify-content-center align-items-baseline gap-3">
     <mat-form-field appearance="outline" class="w-50">
       <mat-icon matPrefix>search</mat-icon>
-      <mat-label>Wyszukaj lekarza</mat-label>
+      <mat-label>Wyszukaj specjalistę</mat-label>
       <input matInput id="search-bar"/>
     </mat-form-field>
     <button mat-flat-button type="submit"
             class="btn text-white border-0" style="background-color: var(--primary-purple)">Szukaj</button>
   </div>
-  <h2 class="pt-4 text-center">Polecani lekarze</h2>
+  <h2 class="pt-4 text-center">Polecani specjaliści</h2>
   <div class="container">
     <div class="row row-cols-1 row-cols-lg-2 g-2">
       <div class="col d-flex justify-content-center" *ngFor="let doctor of recommendedDoctors">
