@@ -1,0 +1,15 @@
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.card {
+  transition: 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}

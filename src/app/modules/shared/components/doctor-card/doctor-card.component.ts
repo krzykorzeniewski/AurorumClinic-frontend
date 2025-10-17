@@ -10,14 +10,14 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './doctor-card.component.css',
 })
 export class DoctorCardComponent {
-  id = input<number>(-1);
+  id = input<number>(0);
   name = input<string>('');
   surname = input<string>('');
   specialization = input<string>('');
-  rating = input<string>('');
+  rating = input<number>(0);
   profilePicture = input<string>('');
   date = input<string>('');
-  price = input<number>(-1);
+  price = input<number>(0);
   serviceName = input<string>('');
   mode = input<'doctor' | 'visit'>('doctor');
 }

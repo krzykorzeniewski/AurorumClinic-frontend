@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { UserService } from '../../../core/services/user.service';
-import { Appointment } from '../../../core/models/user.model';
+import { Appointment } from '../../../core/models/appointment.model';
 import { map } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 

@@ -1,0 +1,74 @@
+<div class="card p-3 mb-4 w-100 h-100 shadow-sm rounded-4">
+  <div class="row g-0">
+
+    <div class="col-md-4 d-flex align-items-center mb-3 mb-md-0">
+      <img
+        [src]="doctor().profilePicture"
+        alt="doctor-image"
+        class="rounded me-4"
+        style="width:64px; height:64px; object-fit: cover;"
+      />
+      <div>
+        <h5 class="mb-1">
+          {{ doctor().name }} {{ doctor().surname }}
+        </h5>
+        <p class="mb-0 text-muted" style="font-size: 1rem;">
+          {{ doctor().specializations[0].name }}
+        </p>
+      </div>
+    </div>
+
+
+    <div class="col-md-8 d-flex align-items-center justify-content-around">
+
+      <button mat-icon-button
+              class="btn p-2 me-2"
+              style="background-color: var(--primary-purple); color: var(--secondary-white);"
+              [disabled]="!canGoToPreviousWeek() || isLoading()"
+              (click)="goToPreviousWeek()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div
+        class="d-flex justify-content-around text-center p-3 shadow rounded-3 bg-white overflow-auto"
+      >
+        <div
+          *ngFor="let day of weekDays"
+          class="border rounded-3 p-2 me-2 flex-shrink-0"
+          style="min-width: 120px;"
+          [class.opacity-50]="isPastDay(day.date)"
+          [class.bg-light]="isPastDay(day.date)"
+        >
+          <div class="fw-bold text-uppercase text-muted small">
+            {{ day.short }}
+          </div>
+          <div class="fw-bold">{{ day.day }}</div>
+
+          <div *ngIf="!isPastDay(day.date) && getTimeFromDay(day.full)?.length; else noSlots">
+            <div
+              *ngFor="let time of getTimeFromDay(day.full)"
+              class="badge d-flex flex-column justify-content-center text-white mt-1 mx-auto w-75"
+              style="font-size: 0.8rem; background: var(--primary-purple);"
+            >
+              {{ time }}
+            </div>
+          </div>
+
+          <ng-template #noSlots>
+            <div class="text-muted small mt-2">Brak<br>terminów</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <button mat-icon-button
+              class="btn btn-outline-primary p-2 ms-2"
+              style="background-color: var(--primary-purple); color: var(--secondary-white);"
+              [disabled]="isLoading()"
+              (click)="goToNextWeek()">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+    </div>
+
+  </div>
+</div>

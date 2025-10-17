@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  ApiResponse,
   TokenVerifyRequest,
   User,
   UserLoginDataRequest,
@@ -28,6 +27,7 @@ import {
   UpdateTokenRequest,
   UpdatePhoneTokenRequest,
 } from '../models/user.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -252,6 +252,10 @@ export class AuthService {
 
   get user$(): Observable<User | null> {
     return this.#user.asObservable();
+  }
+
+  get userRole() {
+    return this.#user.value?.role;
   }
 
   private getLoginErrorMessage(err: HttpErrorResponse) {

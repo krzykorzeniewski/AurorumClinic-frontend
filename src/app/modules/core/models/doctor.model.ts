@@ -1,0 +1,43 @@
+import { Specialization } from './specialization.model';
+
+export interface GetRecommendedDoctorApiResponse {
+  id: number;
+  name: string;
+  surname: string;
+  specializations: Specialization[];
+  profilePicture: string;
+  rating: number;
+}
+
+export class DoctorRecommended implements GetRecommendedDoctorApiResponse {
+  constructor(
+    public id: number,
+    public name: string,
+    public surname: string,
+    public specializations: Specialization[],
+    public profilePicture: string,
+    public rating: number,
+  ) {}
+}
+
+export class Doctor {
+  constructor(
+    public id: number,
+    public name: string,
+    public surname: string,
+    public specializations: Specialization[],
+    public profilePicture: string,
+  ) {}
+}
+
+export class DoctorAppointmentCard {
+  constructor(
+    public id: number = 0,
+    public name: string = '',
+    public surname: string = '',
+    public specializations: Specialization[] = [],
+    public profilePicture: string = '',
+    public rating: number = 0,
+    public serviceId: number = 0,
+  ) {}
+}

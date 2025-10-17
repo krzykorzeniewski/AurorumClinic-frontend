@@ -163,6 +163,23 @@ export class FormsService {
     });
   }
 
+  getSearchFrom() {
+    return new FormGroup({
+      name: new FormControl('', {
+        validators: [],
+        nonNullable: true,
+      }),
+      specialization: new FormControl('', {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      service: new FormControl('', {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

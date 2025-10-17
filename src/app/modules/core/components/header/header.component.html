@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background: var(--primary-purple)">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+    <a class="navbar-brand d-flex align-items-center" routerLink="">
       <img ngSrc="/aurorumclinic.png" width="50" height="50" class="d-inline-block align-top" alt="brand-logo">
       <span class="ms-2 text-white">Aurorum Clinic</span>
     </a>
@@ -23,9 +23,9 @@
           <ul class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
             <li><a class="dropdown-item" routerLink="/profile">Profil</a></li>
             <li><a class="dropdown-item" routerLink="/profile/appointments">Wizyty</a></li>
-            <li><a class="dropdown-item" routerLink="/">Wiadomości</a></li>
+            <li><a class="dropdown-item" routerLink="">Wiadomości</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" routerLink="/" (click)="logout()" >Wyloguj</a></li>
+            <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
           </ul>
         </li>
 

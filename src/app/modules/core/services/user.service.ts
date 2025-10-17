@@ -2,32 +2,40 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import {
-  Appointment,
-  Doctor,
-  GetAppointmentInfo,
   GetPatientApiResponse,
   GetPatientResponse,
   PatchUserRequest,
-  Service,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
   UpdateTokenRequest,
 } from '../models/user.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ApiResponse, PageableResponse } from '../models/auth.model';
+import {
+  ApiResponse,
+  PageableResponse,
+  Payment,
+} from '../models/api-response.model';
+import { Doctor } from '../models/doctor.model';
+import { Service } from '../models/service.model';
+import { GetAppointmentInfo, Appointment } from '../models/appointment.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private _http = inject(HttpClient);
+  private _authService = inject(AuthService);
   private _apiUrl = environment.apiUrl;
 
   getUser(): Observable<GetPatientResponse> {
     return this._http
-      .get<ApiResponse<GetPatientApiResponse>>(`${this._apiUrl}/patients/me`, {
-        withCredentials: true,
-      })
+      .get<ApiResponse<GetPatientApiResponse>>(
+        `${this._apiUrl}/${this._authService.userRole}/me`,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(
         map(
           (apiResponse): GetPatientResponse => ({
@@ -259,11 +267,12 @@ export class UserService {
                   value.id,
                   value.startedAt,
                   value.status,
+                  value.description,
                   new Doctor(
                     value.doctor.id,
                     value.doctor.name,
                     value.doctor.surname,
-                    value.doctor.specialization,
+                    value.doctor.specializations,
                     value.doctor.profilePicture,
                   ),
                   new Service(
@@ -271,6 +280,7 @@ export class UserService {
                     value.service.name,
                     value.service.price,
                   ),
+                  new Payment(value.payment.amount, value.payment.status),
                 ),
             ),
             page: res.data.page,
