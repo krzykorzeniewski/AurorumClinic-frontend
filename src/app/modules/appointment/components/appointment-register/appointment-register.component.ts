@@ -100,11 +100,10 @@ export class AppointmentRegisterComponent implements OnInit {
       doctorId: this.doctor.id,
       description: 'wa',
     };
-    console.log(appointment);
 
     this._patientService.registerPatientForAppointment(appointment).subscribe({
       next: () => {
-        console.log('sie udalo');
+        void this._router.navigate(['']);
       },
     });
   }

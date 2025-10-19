@@ -41,9 +41,8 @@ export class AppointmentService {
           const grouped: AppointmentsSlots = {};
 
           data.forEach((slot) => {
-            const dateObj = new Date(slot);
-            const date = dateObj.toISOString().split('T')[0];
-            const time = dateObj.toISOString().split('T')[1].substring(0, 5);
+            const date = slot.split('T')[0];
+            const time = slot.split('T')[1].substring(0, 5);
 
             if (!grouped[date]) {
               grouped[date] = [];
