@@ -250,6 +250,11 @@ export class AuthService {
     return !!this.#user.getValue();
   }
 
+  hasRole(role: UserRole) {
+    const currentUser = this.#user.value;
+    return !!currentUser && currentUser.role === role;
+  }
+
   get user$(): Observable<User | null> {
     return this.#user.asObservable();
   }

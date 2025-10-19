@@ -10,15 +10,17 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { DoctorCardComponent } from '../shared/components/doctor-card/doctor-card.component';
 import { DoctorService } from '../core/services/doctor.service';
-import { DoctorRecommended } from '../core/models/doctor.model';
-import { Specialization } from '../core/models/specialization.model';
+import {
+  DoctorRecommended,
+  SpecializationWithServices,
+} from '../core/models/doctor.model';
 import { FormsService } from '../core/services/forms.service';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { Service } from '../core/models/service.model';
 import { MatIcon } from '@angular/material/icon';
 import { startWith } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -44,10 +46,9 @@ export class HomeComponent implements OnInit {
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _router = inject(Router);
-  private _route = inject(ActivatedRoute);
   readonly searchForm = this._formService.getSearchFrom();
   recommendedDoctors: DoctorRecommended[] = [];
-  specializations: (Specialization & { services: Service[] })[] = [];
+  specializations: SpecializationWithServices[] = [];
   selectedServices: Service[] = [];
 
   ngOnInit(): void {
@@ -59,6 +60,7 @@ export class HomeComponent implements OnInit {
     this._doctorService.getSpecializationsWithServices().subscribe({
       next: (res) => {
         this.specializations = res;
+        localStorage.setItem('services', JSON.stringify(res));
       },
     });
 
@@ -91,9 +93,8 @@ export class HomeComponent implements OnInit {
     const { name, service } = this.searchForm.value;
 
     void this._router.navigate(['search-results'], {
-      relativeTo: this._route,
       queryParams: {
-        name: name || '',
+        name: name || null,
         serviceId: service || null,
       },
     });

@@ -19,5 +19,5 @@ export class DoctorCardComponent {
   date = input<string>('');
   price = input<number>(0);
   serviceName = input<string>('');
-  mode = input<'doctor' | 'visit'>('doctor');
+  mode = input<'doctor' | 'visit' | 'appointmentRegister'>('doctor');
 }

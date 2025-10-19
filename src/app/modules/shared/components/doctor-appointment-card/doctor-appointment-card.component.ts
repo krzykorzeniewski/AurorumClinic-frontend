@@ -5,6 +5,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { AppointmentService } from '../../../core/services/appointment.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doctor-appointment-card',
@@ -14,7 +15,8 @@ import { AppointmentService } from '../../../core/services/appointment.service';
   styleUrl: './doctor-appointment-card.component.css',
 })
 export class DoctorAppointmentCardComponent implements OnInit {
-  private appointmentService = inject(AppointmentService);
+  private _appointmentService = inject(AppointmentService);
+  private _router = inject(Router);
   doctor = input<DoctorAppointmentCard>(new DoctorAppointmentCard());
   slots = signal<AppointmentsSlots>({});
   currentWeekStart!: Date;
@@ -28,6 +30,19 @@ export class DoctorAppointmentCardComponent implements OnInit {
     this.currentWeekEnd = this.getFriday(startDate);
     this.weekDays = this.fillWithWeekDays();
     this.loadSlots();
+  }
+
+  patientAppointmentRegister(date: string, time: string) {
+    const doctorAppointmentRegister = this.doctor();
+
+    void this._router.navigate(['/appointment/register'], {
+      queryParams: {
+        doctorId: doctorAppointmentRegister.id,
+        serviceId: doctorAppointmentRegister.serviceId,
+        date: date + 'T' + time,
+      },
+      state: { doctorAppointmentRegister },
+    });
   }
 
   fillWithWeekDays() {
@@ -52,6 +67,64 @@ export class DoctorAppointmentCardComponent implements OnInit {
     }
 
     return days;
+  }
+
+  goToNextWeek(): void {
+    const newStart = new Date(this.currentWeekStart);
+    newStart.setDate(newStart.getDate() + 7);
+    newStart.setHours(8, 0, 0, 0);
+
+    const newEnd = new Date(this.currentWeekEnd);
+    newEnd.setDate(newEnd.getDate() + 7);
+    newEnd.setHours(21, 0, 0, 0);
+
+    this.currentWeekStart = newStart;
+    this.currentWeekEnd = newEnd;
+
+    this.weekDays = this.fillWithWeekDays();
+    this.loadSlots();
+  }
+
+  goToPreviousWeek(): void {
+    const newStart = new Date(this.currentWeekStart);
+    newStart.setDate(newStart.getDate() - 7);
+    newStart.setHours(8, 0, 0, 0);
+
+    const newEnd = new Date(this.currentWeekEnd);
+    newEnd.setDate(newEnd.getDate() - 7);
+    newEnd.setHours(21, 0, 0, 0);
+
+    this.currentWeekStart = newStart;
+    this.currentWeekEnd = newEnd;
+
+    this.weekDays = this.fillWithWeekDays();
+    this.loadSlots();
+  }
+
+  canGoToPreviousWeek(): boolean {
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+
+    if ((day === 5 && hour >= 21) || day === 6 || day === 0) {
+      const nextMondayFromNow = new Date(now);
+      const daysToAdd = day === 5 ? 3 : day === 6 ? 2 : 1;
+      nextMondayFromNow.setDate(now.getDate() + daysToAdd);
+      nextMondayFromNow.setHours(8, 0, 0, 0);
+
+      const previousWeekStart = new Date(this.currentWeekStart);
+      previousWeekStart.setDate(previousWeekStart.getDate() - 7);
+
+      return previousWeekStart >= nextMondayFromNow;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const previousWeekStart = new Date(this.currentWeekStart);
+    previousWeekStart.setDate(previousWeekStart.getDate() - 7);
+    previousWeekStart.setHours(0, 0, 0, 0);
+
+    return previousWeekStart >= today;
   }
 
   getTimeFromDay(date: string): string[] | undefined {
@@ -94,42 +167,10 @@ export class DoctorAppointmentCardComponent implements OnInit {
     return friday;
   }
 
-  goToPreviousWeek(): void {
-    const newStart = new Date(this.currentWeekStart);
-    newStart.setDate(newStart.getDate() - 7);
-    newStart.setHours(8, 0, 0, 0);
-
-    const newEnd = new Date(this.currentWeekEnd);
-    newEnd.setDate(newEnd.getDate() - 7);
-    newEnd.setHours(21, 0, 0, 0);
-
-    this.currentWeekStart = newStart;
-    this.currentWeekEnd = newEnd;
-
-    this.weekDays = this.fillWithWeekDays();
-    this.loadSlots();
-  }
-
-  goToNextWeek(): void {
-    const newStart = new Date(this.currentWeekStart);
-    newStart.setDate(newStart.getDate() + 7);
-    newStart.setHours(8, 0, 0, 0);
-
-    const newEnd = new Date(this.currentWeekEnd);
-    newEnd.setDate(newEnd.getDate() + 7);
-    newEnd.setHours(21, 0, 0, 0);
-
-    this.currentWeekStart = newStart;
-    this.currentWeekEnd = newEnd;
-
-    this.weekDays = this.fillWithWeekDays();
-    this.loadSlots();
-  }
-
   private loadSlots(): void {
     this.isLoading.set(true);
 
-    this.appointmentService
+    this._appointmentService
       .getAppointmentSlots(
         this.doctor().id,
         this.currentWeekStart,
@@ -146,31 +187,5 @@ export class DoctorAppointmentCardComponent implements OnInit {
           this.isLoading.set(false);
         },
       });
-  }
-
-  canGoToPreviousWeek(): boolean {
-    const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours();
-
-    if ((day === 5 && hour >= 21) || day === 6 || day === 0) {
-      const nextMondayFromNow = new Date(now);
-      const daysToAdd = day === 5 ? 3 : day === 6 ? 2 : 1;
-      nextMondayFromNow.setDate(now.getDate() + daysToAdd);
-      nextMondayFromNow.setHours(8, 0, 0, 0);
-
-      const previousWeekStart = new Date(this.currentWeekStart);
-      previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-
-      return previousWeekStart >= nextMondayFromNow;
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const previousWeekStart = new Date(this.currentWeekStart);
-    previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-    previousWeekStart.setHours(0, 0, 0, 0);
-
-    return previousWeekStart >= today;
   }
 }

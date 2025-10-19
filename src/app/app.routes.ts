@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
-import { authActivateGuard } from './modules/core/guards/auth-activate.guard';
+import { isLoggedInGuard } from './modules/core/guards/is-logged-in.guard';
 
 export const APP_ROUTES: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./modules/home/home.component').then((c) => c.HomeComponent),
   },
@@ -21,8 +22,16 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'profile',
-    canActivate: [authActivateGuard],
+    canActivate: [isLoggedInGuard],
     loadChildren: () =>
       import('./modules/user/user.routes').then((m) => m.USER_ROUTES),
+  },
+  {
+    path: 'appointment',
+    canActivate: [isLoggedInGuard],
+    loadChildren: () =>
+      import('./modules/appointment/appointment.routes').then(
+        (m) => m.APPOINTMENT_ROUTES,
+      ),
   },
 ];

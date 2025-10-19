@@ -26,7 +26,9 @@ export class Appointment implements GetAppointmentInfo {
 
 export type AppointmentsSlots = Record<string, string[]>;
 
-export interface AppointmentStatus {
+export interface CreateAppointmentPatient {
   startedAt: string;
-  status: string;
+  serviceId: number;
+  doctorId: number;
+  description: string;
 }

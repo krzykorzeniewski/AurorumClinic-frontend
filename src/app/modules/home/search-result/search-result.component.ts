@@ -15,12 +15,10 @@ import { NgForOf } from '@angular/common';
   styleUrl: './search-result.component.css',
 })
 export class SearchResultComponent implements OnInit {
-  private _searchQuery!: string;
   private _appointmentService = inject(AppointmentService);
   private _doctorService = inject(DoctorService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
-  serviceId!: number;
   startOfTheWeek!: Date;
   endOfTheWeek!: Date;
 
@@ -30,14 +28,14 @@ export class SearchResultComponent implements OnInit {
   ngOnInit(): void {
     this._route.queryParams.subscribe({
       next: (params) => {
-        this._searchQuery = params['searchQuery'] || null;
-        this.serviceId = params['serviceId'] || null;
+        const searchQuery = params['searchQuery'] || null;
+        const serviceIdFromQuery = params['serviceId'] || null;
 
-        if (this.serviceId) {
+        if (serviceIdFromQuery) {
           this.setDaysToSearch();
 
           this._doctorService
-            .searchDoctor(this._searchQuery, this.serviceId)
+            .searchDoctor(searchQuery, serviceIdFromQuery)
             .subscribe({
               next: (doctors) => {
                 this.doctors = doctors;
@@ -58,7 +56,7 @@ export class SearchResultComponent implements OnInit {
           doctor.id,
           this.startOfTheWeek,
           this.endOfTheWeek,
-          this.serviceId,
+          doctor.serviceId,
         )
         .subscribe({
           next: (slots) => {

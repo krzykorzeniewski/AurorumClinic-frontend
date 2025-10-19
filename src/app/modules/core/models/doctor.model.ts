@@ -1,4 +1,5 @@
 import { Specialization } from './specialization.model';
+import { Service } from './service.model';
 
 export interface GetRecommendedDoctorApiResponse {
   id: number;
@@ -40,4 +41,9 @@ export class DoctorAppointmentCard {
     public rating: number = 0,
     public serviceId: number = 0,
   ) {}
+}
+export interface SpecializationWithServices {
+  id: number;
+  name: string;
+  services: Service[];
 }

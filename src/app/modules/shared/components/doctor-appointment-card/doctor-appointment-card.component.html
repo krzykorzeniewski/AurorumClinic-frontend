@@ -45,13 +45,15 @@
           <div class="fw-bold">{{ day.day }}</div>
 
           <div *ngIf="!isPastDay(day.date) && getTimeFromDay(day.full)?.length; else noSlots">
-            <div
+            <button
               *ngFor="let time of getTimeFromDay(day.full)"
-              class="badge d-flex flex-column justify-content-center text-white mt-1 mx-auto w-75"
-              style="font-size: 0.8rem; background: var(--primary-purple);"
+              type="button"
+              class="badge d-flex flex-column justify-content-center text-white mt-1 mx-auto w-75 border-0"
+              style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer;"
+              (click)="patientAppointmentRegister(day.full, time)"
             >
               {{ time }}
-            </div>
+            </button>
           </div>
 
           <ng-template #noSlots>
