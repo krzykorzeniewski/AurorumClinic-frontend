@@ -5,7 +5,7 @@ import { patientGuard } from './patient.guard';
 
 describe('patientGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => patientGuard());
+    TestBed.runInInjectionContext(() => patientGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
