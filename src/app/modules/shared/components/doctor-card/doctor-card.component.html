@@ -15,7 +15,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="mode() === 'visit'" class="card p-3 mb-4 w-100 h-75">
+<div *ngIf="mode() === 'visit'" [class]="'card p-3 mb-4 w-100 h-75 doctor-card-hover' + (paymentStatus() === PaymentStatus.CREATED ? ' border border-warning':'')">
   <div class="d-flex align-items-center">
     <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
 

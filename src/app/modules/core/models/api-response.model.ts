@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { PaymentStatus } from './appointment.model';
 
 export interface ApiResponse<T> {
   status: string;
@@ -19,6 +20,6 @@ export interface PageableResponse<T> {
 export class Payment {
   constructor(
     public amount: BigNumber,
-    public status: string,
+    public status: PaymentStatus,
   ) {}
 }

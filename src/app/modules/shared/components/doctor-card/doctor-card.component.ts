@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
+import { PaymentStatus } from '../../../core/models/appointment.model';
 
 @Component({
   selector: 'app-doctor-card',
@@ -19,5 +20,7 @@ export class DoctorCardComponent {
   date = input<string>('');
   price = input<number>(0);
   serviceName = input<string>('');
+  paymentStatus = input<PaymentStatus>(PaymentStatus.CREATED);
   mode = input<'doctor' | 'visit' | 'appointmentRegister'>('doctor');
+  protected readonly PaymentStatus = PaymentStatus;
 }

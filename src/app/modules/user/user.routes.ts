@@ -15,4 +15,11 @@ export const USER_ROUTES: Routes = [
         (c) => c.AppointmentsComponent,
       ),
   },
+  {
+    path: 'appointments/details',
+    loadComponent: () =>
+      import(
+        './components/appointments/appointments-details/appointments-details.component'
+      ).then((c) => c.AppointmentsDetailsComponent),
+  },
 ];

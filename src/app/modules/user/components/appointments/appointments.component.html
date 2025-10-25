@@ -15,7 +15,9 @@
         [price]="value.service.price"
         [profilePicture]="value.doctor.profilePicture"
         [serviceName]="value.service.name"
+        [paymentStatus]="value.payment.status"
         [mode]="'visit'"
+        (click)="goToDetails(value)"
       >
       </app-doctor-card>
     </div>
@@ -33,7 +35,9 @@
         [price]="value.service.price"
         [profilePicture]="value.doctor.profilePicture"
         [serviceName]="value.service.name"
+        [paymentStatus]="value.payment.status"
         [mode]="'visit'"
+        (click)="goToDetails(value)"
       >
       </app-doctor-card>
     </div>

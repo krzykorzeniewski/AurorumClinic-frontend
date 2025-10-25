@@ -32,3 +32,14 @@ export interface CreateAppointmentPatient {
   doctorId: number;
   description: string;
 }
+
+export enum PaymentStatus {
+  CREATED = 'CREATED',
+  COMPLETED = 'COMPLETED',
+  DELETED = 'DELETED',
+}
+
+export enum AppointmentStatus {
+  CREATED = 'CREATED',
+  FINISHED = 'FINISHED',
+}

@@ -1,8 +1,21 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
-import { CreateAppointmentPatient } from '../models/appointment.model';
+import {
+  Appointment,
+  AppointmentStatus,
+  CreateAppointmentPatient,
+  GetAppointmentInfo,
+  PaymentStatus,
+} from '../models/appointment.model';
+import {
+  ApiResponse,
+  PageableResponse,
+  Payment,
+} from '../models/api-response.model';
+import { Doctor } from '../models/doctor.model';
+import { Service } from '../models/service.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +23,55 @@ import { CreateAppointmentPatient } from '../models/appointment.model';
 export class PatientService {
   private _http = inject(HttpClient);
   private _apiUrl = environment.apiUrl;
+
+  getPatientAppointments(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this._http
+      .get<ApiResponse<PageableResponse<GetAppointmentInfo>>>(
+        `${this._apiUrl}/appointments/me`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            appointments: res.data.content.map(
+              (value) =>
+                new Appointment(
+                  value.id,
+                  value.startedAt,
+                  value.status as AppointmentStatus,
+                  value.description,
+                  new Doctor(
+                    value.doctor.id,
+                    value.doctor.name,
+                    value.doctor.surname,
+                    value.doctor.specializations,
+                    value.doctor.profilePicture,
+                  ),
+                  new Service(
+                    value.service.id,
+                    value.service.name,
+                    value.service.price,
+                  ),
+                  new Payment(value.payment.amount, value.payment.status),
+                ),
+            ),
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
 
   registerPatientForAppointment(
     appointment: CreateAppointmentPatient,
@@ -28,5 +90,16 @@ export class PatientService {
           );
         }),
       );
+  }
+
+  public mapPaymentToVisibleStatus(status: PaymentStatus): string {
+    switch (status) {
+      case PaymentStatus.DELETED:
+        return 'Anulowano';
+      case PaymentStatus.COMPLETED:
+        return 'Zapłacono';
+      default:
+        return 'Nie zapłacono';
+    }
   }
 }

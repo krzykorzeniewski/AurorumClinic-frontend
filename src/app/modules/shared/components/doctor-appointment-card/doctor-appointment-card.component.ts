@@ -106,25 +106,26 @@ export class DoctorAppointmentCardComponent implements OnInit {
     const day = now.getDay();
     const hour = now.getHours();
 
+    let earliestAllowedWeekStart: Date;
+
     if ((day === 5 && hour >= 21) || day === 6 || day === 0) {
-      const nextMondayFromNow = new Date(now);
+      earliestAllowedWeekStart = new Date(now);
       const daysToAdd = day === 5 ? 3 : day === 6 ? 2 : 1;
-      nextMondayFromNow.setDate(now.getDate() + daysToAdd);
-      nextMondayFromNow.setHours(8, 0, 0, 0);
-
-      const previousWeekStart = new Date(this.currentWeekStart);
-      previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-
-      return previousWeekStart >= nextMondayFromNow;
+      earliestAllowedWeekStart.setDate(now.getDate() + daysToAdd);
+      earliestAllowedWeekStart.setHours(0, 0, 0, 0);
+    } else {
+      earliestAllowedWeekStart = new Date(now);
+      const currentDay = now.getDay();
+      const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
+      earliestAllowedWeekStart.setDate(now.getDate() - daysFromMonday);
+      earliestAllowedWeekStart.setHours(0, 0, 0, 0);
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const previousWeekStart = new Date(this.currentWeekStart);
     previousWeekStart.setDate(previousWeekStart.getDate() - 7);
     previousWeekStart.setHours(0, 0, 0, 0);
 
-    return previousWeekStart >= today;
+    return previousWeekStart >= earliestAllowedWeekStart;
   }
 
   getTimeFromDay(date: string): string[] | undefined {
