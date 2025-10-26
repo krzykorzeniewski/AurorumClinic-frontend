@@ -51,7 +51,6 @@ export class TwoFactorLoginComponent {
 
   constructor() {
     const nav = this._router.getCurrentNavigation();
-    console.log(nav);
     if (nav?.extras.state) {
       if (!nav.extras.state['fromLogin']) {
         void this._router.navigate(['/auth/login']);

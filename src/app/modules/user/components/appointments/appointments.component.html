@@ -1,0 +1,56 @@
+<div class="container d-flex flex-column align-items-center pt-4 mx-auto">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <h2 class="text-center mb-4">Moje wizyty</h2>
+  </div>
+  <h4 class="text-center fw-light mb-4">Nadchodzące wizyty</h4>
+  <h5 *ngIf="appointmentsFuture.length === 0" class="text-center fw-light mb-4">Brak nadchodzących wizyt</h5>
+  <div *ngIf="appointmentsFuture.length !== 0" class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto w-75">
+    <div class="mb-3" *ngFor="let value of appointmentsFuture">
+      <app-doctor-card
+        [id]="value.id"
+        [name]="value.doctor.name"
+        [surname]="value.doctor.surname"
+        [specialization]="value.doctor.specializations[0].name"
+        [date]="value.startedAt"
+        [price]="value.service.price"
+        [profilePicture]="value.doctor.profilePicture"
+        [serviceName]="value.service.name"
+        [paymentStatus]="value.payment.status"
+        [mode]="'visit'"
+        (click)="goToDetails(value)"
+      >
+      </app-doctor-card>
+    </div>
+  </div>
+  <h4 class="text-center fw-light mb-4">Poprzednie wizyty</h4>
+  <h5 *ngIf="appointmentsDone.length === 0" class="text-center fw-light mb-4">Brak poprzednich wizyt</h5>
+  <div *ngIf="appointmentsDone.length !== 0" class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto w-75">
+    <div class="mb-3" *ngFor="let value of appointmentsDone">
+      <app-doctor-card
+        [id]="value.id"
+        [name]="value.doctor.name"
+        [surname]="value.doctor.surname"
+        [specialization]="value.doctor.specializations[0].name"
+        [date]="value.startedAt"
+        [price]="value.service.price"
+        [profilePicture]="value.doctor.profilePicture"
+        [serviceName]="value.service.name"
+        [paymentStatus]="value.payment.status"
+        [mode]="'visit'"
+        (click)="goToDetails(value)"
+      >
+      </app-doctor-card>
+    </div>
+    <div *ngIf="hasMoreData" class="d-flex justify-content-center mt-4">
+      <button
+        mat-flat-button
+        type="submit"
+        class="rounded-circle text-white d-flex align-items-center justify-content-center"
+        style="background-color: var(--primary-purple); width: 40px; height: 40px; min-width: 40px; padding: 0;"
+        (click)="fetchMoreData()"
+      >
+        +
+      </button>
+    </div>
+  </div>
+</div>

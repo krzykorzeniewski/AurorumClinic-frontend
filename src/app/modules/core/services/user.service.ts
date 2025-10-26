@@ -5,25 +5,30 @@ import {
   GetPatientApiResponse,
   GetPatientResponse,
   PatchUserRequest,
-  UpdateTokenRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
+  UpdateTokenRequest,
 } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../models/auth.model';
+import { ApiResponse } from '../models/api-response.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private _http = inject(HttpClient);
+  private _authService = inject(AuthService);
   private _apiUrl = environment.apiUrl;
 
   getUser(): Observable<GetPatientResponse> {
     return this._http
-      .get<ApiResponse<GetPatientApiResponse>>(`${this._apiUrl}/patients/me`, {
-        withCredentials: true,
-      })
+      .get<ApiResponse<GetPatientApiResponse>>(
+        `${this._apiUrl}/${this._authService.userRole}/me`,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(
         map(
           (apiResponse): GetPatientResponse => ({

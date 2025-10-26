@@ -47,14 +47,8 @@ export interface TokenVerifyRequest {
   email: string;
 }
 
-export interface ApiResponse<T> {
-  status: string;
-  data: T;
-  message?: string;
-}
-
 export enum UserRole {
-  DOCTOR = 'doctor',
-  PATIENT = 'patient',
+  DOCTOR = 'doctors',
+  PATIENT = 'patients',
   ADMIN = 'admin',
 }

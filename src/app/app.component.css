@@ -5,5 +5,5 @@ html, body {
   padding: 0;
 }
 * {
-  background-color: #F4F3F2;
+  background-color: var(--secondary-white);
 }

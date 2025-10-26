@@ -1,0 +1,51 @@
+<div *ngIf="mode() === 'doctor'" class="card p-3 mb-4 w-100 h-75">
+  <div class="d-flex align-items-center">
+    <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
+
+    <div class="flex-grow-1">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">{{ name() }} {{ surname() }}</h5>
+        <div class="d-flex ms-4">
+            <span *ngFor="let _ of [1,2,3,4,5]; let i = index">
+              <mat-icon class="{{ i+1 <= +rating() ? 'text-warning' : 'text-secondary' }}">star</mat-icon>
+            </span>
+        </div>
+      </div>
+      <p class="mb-0 text-muted" style="font-size: 1rem;">{{ specialization() }}</p>
+    </div>
+  </div>
+</div>
+<div *ngIf="mode() === 'visit'" [class]="'card p-3 mb-4 w-100 h-75 doctor-card-hover' + (paymentStatus() === PaymentStatus.CREATED ? ' border border-warning':'')">
+  <div class="d-flex align-items-center">
+    <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
+
+    <div class="flex-grow-1">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">{{ name() }} {{ surname() }} ({{specialization()}})</h5>
+        <div class="d-flex ms-3">
+          {{ date() | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl'}}
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between">
+        <p class="mb-0 text-muted" style="font-size: 1rem;">{{ serviceName() }}</p>
+        <div class="d-flex ms-3">
+          {{ price() + ' zł'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="mode() === 'appointmentRegister'" class="card p-3 mb-4 w-100 h-75">
+  <div class="d-flex align-items-center">
+    <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
+
+    <div class="flex-grow-1">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">{{ name() }} {{ surname() }} ({{specialization()}})</h5>
+        <div class="d-flex ms-3">
+          {{ price() + ' zł'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

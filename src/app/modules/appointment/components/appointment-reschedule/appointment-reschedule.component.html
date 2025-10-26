@@ -1,0 +1,35 @@
+<div *ngIf="appointment() as app" class="container pt-3">
+  <h2 class="pb-2 text-center">Przełóż wizytę</h2>
+  <h5 class="pb-4 text-center">
+    {{ app.service.name }} <b style="color: #c3a71e">{{ app.service.price }} zł</b>
+  </h5>
+
+  <app-doctor-appointment-card
+    [doctor]="doctorAppointmentCard"
+    [selectedDateTime]="selectedDateTime"
+    (timeSelectedReschedule)="onTimeSelected($event)"
+    [mode]="'reschedule'"
+    class="mb-4"
+  ></app-doctor-appointment-card>
+
+  <div class="mb-3 w-100">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Dodatkowe informacje</mat-label>
+      <textarea matInput placeholder="Czy muszę przynieść swoje poprzednie badania?" [formControl]="additionalInformation"></textarea>
+      @if (additionalInformation.invalid) {
+        <mat-error>{{ getErrorMessage(additionalInformation) }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="row w-100 mt-4">
+    <div class="col-sm text-center mb-2">
+      <button mat-flat-button type="button" class="btn btn-outline-custom w-50 mb-2"
+              (click)="goBack()">Powrót</button>
+    </div>
+    <div class="col-sm text-center mb-2">
+      <button mat-flat-button type="button" class="btn btn-purple w-50 mb-2"
+              (click)="onConfirmReschedule()">Przełóż</button>
+    </div>
+  </div>
+</div>

@@ -72,7 +72,7 @@ export class LoginComponent {
     this._authService.login(userData).subscribe({
       next: (user) => {
         if (user.twoFactorAuth) {
-          this._router.navigate(['/auth/twoFactorAuthorization'], {
+          void this._router.navigate(['/auth/twoFactorAuthorization'], {
             state: {
               fromLogin: true,
               email: userData.email,

@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  ApiResponse,
   TokenVerifyRequest,
   User,
   UserLoginDataRequest,
@@ -28,12 +27,13 @@ import {
   UpdateTokenRequest,
   UpdatePhoneTokenRequest,
 } from '../models/user.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  #user = new BehaviorSubject<User | null>(null);
+  #user = new BehaviorSubject<User | null | undefined>(undefined);
   private _apiUrl = environment.apiUrl + '/auth';
   private _http = inject(HttpClient);
 
@@ -250,8 +250,17 @@ export class AuthService {
     return !!this.#user.getValue();
   }
 
-  get user$(): Observable<User | null> {
+  hasRole(role: UserRole) {
+    const currentUser = this.#user.value;
+    return !!currentUser && currentUser.role === role;
+  }
+
+  get user$(): Observable<User | null | undefined> {
     return this.#user.asObservable();
+  }
+
+  get userRole() {
+    return this.#user.value?.role;
   }
 
   private getLoginErrorMessage(err: HttpErrorResponse) {

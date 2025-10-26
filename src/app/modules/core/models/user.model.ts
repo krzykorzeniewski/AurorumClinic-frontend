@@ -18,7 +18,7 @@ export interface GetPatientApiResponse {
   communicationPreferences: communicationPreferences;
 }
 
-export type GetPatientResponse = Omit<GetPatientApiResponse, 'id'>;
+export type GetPatientResponse = GetPatientApiResponse;
 export type UpdateEmailTokenRequest = Partial<
   Pick<GetPatientApiResponse, 'email'>
 >;
