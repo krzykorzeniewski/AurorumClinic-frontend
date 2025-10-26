@@ -56,7 +56,7 @@ export class DoctorService {
       );
   }
 
-  searchDoctor(query: string, serviceId: number, page = 0, size = 6) {
+  searchDoctors(query: string, serviceId: number, page = 0, size = 6) {
     let searchParams = new HttpParams()
       .set('page', page)
       .set('size', size)

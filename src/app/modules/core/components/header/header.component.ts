@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private _router = inject(Router);
   private _element = inject(ElementRef);
   private _routeSub?: Subscription;
-  user: User | null = null;
+  user: User | null | undefined = undefined;
   isLargeScreen = false;
 
   ngOnInit(): void {

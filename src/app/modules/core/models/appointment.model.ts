@@ -33,6 +33,11 @@ export interface CreateAppointmentPatient {
   description: string;
 }
 
+export interface RescheduleAppointmentPatient {
+  startedAt: string;
+  description: string;
+}
+
 export enum PaymentStatus {
   CREATED = 'CREATED',
   COMPLETED = 'COMPLETED',

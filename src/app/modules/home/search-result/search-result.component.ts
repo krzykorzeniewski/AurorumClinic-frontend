@@ -36,7 +36,7 @@ export class SearchResultComponent implements OnInit {
           this.setDaysToSearch();
 
           this._doctorService
-            .searchDoctor(searchQuery, serviceIdFromQuery)
+            .searchDoctors(searchQuery, serviceIdFromQuery)
             .subscribe({
               next: (doctors) => {
                 this.doctors = doctors;

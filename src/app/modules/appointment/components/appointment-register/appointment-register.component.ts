@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
 import { GetPatientResponse } from '../../../core/models/user.model';
 import { UserService } from '../../../core/services/user.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatError,
@@ -10,12 +10,11 @@ import {
   MatInput,
   MatLabel,
 } from '@angular/material/input';
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe, Location, NgIf } from '@angular/common';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { Service } from '../../../core/models/service.model';
 import { MatButton } from '@angular/material/button';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
-import { PatientService } from '../../../core/services/patient.service';
 import { CreateAppointmentPatient } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { FormsService } from '../../../core/services/forms.service';
@@ -32,7 +31,6 @@ import { FormsService } from '../../../core/services/forms.service';
     DatePipe,
     NgIf,
     MatButton,
-    RouterLink,
     DoctorCardComponent,
     ReactiveFormsModule,
     MatError,
@@ -43,10 +41,10 @@ import { FormsService } from '../../../core/services/forms.service';
 export class AppointmentRegisterComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);
   private _doctorService = inject(DoctorService);
-  private _patientService = inject(PatientService);
   private _formService = inject(FormsService);
   private _userService = inject(UserService);
   private _route = inject(ActivatedRoute);
+  private _location = inject(Location);
   private _router = inject(Router);
   doctor!: DoctorAppointmentCard;
   patient!: GetPatientResponse;
@@ -111,11 +109,17 @@ export class AppointmentRegisterComponent implements OnInit {
       description: this.additionalInformation.value || '',
     };
 
-    this._patientService.registerPatientForAppointment(appointment).subscribe({
-      next: () => {
-        void this._router.navigate(['']);
-      },
-    });
+    this._appointmentService
+      .registerPatientForAppointment(appointment)
+      .subscribe({
+        next: () => {
+          void this._router.navigate(['']);
+        },
+      });
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   getErrorMessage(control: FormControl) {

@@ -1,4 +1,14 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  OnInit,
+  Output,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
 import { AppointmentsSlots } from '../../../core/models/appointment.model';
 import { NgForOf, NgIf } from '@angular/common';
@@ -23,6 +33,9 @@ export class DoctorAppointmentCardComponent implements OnInit {
   currentWeekEnd!: Date;
   weekDays: { full: string; short: string; day: string; date: Date }[] = [];
   isLoading = signal<boolean>(false);
+  @Output() timeSelectedReschedule = new EventEmitter<string>();
+  @Input({ required: true }) selectedDateTime!: WritableSignal<string | null>;
+  @Input() mode: 'register' | 'reschedule' = 'register';
 
   ngOnInit(): void {
     const startDate = this.getInitialDate();
@@ -32,17 +45,23 @@ export class DoctorAppointmentCardComponent implements OnInit {
     this.loadSlots();
   }
 
-  patientAppointmentRegister(date: string, time: string) {
+  patientAppointmentRegisterOrReschedule(date: string, time: string) {
     const doctorAppointmentRegister = this.doctor();
 
-    void this._router.navigate(['/appointment/register'], {
-      queryParams: {
-        doctorId: doctorAppointmentRegister.id,
-        serviceId: doctorAppointmentRegister.serviceId,
-        date: date + 'T' + time,
-      },
-      state: { doctorAppointmentRegister },
-    });
+    const dateTime = date + 'T' + time;
+
+    if (this.mode === 'register') {
+      void this._router.navigate(['/appointment/register'], {
+        queryParams: {
+          doctorId: doctorAppointmentRegister.id,
+          serviceId: doctorAppointmentRegister.serviceId,
+          date: dateTime,
+        },
+        state: { doctorAppointmentRegister },
+      });
+    } else {
+      this.selectedDateTime.set(dateTime);
+    }
   }
 
   fillWithWeekDays() {

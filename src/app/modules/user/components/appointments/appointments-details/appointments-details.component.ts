@@ -17,7 +17,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import { PatientService } from '../../../../core/services/patient.service';
+import { AppointmentService } from '../../../../core/services/appointment.service';
 
 @Component({
   selector: 'app-appointments-details',
@@ -43,7 +43,7 @@ import { PatientService } from '../../../../core/services/patient.service';
   styleUrl: './appointments-details.component.css',
 })
 export class AppointmentsDetailsComponent implements OnInit {
-  private _patientService = inject(PatientService);
+  private _appointmentService = inject(AppointmentService);
   private _router = inject(Router);
   protected readonly PaymentStatus = PaymentStatus;
   protected readonly AppointmentStatus = AppointmentStatus;
@@ -70,7 +70,7 @@ export class AppointmentsDetailsComponent implements OnInit {
     const currentAppointment = this.appointment();
     if (!currentAppointment) return;
 
-    this._patientService
+    this._appointmentService
       .deletePatientAppointment(currentAppointment.id)
       .subscribe({
         next: () => {
@@ -97,10 +97,15 @@ export class AppointmentsDetailsComponent implements OnInit {
   }
 
   onRescheduleAppointment() {
-    void this._router.navigate(['/profile/appointments']);
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    void this._router.navigate(['/appointment/reschedule'], {
+      state: { appointment: currentAppointment },
+    });
   }
 
   mapPaymentToVisibleStatus(payment: PaymentStatus) {
-    return this._patientService.mapPaymentToVisibleStatus(payment);
+    return this._appointmentService.mapPaymentToVisibleStatus(payment);
   }
 }

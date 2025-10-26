@@ -1,13 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, throwError } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import {
   Appointment,
   AppointmentStatus,
-  CreateAppointmentPatient,
   GetAppointmentInfo,
-  PaymentStatus,
 } from '../models/appointment.model';
 import {
   ApiResponse,
@@ -71,52 +69,5 @@ export class PatientService {
           );
         }),
       );
-  }
-
-  registerPatientForAppointment(
-    appointment: CreateAppointmentPatient,
-  ): Observable<void> {
-    return this._http
-      .post<void>(`${this._apiUrl}/appointments/me`, appointment, {
-        withCredentials: true,
-      })
-      .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie umawiania wizyty. Spróbuj ponownie później.',
-              ),
-          );
-        }),
-      );
-  }
-
-  deletePatientAppointment(appointmentId: number): Observable<void> {
-    return this._http
-      .delete<void>(`${this._apiUrl}/appointments/me/${appointmentId}`, {
-        withCredentials: true,
-      })
-      .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie odwoływania wizyty. Spróbuj ponownie później.',
-              ),
-          );
-        }),
-      );
-  }
-
-  public mapPaymentToVisibleStatus(status: PaymentStatus): string {
-    switch (status) {
-      case PaymentStatus.DELETED:
-        return 'Anulowano';
-      case PaymentStatus.COMPLETED:
-        return 'Zapłacono';
-      default:
-        return 'Nie zapłacono';
-    }
   }
 }

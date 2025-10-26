@@ -33,7 +33,7 @@ import { ApiResponse } from '../models/api-response.model';
   providedIn: 'root',
 })
 export class AuthService {
-  #user = new BehaviorSubject<User | null>(null);
+  #user = new BehaviorSubject<User | null | undefined>(undefined);
   private _apiUrl = environment.apiUrl + '/auth';
   private _http = inject(HttpClient);
 
@@ -255,7 +255,7 @@ export class AuthService {
     return !!currentUser && currentUser.role === role;
   }
 
-  get user$(): Observable<User | null> {
+  get user$(): Observable<User | null | undefined> {
     return this.#user.asObservable();
   }
 

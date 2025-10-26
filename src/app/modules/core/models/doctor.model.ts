@@ -33,13 +33,13 @@ export class Doctor {
 
 export class DoctorAppointmentCard {
   constructor(
-    public id: number = 0,
-    public name: string = '',
-    public surname: string = '',
+    public id = 0,
+    public name = '',
+    public surname = '',
     public specializations: Specialization[] = [],
-    public profilePicture: string = '',
-    public rating: number = 0,
-    public serviceId: number = 0,
+    public profilePicture = '',
+    public rating: number | null = null,
+    public serviceId = 0,
   ) {}
 }
 export interface SpecializationWithServices {

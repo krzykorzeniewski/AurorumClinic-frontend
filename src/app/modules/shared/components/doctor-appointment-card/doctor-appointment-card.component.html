@@ -49,8 +49,9 @@
               *ngFor="let time of getTimeFromDay(day.full)"
               type="button"
               class="badge d-flex flex-column justify-content-center text-white mt-1 mx-auto w-75 border-0"
+              [class.bg-success]="mode === 'reschedule' && selectedDateTime() === (day.full + 'T' + time)"
               style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer;"
-              (click)="patientAppointmentRegister(day.full, time)"
+              (click)="patientAppointmentRegisterOrReschedule(day.full, time)"
             >
               {{ time }}
             </button>

@@ -1,9 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
-import { AppointmentsSlots } from '../models/appointment.model';
+import {
+  AppointmentsSlots,
+  CreateAppointmentPatient,
+  PaymentStatus,
+  RescheduleAppointmentPatient,
+} from '../models/appointment.model';
 import { toLocalISOString } from '../../shared/methods/dateTransform';
 import { SpecializationWithServices } from '../models/doctor.model';
 import { Service } from '../models/service.model';
@@ -62,6 +67,59 @@ export class AppointmentService {
       );
   }
 
+  registerPatientForAppointment(
+    appointment: CreateAppointmentPatient,
+  ): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/appointments/me`, appointment, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie umawiania wizyty. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  rescheduleAppointment(id: number, data: RescheduleAppointmentPatient) {
+    return this._http
+      .put<void>(`${this._apiUrl}/appointments/me/${id}`, data, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie przekładania wizyty. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  deletePatientAppointment(appointmentId: number): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/appointments/me/${appointmentId}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie odwoływania wizyty. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   returnServiceById(
     servicesArray: SpecializationWithServices[],
     serviceId: string,
@@ -75,5 +133,16 @@ export class AppointmentService {
       }
     }
     return null;
+  }
+
+  public mapPaymentToVisibleStatus(status: PaymentStatus): string {
+    switch (status) {
+      case PaymentStatus.DELETED:
+        return 'Anulowano';
+      case PaymentStatus.COMPLETED:
+        return 'Zapłacono';
+      default:
+        return 'Nie zapłacono';
+    }
   }
 }
