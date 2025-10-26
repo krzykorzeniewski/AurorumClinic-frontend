@@ -180,6 +180,12 @@ export class FormsService {
     });
   }
 
+  getAdditionalInformationAppointmentForm() {
+    return new FormControl<string>('', {
+      validators: [Validators.maxLength(500)],
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

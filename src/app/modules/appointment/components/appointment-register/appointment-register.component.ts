@@ -1,13 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  DoctorAppointmentCard,
-  SpecializationWithServices,
-} from '../../../core/models/doctor.model';
+import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
 import { GetPatientResponse } from '../../../core/models/user.model';
 import { UserService } from '../../../core/services/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatError,
+  MatFormField,
+  MatInput,
+  MatLabel,
+} from '@angular/material/input';
 import { DatePipe, NgIf } from '@angular/common';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { Service } from '../../../core/models/service.model';
@@ -15,6 +17,8 @@ import { MatButton } from '@angular/material/button';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
 import { PatientService } from '../../../core/services/patient.service';
 import { CreateAppointmentPatient } from '../../../core/models/appointment.model';
+import { AppointmentService } from '../../../core/services/appointment.service';
+import { FormsService } from '../../../core/services/forms.service';
 
 @Component({
   selector: 'app-appointment-register',
@@ -30,13 +34,17 @@ import { CreateAppointmentPatient } from '../../../core/models/appointment.model
     MatButton,
     RouterLink,
     DoctorCardComponent,
+    ReactiveFormsModule,
+    MatError,
   ],
   templateUrl: './appointment-register.component.html',
   styleUrl: './appointment-register.component.css',
 })
 export class AppointmentRegisterComponent implements OnInit {
+  private _appointmentService = inject(AppointmentService);
   private _doctorService = inject(DoctorService);
   private _patientService = inject(PatientService);
+  private _formService = inject(FormsService);
   private _userService = inject(UserService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
@@ -44,6 +52,8 @@ export class AppointmentRegisterComponent implements OnInit {
   patient!: GetPatientResponse;
   service!: Service;
   date!: string;
+  additionalInformation =
+    this._formService.getAdditionalInformationAppointmentForm();
 
   ngOnInit(): void {
     this._route.queryParams.subscribe({
@@ -72,7 +82,7 @@ export class AppointmentRegisterComponent implements OnInit {
               },
             });
           }
-          const serviceFromStorage = this.returnServiceById(
+          const serviceFromStorage = this._appointmentService.returnServiceById(
             services,
             serviceIdFromQuery,
           );
@@ -98,7 +108,7 @@ export class AppointmentRegisterComponent implements OnInit {
       startedAt: this.date + ':00',
       serviceId: this.service.id,
       doctorId: this.doctor.id,
-      description: 'wa',
+      description: this.additionalInformation.value || '',
     };
 
     this._patientService.registerPatientForAppointment(appointment).subscribe({
@@ -108,18 +118,7 @@ export class AppointmentRegisterComponent implements OnInit {
     });
   }
 
-  private returnServiceById(
-    servicesArray: SpecializationWithServices[],
-    serviceId: string,
-  ) {
-    for (const spec of servicesArray) {
-      const found = spec.services.find(
-        (s: Service) => String(s.id) === serviceId,
-      );
-      if (found) {
-        return found;
-      }
-    }
-    return null;
+  getErrorMessage(control: FormControl) {
+    return this._formService.getErrorMessage(control);
   }
 }

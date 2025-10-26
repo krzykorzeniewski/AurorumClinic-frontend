@@ -5,6 +5,8 @@ import { catchError, map, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { AppointmentsSlots } from '../models/appointment.model';
 import { toLocalISOString } from '../../shared/methods/dateTransform';
+import { SpecializationWithServices } from '../models/doctor.model';
+import { Service } from '../models/service.model';
 
 @Injectable({
   providedIn: 'root',
@@ -58,5 +60,20 @@ export class AppointmentService {
           );
         }),
       );
+  }
+
+  returnServiceById(
+    servicesArray: SpecializationWithServices[],
+    serviceId: string,
+  ) {
+    for (const spec of servicesArray) {
+      const found = spec.services.find(
+        (s: Service) => String(s.id) === serviceId,
+      );
+      if (found) {
+        return found;
+      }
+    }
+    return null;
   }
 }

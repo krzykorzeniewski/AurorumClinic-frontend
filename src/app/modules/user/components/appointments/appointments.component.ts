@@ -6,6 +6,7 @@ import { map } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-appointments',
@@ -16,12 +17,26 @@ import { PatientService } from '../../../core/services/patient.service';
 })
 export class AppointmentsComponent implements OnInit {
   private _patientService = inject(PatientService);
+  private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   private _page = 0;
   private _size = 5;
   appointmentsDone: Appointment[] = [];
   appointmentsFuture: Appointment[] = [];
   hasMoreData = true;
+
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.fetchAppointments();

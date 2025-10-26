@@ -66,6 +66,40 @@ export class AppointmentsDetailsComponent implements OnInit {
     }
   }
 
+  onCancelAppointment() {
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    this._patientService
+      .deletePatientAppointment(currentAppointment.id)
+      .subscribe({
+        next: () => {
+          void this._router.navigate(['/profile/appointments'], {
+            state: {
+              message: 'Pomyślnie usunięto wizytę',
+              status: 'success',
+            },
+          });
+        },
+        error: (err) => {
+          void this._router.navigate(['/profile/appointments'], {
+            state: {
+              message: err.message,
+              status: 'error',
+            },
+          });
+        },
+      });
+  }
+
+  onPayment() {
+    void this._router.navigate(['/profile/appointments']);
+  }
+
+  onRescheduleAppointment() {
+    void this._router.navigate(['/profile/appointments']);
+  }
+
   mapPaymentToVisibleStatus(payment: PaymentStatus) {
     return this._patientService.mapPaymentToVisibleStatus(payment);
   }

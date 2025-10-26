@@ -19,6 +19,7 @@ export class SearchResultComponent implements OnInit {
   private _doctorService = inject(DoctorService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  nameOfTheService!: string;
   startOfTheWeek!: Date;
   endOfTheWeek!: Date;
 
@@ -42,6 +43,28 @@ export class SearchResultComponent implements OnInit {
                 this.loadAppointmentsForDoctors(doctors);
               },
             });
+
+          const storedServices = localStorage.getItem('services');
+          let services;
+          if (storedServices) {
+            services = JSON.parse(storedServices);
+          } else {
+            this._doctorService.getSpecializationsWithServices().subscribe({
+              next: (res) => {
+                services = res;
+                localStorage.setItem('services', JSON.stringify(res));
+              },
+            });
+          }
+          const serviceFromStorage = this._appointmentService.returnServiceById(
+            services,
+            serviceIdFromQuery,
+          );
+          if (serviceFromStorage) {
+            this.nameOfTheService = serviceFromStorage.name;
+          } else {
+            void this._router.navigate(['']);
+          }
         } else {
           void this._router.navigate(['']);
         }

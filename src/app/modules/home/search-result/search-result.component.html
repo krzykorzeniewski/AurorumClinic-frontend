@@ -1,5 +1,6 @@
 <div class="container pt-3">
-  <h2 class="pb-4 text-center">Wyniki wyszukiwania</h2>
+  <h2 class="pb-2 text-center">Wyniki wyszukiwania dla:</h2>
+  <h5 class="pb-4 text-center"> {{ nameOfTheService }}</h5>
   <div *ngFor="let doctor of doctors">
     <app-doctor-appointment-card
       [doctor]="doctor"
