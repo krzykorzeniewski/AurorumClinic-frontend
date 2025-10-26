@@ -22,7 +22,7 @@
       <div class="mb-3 w-100" *ngIf="date">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Data i godzina</mat-label>
-          <input readonly matInput [value]="date | date:'dd MMMM yyyy, hh:mm':'':'pl'"/>
+          <input readonly matInput [value]="date | date:'dd MMMM yyyy, HH:mm':'':'pl'"/>
         </mat-form-field>
       </div>
       <div class="mb-3 w-100" *ngIf="patient?.pesel">
