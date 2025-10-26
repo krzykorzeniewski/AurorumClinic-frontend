@@ -29,6 +29,7 @@
     </div>
     <div class="col-sm text-center mb-2">
       <button mat-flat-button type="button" class="btn btn-purple w-50 mb-2"
+              [disabled]="selectedDateTime() === null"
               (click)="onConfirmReschedule()">Przełóż</button>
     </div>
   </div>

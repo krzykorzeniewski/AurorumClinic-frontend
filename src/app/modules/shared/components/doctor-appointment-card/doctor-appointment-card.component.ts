@@ -34,7 +34,7 @@ export class DoctorAppointmentCardComponent implements OnInit {
   weekDays: { full: string; short: string; day: string; date: Date }[] = [];
   isLoading = signal<boolean>(false);
   @Output() timeSelectedReschedule = new EventEmitter<string>();
-  @Input({ required: true }) selectedDateTime!: WritableSignal<string | null>;
+  @Input() selectedDateTime!: WritableSignal<string | null>;
   @Input() mode: 'register' | 'reschedule' = 'register';
 
   ngOnInit(): void {
