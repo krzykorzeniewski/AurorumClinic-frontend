@@ -6,7 +6,7 @@ import {
   MatLabel,
 } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { DoctorCardComponent } from '../shared/components/doctor-card/doctor-card.component';
 import { DoctorService } from '../core/services/doctor.service';
@@ -67,23 +67,26 @@ export class HomeComponent implements OnInit {
     this.controls.specialization.valueChanges
       .pipe(startWith(this.controls.specialization.value))
       .subscribe((specId) => {
-        if (!specId) {
-          this.selectedServices = [];
-          this.controls.service.reset();
-          this.controls.service.disable();
-          return;
-        }
-
         const selectedSpec = this.specializations.find(
           (spec) => spec.id === Number(specId),
         );
+
         this.selectedServices = selectedSpec?.services || [];
 
-        if (this.selectedServices.length) {
-          this.controls.service.enable();
+        this.controls.service.setValue('');
+        this.controls.service.markAsPristine();
+        this.controls.service.markAsUntouched();
+
+        if (this.selectedServices.length > 0) {
+          this.controls.service.setValidators([Validators.required]);
+          this.controls.service.enable({ emitEvent: false });
         } else {
-          this.controls.service.disable();
+          this.controls.service.clearValidators();
+          this.controls.service.disable({ emitEvent: false });
         }
+
+        this.controls.service.updateValueAndValidity({ emitEvent: false });
+        this.searchForm.updateValueAndValidity();
       });
   }
 
@@ -98,6 +101,21 @@ export class HomeComponent implements OnInit {
         serviceId: service || null,
       },
     });
+  }
+
+  get canSearch(): boolean {
+    const { specialization, service } = this.controls;
+
+    const selectedSpec = this.specializations.find(
+      (spec) => spec.id === Number(specialization.value),
+    );
+
+    const hasServices = (selectedSpec?.services?.length ?? 0) > 0;
+    if (hasServices) {
+      return this.searchForm.valid && !!service.value;
+    }
+
+    return false;
   }
 
   get controls() {
