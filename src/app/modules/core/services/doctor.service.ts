@@ -67,7 +67,7 @@ export class DoctorService {
     }
     return this._http
       .get<ApiResponse<PageableResponse<GetRecommendedDoctorApiResponse>>>(
-        `${this._apiUrl}`,
+        `${this._apiUrl}/search`,
         {
           params: searchParams,
           headers: {
