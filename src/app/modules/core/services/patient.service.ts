@@ -14,6 +14,7 @@ import {
 } from '../models/api-response.model';
 import { Doctor } from '../models/doctor.model';
 import { Service } from '../models/service.model';
+import { GetPatientApiResponse } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +67,56 @@ export class PatientService {
         catchError(() => {
           return throwError(
             () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
+  getPatients(
+    page: number,
+    size: number,
+    sort: string,
+    direction: 'asc' | 'desc' | '',
+    query?: string,
+  ) {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (sort) {
+      if (direction) {
+        params = params.set('sort', `${sort},${direction}`);
+      } else {
+        params = params.set('sort', sort);
+      }
+    }
+
+    if (query) {
+      params = params.set('query', query);
+    }
+
+    return this._http
+      .get<ApiResponse<PageableResponse<GetPatientApiResponse>>>(
+        `${this._apiUrl}/patients`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            patients: res.data.content,
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd podczas uzyskiwania danych pacjentów. Spróbuj ponownie później.',
+              ),
           );
         }),
       );

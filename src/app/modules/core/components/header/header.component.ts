@@ -7,8 +7,14 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
-import { User } from '../../models/auth.model';
+import {
+  NgClass,
+  NgIf,
+  NgOptimizedImage,
+  NgSwitch,
+  NgSwitchCase,
+} from '@angular/common';
+import { User, UserRole } from '../../models/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -16,7 +22,15 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatIconModule, NgClass, NgIf, RouterLink, NgOptimizedImage],
+  imports: [
+    MatIconModule,
+    NgClass,
+    NgIf,
+    RouterLink,
+    NgOptimizedImage,
+    NgSwitch,
+    NgSwitchCase,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -65,6 +79,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  get userRole() {
+    return this._authService.userRole;
+  }
+
   checkScreen(): void {
     this.isLargeScreen = window.innerWidth >= 992;
   }
@@ -72,7 +90,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   logout() {
     this._authService.logout().subscribe({
       next: () => {
-        void this._router.navigate(['/auth/login']);
+        void this._router.navigate(['']);
       },
     });
   }
@@ -81,4 +99,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this._sub) this._sub.unsubscribe();
     if (this._routeSub) this._routeSub.unsubscribe();
   }
+
+  protected readonly UserRole = UserRole;
 }

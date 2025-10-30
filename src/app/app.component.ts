@@ -16,6 +16,8 @@ export class AppComponent implements OnInit {
   private _authService = inject(AuthService);
 
   ngOnInit(): void {
-    this._authService.refreshCookies().subscribe();
+    this._authService.refreshCookies().subscribe({
+      next: () => this._authService.redirectAfterLogin(),
+    });
   }
 }
