@@ -43,7 +43,7 @@ tr.mat-row:hover {
   background-color: #faf5fb;
 }
 
-.btn-purple {
+.btn-green {
   background-color: var(--primary-purple);
   color: white;
   border: none;
@@ -51,7 +51,7 @@ tr.mat-row:hover {
   border-radius: 0.4rem;
 }
 
-.btn-purple:hover {
+.btn-green:hover {
   background-color: #5d1a63;
 }
 

@@ -12,13 +12,6 @@ export const APP_ROUTES: Routes = [
       import('./modules/home/home.routes').then((m) => m.HOME_ROUTES),
   },
   {
-    path: 'auth',
-    canActivate: [authStateGuard],
-    data: { requireAuth: false },
-    loadChildren: () =>
-      import('./modules/auth/auth.routes').then((m) => m.AUTH_ROUTES),
-  },
-  {
     path: 'internal',
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN] },
@@ -26,6 +19,13 @@ export const APP_ROUTES: Routes = [
       import('./modules/employee/employee.routes').then(
         (m) => m.EMPLOYEE_ROUTES,
       ),
+  },
+  {
+    path: 'auth',
+    canActivate: [authStateGuard],
+    data: { requireAuth: false },
+    loadChildren: () =>
+      import('./modules/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'profile',

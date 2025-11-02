@@ -2,7 +2,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { UserRole } from '../models/auth.model';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 export const authStateGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -12,8 +12,9 @@ export const authStateGuard: CanActivateFn = (
   const requireAuth = route.data['requireAuth'] as boolean;
 
   return authService.user$.pipe(
+    filter((user) => user !== undefined),
     map((user) => {
-      const isAuthenticated = user !== null && user !== undefined;
+      const isAuthenticated = user !== null;
 
       if (!requireAuth && isAuthenticated) {
         const role = user.role;
@@ -22,7 +23,7 @@ export const authStateGuard: CanActivateFn = (
         ) {
           void router.navigate(['/internal']);
         } else {
-          void router.navigate(['/']);
+          void router.navigate(['']);
         }
         return false;
       }

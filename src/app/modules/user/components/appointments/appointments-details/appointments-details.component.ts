@@ -76,7 +76,7 @@ export class AppointmentsDetailsComponent implements OnInit {
         next: () => {
           void this._router.navigate(['/profile/appointments'], {
             state: {
-              message: 'Pomyślnie usunięto wizytę',
+              message: 'Pomyślnie odwołano wizytę',
               status: 'success',
             },
           });

@@ -65,8 +65,6 @@ export class EmployeePanelComponent implements OnInit {
     switch (userRole) {
       case UserRole.DOCTOR:
         return 'DOKTOR';
-      case UserRole.EMPLOYEE:
-        return 'PRACOWNIK';
       case UserRole.ADMIN:
         return 'ADMIN';
       default:

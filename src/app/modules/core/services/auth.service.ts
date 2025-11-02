@@ -313,10 +313,10 @@ export class AuthService {
         void this._router.navigate(['/internal']);
         break;
       case UserRole.PATIENT:
-        void this._router.navigate(['/']);
+        void this._router.navigate(['']);
         break;
       default:
-        void this._router.navigate(['/']);
+        void this._router.navigate(['']);
     }
   }
 }
