@@ -82,10 +82,13 @@ export class PatientProfileComponent implements OnInit {
     void this._router.navigate([`/internal/patients/${patientId}/edit`]);
   }
 
-  goToDetails(patientId: number, appointmentId: number) {
-    void this._router.navigate([
-      `/internal/patients/${patientId}/appointments/${appointmentId}`,
-    ]);
+  goToDetails(patientId: number, appointment: Appointment) {
+    void this._router.navigate(
+      [`/internal/patients/${patientId}/appointments/details`],
+      {
+        state: { appointment },
+      },
+    );
   }
 
   private fetchAppointments(): void {

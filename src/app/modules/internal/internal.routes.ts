@@ -37,4 +37,13 @@ export const INTERNAL_ROUTES: Routes = [
         './shared/patient-profile/patient-profile-edit/patient-profile-edit.component'
       ).then((c) => c.PatientProfileEditComponent),
   },
+  {
+    path: 'patients/:id/appointments/details',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE] },
+    loadComponent: () =>
+      import(
+        './shared/patient-appointment-details/patient-appointment-details.component'
+      ).then((c) => c.PatientAppointmentDetailsComponent),
+  },
 ];
