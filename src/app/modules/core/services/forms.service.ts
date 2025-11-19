@@ -3,10 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordRepeatValidator } from '../../shared/validators/password-repeat.validator';
 import { phoneValidator } from '../../shared/validators/phone.validator';
 import { dateValidator } from '../../shared/validators/date.validator';
-import {
-  communicationPreferences,
-  GetPatientResponse,
-} from '../models/user.model';
+import { communicationPreferences } from '../models/user.model';
+import { GetPatientResponse } from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root',
@@ -139,6 +137,56 @@ export class FormsService {
           : communicationPreferences.EMAIL,
         {
           validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      newsletter: new FormControl<boolean>(
+        userData ? userData.newsletter : false,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+    });
+  }
+
+  getFulfilledPatientProfileForm(userData: GetPatientResponse | null) {
+    return new FormGroup({
+      firstName: new FormControl<string>(userData ? userData.name : '', {
+        validators: [Validators.maxLength(50), Validators.required],
+        nonNullable: true,
+      }),
+      surname: new FormControl<string>(userData ? userData.surname : '', {
+        validators: [Validators.maxLength(50), Validators.required],
+        nonNullable: true,
+      }),
+      pesel: new FormControl<string>(userData ? userData.pesel : '', {
+        validators: [
+          Validators.minLength(11),
+          Validators.maxLength(11),
+          Validators.required,
+        ],
+        nonNullable: false,
+      }),
+      birthdate: new FormControl<Date>(
+        userData ? new Date(userData.birthDate) : new Date(),
+        {
+          validators: [dateValidator(), Validators.required],
+          nonNullable: true,
+        },
+      ),
+      email: new FormControl<string>(userData ? userData.email : '', {
+        validators: [
+          Validators.email,
+          Validators.maxLength(100),
+          Validators.required,
+        ],
+        nonNullable: true,
+      }),
+      phoneNumber: new FormControl<string>(
+        userData ? userData.phoneNumber : '',
+        {
+          validators: [Validators.required, phoneValidator()],
           nonNullable: true,
         },
       ),

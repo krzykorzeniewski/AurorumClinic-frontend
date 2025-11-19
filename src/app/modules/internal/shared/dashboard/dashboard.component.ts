@@ -1,19 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserRole } from '../../../core/models/auth.model';
-import { EmployeeService } from '../../../core/services/employee.service';
 import { DoctorService } from '../../../core/services/doctor.service';
+import { EmployeeService } from '../../../core/services/employee.service';
+import { UserRole } from '../../../core/models/auth.model';
 import { toLocalISOString } from '../../../shared/methods/dateTransform';
 
 @Component({
-  selector: 'app-employee-panel',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [DatePipe],
-  templateUrl: './employee-panel.component.html',
-  styleUrl: './employee-panel.component.css',
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css',
 })
-export class EmployeePanelComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   private _authService = inject(AuthService);
   private _doctorService = inject(DoctorService);
   private _employeeService = inject(EmployeeService);

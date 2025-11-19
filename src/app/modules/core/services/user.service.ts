@@ -2,16 +2,29 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import {
-  GetPatientApiResponse,
-  GetPatientResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
   UpdateTokenRequest,
 } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../models/api-response.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  ApiResponse,
+  PageableResponse,
+  Payment,
+} from '../models/api-response.model';
 import { AuthService } from './auth.service';
+import {
+  Appointment,
+  AppointmentStatus,
+  GetAppointmentInfo,
+} from '../models/appointment.model';
+import { Doctor } from '../models/doctor.model';
+import { Service } from '../models/service.model';
+import {
+  GetPatientApiResponse,
+  GetPatientResponse,
+} from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +57,55 @@ export class UserService {
               new Error(
                 'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
               ),
+          );
+        }),
+      );
+  }
+
+  getPatientAppointments(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this._http
+      .get<ApiResponse<PageableResponse<GetAppointmentInfo>>>(
+        `${this._apiUrl}/appointments/me`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            appointments: res.data.content.map(
+              (value) =>
+                new Appointment(
+                  value.id,
+                  value.startedAt,
+                  value.status as AppointmentStatus,
+                  value.description,
+                  new Doctor(
+                    value.doctor.id,
+                    value.doctor.name,
+                    value.doctor.surname,
+                    value.doctor.specializations,
+                    value.doctor.profilePicture,
+                  ),
+                  new Service(
+                    value.service.id,
+                    value.service.name,
+                    value.service.price,
+                  ),
+                  new Payment(value.payment.amount, value.payment.status),
+                ),
+            ),
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
           );
         }),
       );

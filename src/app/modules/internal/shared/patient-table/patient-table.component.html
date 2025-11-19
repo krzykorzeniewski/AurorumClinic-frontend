@@ -39,7 +39,7 @@
       <ng-container matColumnDef="profileButton">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button type="button" class="btn btn-info text-white">Profil</button>
+          <button type="button" class="btn btn-info" [routerLink]="'/internal/patients/' + row.id">Profil</button>
         </td>
       </ng-container>
 

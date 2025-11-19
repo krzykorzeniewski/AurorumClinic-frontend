@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
-import { GetPatientResponse } from '../../../core/models/user.model';
 import { UserService } from '../../../core/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +17,7 @@ import { DoctorCardComponent } from '../../../shared/components/doctor-card/doct
 import { CreateAppointmentPatient } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { FormsService } from '../../../core/services/forms.service';
+import { GetPatientResponse } from '../../../core/models/patient.model';
 
 @Component({
   selector: 'app-appointment-register',

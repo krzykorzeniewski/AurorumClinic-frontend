@@ -19,7 +19,6 @@ import {
   MatTable,
   MatTableDataSource,
 } from '@angular/material/table';
-import { GetPatientResponse } from '../../../core/models/user.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +33,8 @@ import {
 } from 'rxjs';
 import { PatientService } from '../../../core/services/patient.service';
 import { MatInput } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
+import { GetPatientResponse } from '../../../core/models/patient.model';
 
 @Component({
   selector: 'app-patient-table',
@@ -54,6 +55,7 @@ import { MatInput } from '@angular/material/input';
     MatHeaderRowDef,
     MatRow,
     MatNoDataRow,
+    RouterLink,
   ],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.css',
@@ -61,11 +63,11 @@ import { MatInput } from '@angular/material/input';
 export class PatientTableComponent implements AfterViewInit, OnDestroy {
   private _patientService = inject(PatientService);
   displayedColumns: string[] = [
-    'pesel',
     'name',
     'surname',
     'email',
     'phoneNumber',
+    'pesel',
     'profileButton',
     'createAppointmentButton',
   ];

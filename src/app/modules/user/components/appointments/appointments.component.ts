@@ -5,8 +5,8 @@ import { Appointment } from '../../../core/models/appointment.model';
 import { map } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { PatientService } from '../../../core/services/patient.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-appointments',
@@ -16,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './appointments.component.css',
 })
 export class AppointmentsComponent implements OnInit {
-  private _patientService = inject(PatientService);
+  private _userService = inject(UserService);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   private _page = 0;
@@ -54,7 +54,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   private fetchAppointments(): void {
-    this._patientService
+    this._userService
       .getPatientAppointments(this._page, this._size)
       .pipe(
         map((res) => ({

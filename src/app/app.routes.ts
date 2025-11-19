@@ -16,8 +16,8 @@ export const APP_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN] },
     loadChildren: () =>
-      import('./modules/employee/employee.routes').then(
-        (m) => m.EMPLOYEE_ROUTES,
+      import('./modules/internal/internal.routes').then(
+        (m) => m.INTERNAL_ROUTES,
       ),
   },
   {
