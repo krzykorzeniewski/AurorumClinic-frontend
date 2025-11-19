@@ -1,0 +1,80 @@
+<div class="container-fluid d-flex align-items-center pt-4">
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
+    <h2 class="text-center mb-4 fw-bold text-white py-3 rounded-4 shadow-sm"
+        style="background: linear-gradient(-135deg, var(--primary-purple), #8a5cff);">
+      Szczegóły wizyty
+    </h2>
+    <div *ngIf="appointment() as app" class="d-flex flex-column align-items-center">
+
+      <div *ngIf="app.payment.status === PaymentStatus.CREATED"
+           class="mb-3 w-100 text-center py-2 rounded-3 alert-unpaid">
+        Ta wizyta nie została opłacona! Proszę uregulować płatność.
+      </div>
+
+      <div class="mb-2 w-100">
+        <app-doctor-card
+          [id]="app.doctor.id"
+          [name]="app.doctor.name"
+          [surname]="app.doctor.surname"
+          [specialization]="app.doctor.specializations[0].name"
+          [profilePicture]="app.doctor.profilePicture"
+          [price]="app.service.price"
+          [mode]="'appointmentRegister'"
+        />
+      </div>
+
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data i godzina</mat-label>
+          <input readonly matInput [value]="app.startedAt | date:'dd MMMM yyyy, HH:mm':'':'pl'"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Status płatności</mat-label>
+          <input readonly matInput [value]="mapPaymentToVisibleStatus(app.payment.status)"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Typ wizyty</mat-label>
+          <input readonly matInput [value]="app.service.name"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Dodatkowe informacje</mat-label>
+          <textarea style="resize: none"  readonly matInput [value]="app.description"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="app.status === AppointmentStatus.CREATED" class="mb-4 w-100">
+        <mat-accordion>
+          <mat-expansion-panel class="border-0 rounded-4 shadow-sm overflow-hidden text-white"
+                               style="background: linear-gradient(-145deg, var(--primary-purple), #6b42d1); color: white;">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-white"> Zarządzaj wizytą </mat-panel-title>
+              <mat-panel-description class="text-white"> Przełóż, opłać lub odwołaj wizytę </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row w-100 mb-2">
+              <div class="col-sm text-center mb-3">
+                <button mat-flat-button type="button" class="btn btn-danger-custom w-100" (click)="onCancelAppointment()">Odwołaj</button>
+              </div>
+              <div class="col-sm text-center mb-3">
+                <button *ngIf="app.payment.status === PaymentStatus.CREATED" mat-flat-button type="button" class="btn btn-warning-custom w-100" (click)="onPayment()">Opłać na miejsu</button>
+              </div>
+              <div class="col-sm text-center mb-3">
+                <button mat-flat-button type="button" class="btn btn-green w-100" (click)="onRescheduleAppointment()">Przełóż</button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="row w-100">
+        <div class="col-sm text-center">
+          <button mat-flat-button type="button" class="btn btn-outline-custom w-50" (click)="goBack()">Powrót</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
