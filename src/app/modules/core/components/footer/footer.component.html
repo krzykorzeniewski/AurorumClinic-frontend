@@ -28,43 +28,6 @@
         </li>
       </ul>
     </div>
-    <div class="col-12 col-md-5 mb-3">
-      <form (ngSubmit)="signup()" class="row gx-2 gy-0">
-        <div class="col">
-          <mat-form-field appearance="outline" class="w-100 mb-0">
-            <mat-label>Zapisz się do newslettera!</mat-label>
-            <input
-              id="newsletter-signup-user"
-              matInput
-              placeholder="jan.kowalski@example.com"
-              #newsletterSignup
-              [formControl]="email"
-            />
-            <mat-error *ngIf="email.invalid">
-              {{ getErrorMessage(email) }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-auto">
-          <button
-            mat-flat-button
-            type="submit"
-            [disabled]="email.invalid || email.pristine"
-            class="btn text-white border-0"
-            style="background-color: var(--primary-purple); height: 40px; padding: 0 20px; margin-top: 7px">
-            Zapisz się
-          </button>
-        </div>
-      </form>
-      <div
-        *ngIf="message()"
-        class="alert alert-warning"
-        role="alert"
-        style="padding: 0.3rem 0.3rem; font-size: 0.75rem; text-align: center;"
-      >
-        {{ message() }}
-      </div>
-    </div>
     <div class="col-12 col-sm-6 col-md-2 mb-4"></div>
   </footer>
 </div>
