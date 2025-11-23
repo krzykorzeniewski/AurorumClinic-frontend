@@ -5,7 +5,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { DatePipe, Location, NgClass, NgForOf, NgIf } from '@angular/common';
 import { catchError, map, of, tap } from 'rxjs';
@@ -27,6 +27,7 @@ import { GetPatientResponse } from '../../../core/models/patient.model';
     NgForOf,
     DatePipe,
     DoctorCardComponent,
+    RouterLink,
   ],
   templateUrl: './patient-profile.component.html',
   styleUrl: './patient-profile.component.css',
@@ -112,9 +113,5 @@ export class PatientProfileComponent implements OnInit {
 
   toggleVisits() {
     this.visibleVisits.set(!this.visibleVisits());
-  }
-
-  goBack() {
-    this._location.back();
   }
 }

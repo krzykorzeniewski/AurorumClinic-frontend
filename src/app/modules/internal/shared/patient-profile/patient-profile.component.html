@@ -11,7 +11,7 @@
         <h5 class="mb-3">{{ patient.name }} {{ patient.surname }}</h5>
         <p class="mb-1"><strong class="me-2">Email:</strong> {{ patient.email }}</p>
         <p class="mb-1" *ngIf="hasPesel()"><strong class="me-2">PESEL:</strong> {{ patient.pesel ? patient.pesel : '-----' }}</p>
-        <p class="mb-1"><strong class="me-2">Data urodzenia:</strong> {{ patient.birthDate | date: 'd MMMM yyyy':'':'pl' }}</p>
+        <p class="mb-1"><strong class="me-2">Data urodzenia:</strong> {{ patient.birthDate | date: 'dd MMMM yyyy':'':'pl' }}</p>
         <p class="mb-1"><strong class="me-2">Numer telefonu:</strong> {{ patient.phoneNumber }}</p>
         <p class="mb-0"><strong class="me-2">Newsletter:</strong> {{ patient.newsletter ? 'Zapisano' : 'Nie zapisano'}}</p>
 
@@ -23,7 +23,7 @@
               type="button"
               class="btn border w-100"
               style="background-color: white; color: black"
-              (click)="goBack()"
+              routerLink="/internal/patients"
             >Powrót</button>
           </div>
 
