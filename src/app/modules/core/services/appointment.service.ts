@@ -103,6 +103,23 @@ export class AppointmentService {
       );
   }
 
+  deletePatientAppointmentByEmployee(appointmentId: number): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/appointments/${appointmentId}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie odwoływania wizyty pacjenta. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   deletePatientAppointment(appointmentId: number): Observable<void> {
     return this._http
       .delete<void>(`${this._apiUrl}/appointments/me/${appointmentId}`, {

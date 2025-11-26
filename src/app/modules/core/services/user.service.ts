@@ -97,7 +97,11 @@ export class UserService {
                     value.service.name,
                     value.service.price,
                   ),
-                  new Payment(value.payment.amount, value.payment.status),
+                  new Payment(
+                    value.payment.id,
+                    value.payment.amount,
+                    value.payment.status,
+                  ),
                 ),
             ),
             page: res.data.page,

@@ -14,6 +14,7 @@ import { MatButton } from '@angular/material/button';
 import { Appointment } from '../../../core/models/appointment.model';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
 import { GetPatientResponse } from '../../../core/models/patient.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-patient-profile',
@@ -34,6 +35,7 @@ import { GetPatientResponse } from '../../../core/models/patient.model';
 })
 export class PatientProfileComponent implements OnInit {
   private _patientService = inject(PatientService);
+  private _snackBar = inject(MatSnackBar);
   private _route = inject(ActivatedRoute);
   private _location = inject(Location);
   private _router = inject(Router);
@@ -45,6 +47,19 @@ export class PatientProfileComponent implements OnInit {
   appointmentsDone: Appointment[] = [];
   appointmentsFuture: Appointment[] = [];
   hasMoreData = true;
+
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
+  }
 
   ngOnInit(): void {
     this._route.paramMap
@@ -87,7 +102,7 @@ export class PatientProfileComponent implements OnInit {
     void this._router.navigate(
       [`/internal/patients/${patientId}/appointments/details`],
       {
-        state: { appointment },
+        state: { appointment, patientId },
       },
     );
   }
