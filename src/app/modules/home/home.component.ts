@@ -57,12 +57,17 @@ export class HomeComponent implements OnInit {
         this.recommendedDoctors = res;
       },
     });
-    this._doctorService.getSpecializationsWithServices().subscribe({
-      next: (res) => {
-        this.specializations = res;
-        localStorage.setItem('services', JSON.stringify(res));
-      },
-    });
+    const specAndServices = localStorage.getItem('services');
+    if (specAndServices) {
+      this.specializations = JSON.parse(specAndServices);
+    } else {
+      this._doctorService.getSpecializationsWithServices().subscribe({
+        next: (res) => {
+          this.specializations = res;
+          localStorage.setItem('services', JSON.stringify(res));
+        },
+      });
+    }
 
     this.controls.specialization.valueChanges
       .pipe(startWith(this.controls.specialization.value))

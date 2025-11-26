@@ -27,7 +27,7 @@ import { Router } from '@angular/router';
 export class DoctorAppointmentCardComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);
   private _router = inject(Router);
-  doctor = input<DoctorAppointmentCard>(new DoctorAppointmentCard());
+  doctor = input.required<DoctorAppointmentCard>();
   slots = signal<AppointmentsSlots>({});
   currentWeekStart!: Date;
   currentWeekEnd!: Date;
@@ -152,7 +152,11 @@ export class DoctorAppointmentCardComponent implements OnInit {
   }
 
   isPastDay(dateFromAppointment: Date): boolean {
-    return dateFromAppointment < new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(dateFromAppointment);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate < today;
   }
 
   private getInitialDate(): Date {
@@ -199,7 +203,27 @@ export class DoctorAppointmentCardComponent implements OnInit {
       )
       .subscribe({
         next: (slotsData) => {
-          this.slots.set(slotsData);
+          const now = new Date();
+          const filteredData: AppointmentsSlots = {};
+
+          Object.keys(slotsData).forEach((dateKey) => {
+            const times = slotsData[dateKey];
+
+            const validTimes = times.filter((time) => {
+              const [h, m] = time.split(':').map(Number);
+
+              const slotDate = new Date(dateKey);
+              slotDate.setHours(h, m, 0, 0);
+
+              return slotDate > now;
+            });
+
+            if (validTimes.length > 0) {
+              filteredData[dateKey] = validTimes;
+            }
+          });
+
+          this.slots.set(filteredData);
           this.isLoading.set(false);
         },
         error: () => {

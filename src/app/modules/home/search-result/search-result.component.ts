@@ -3,7 +3,6 @@ import { DoctorService } from '../../core/services/doctor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppointmentService } from '../../core/services/appointment.service';
 import { DoctorAppointmentCard } from '../../core/models/doctor.model';
-import { AppointmentsSlots } from '../../core/models/appointment.model';
 import { DoctorAppointmentCardComponent } from '../../shared/components/doctor-appointment-card/doctor-appointment-card.component';
 import { NgForOf } from '@angular/common';
 
@@ -20,11 +19,7 @@ export class SearchResultComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   nameOfTheService!: string;
-  startOfTheWeek!: Date;
-  endOfTheWeek!: Date;
-
   doctors: DoctorAppointmentCard[] = [];
-  appointments: Record<number, AppointmentsSlots> = {};
 
   ngOnInit(): void {
     this._route.queryParams.subscribe({
@@ -33,14 +28,11 @@ export class SearchResultComponent implements OnInit {
         const serviceIdFromQuery = params['serviceId'] || null;
 
         if (serviceIdFromQuery) {
-          this.setDaysToSearch();
-
           this._doctorService
             .searchDoctors(searchQuery, serviceIdFromQuery)
             .subscribe({
               next: (doctors) => {
                 this.doctors = doctors;
-                this.loadAppointmentsForDoctors(doctors);
               },
             });
 
@@ -70,40 +62,5 @@ export class SearchResultComponent implements OnInit {
         }
       },
     });
-  }
-
-  private loadAppointmentsForDoctors(doctors: DoctorAppointmentCard[]): void {
-    doctors.forEach((doctor) => {
-      this._appointmentService
-        .getAppointmentSlots(
-          doctor.id,
-          this.startOfTheWeek,
-          this.endOfTheWeek,
-          doctor.serviceId,
-        )
-        .subscribe({
-          next: (slots) => {
-            this.appointments[doctor.id] = slots;
-          },
-        });
-    });
-  }
-
-  private setDaysToSearch() {
-    const now = new Date();
-    const day = now.getDay();
-
-    const diffToMonday = day === 0 ? -6 : 1 - day;
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diffToMonday);
-    monday.setHours(8, 0, 0, 0);
-
-    const diffToFriday = day === 0 ? 5 : 5 - day;
-    const friday = new Date(now);
-    friday.setDate(now.getDate() + diffToFriday);
-    friday.setHours(21, 0, 0, 0);
-
-    this.startOfTheWeek = monday;
-    this.endOfTheWeek = friday;
   }
 }
