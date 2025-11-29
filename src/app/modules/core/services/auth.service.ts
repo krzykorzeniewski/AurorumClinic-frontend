@@ -252,15 +252,12 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
+    this.#user.next(null);
     return this._http
       .get<void>(`${this._apiUrl}/logout`, {
         withCredentials: true,
       })
-      .pipe(
-        tap(() => {
-          this.#user.next(null);
-        }),
-      );
+      .pipe(catchError(() => of(void 0)));
   }
 
   isLoggedIn(): boolean {

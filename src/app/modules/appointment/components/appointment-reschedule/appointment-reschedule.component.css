@@ -1,4 +1,4 @@
-.btn-green {
+.btn-purple {
   background: #922c9a;
   color: white;
   border: none;
@@ -8,7 +8,7 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-.btn-green:hover {
+.btn-purple:hover {
   background: #8a5cff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);

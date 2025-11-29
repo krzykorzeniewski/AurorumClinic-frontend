@@ -37,7 +37,7 @@ export const APP_ROUTES: Routes = [
   {
     path: 'appointment',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.PATIENT] },
+    data: { roles: [UserRole.PATIENT, UserRole.EMPLOYEE] },
     loadChildren: () =>
       import('./modules/appointment/appointment.routes').then(
         (m) => m.APPOINTMENT_ROUTES,

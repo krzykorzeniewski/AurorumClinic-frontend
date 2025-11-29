@@ -86,6 +86,26 @@ export class AppointmentService {
       );
   }
 
+  reschedulePatientAppointmentByEmployee(
+    id: number,
+    data: RescheduleAppointmentPatient,
+  ) {
+    return this._http
+      .put<void>(`${this._apiUrl}/appointments/${id}`, data, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie przekładania wizyty pacjentowi. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   rescheduleAppointment(id: number, data: RescheduleAppointmentPatient) {
     return this._http
       .put<void>(`${this._apiUrl}/appointments/me/${id}`, data, {

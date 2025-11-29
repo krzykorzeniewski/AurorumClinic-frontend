@@ -1,11 +1,10 @@
 .btn-green {
-  background: #489a2c;
-  color: white;
+  background: #489a2c !important;
+  color: white !important;
   border: none;
   border-radius: 0.75rem;
   padding: 0.5rem 1rem;
   transition: 0.3s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .btn-green:hover {
@@ -15,8 +14,8 @@
 }
 
 .btn-danger-custom {
-  background: #ac2626;
-  color: var(--secondary-white);
+  background: #ac2626 !important;
+  color: var(--secondary-white) !important;
   border: none;
   border-radius: 0.75rem;
   transition: 0.3s;
@@ -29,8 +28,8 @@
 }
 
 .btn-warning-custom {
-  background: #ffc107;
-  color: black;
+  background: #ffc107 !important;
+  color: black !important;
   border-radius: 0.75rem;
   transition: 0.3s;
 }

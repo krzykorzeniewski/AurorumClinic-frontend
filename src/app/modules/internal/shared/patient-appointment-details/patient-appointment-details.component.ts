@@ -77,7 +77,17 @@ export class PatientAppointmentDetailsComponent {
     }
   }
 
-  onRescheduleAppointment() {}
+  onRescheduleAppointment() {
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    const currentPatient = this.patient();
+    if (!currentPatient) return;
+
+    void this._router.navigate(['/appointment/reschedule'], {
+      state: { appointment: currentAppointment, patientId: currentPatient.id },
+    });
+  }
 
   onPayment() {}
 
@@ -109,7 +119,9 @@ export class PatientAppointmentDetailsComponent {
   }
 
   goBack() {
-    this._location.back();
+    const patient = this.patient();
+    if (!patient) return;
+    void this._router.navigate(['internal/patients/' + patient.id]);
   }
 
   mapPaymentToVisibleStatus(payment: PaymentStatus) {

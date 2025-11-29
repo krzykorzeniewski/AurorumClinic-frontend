@@ -2,12 +2,11 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
   input,
   OnInit,
   Output,
   signal,
-  WritableSignal,
+  model,
 } from '@angular/core';
 import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
 import { AppointmentsSlots } from '../../../core/models/appointment.model';
@@ -34,8 +33,8 @@ export class DoctorAppointmentCardComponent implements OnInit {
   weekDays: { full: string; short: string; day: string; date: Date }[] = [];
   isLoading = signal<boolean>(false);
   @Output() timeSelectedReschedule = new EventEmitter<string>();
-  @Input() selectedDateTime!: WritableSignal<string | null>;
-  @Input() mode: 'register' | 'reschedule' = 'register';
+  selectedDateTime = model<string | null>(null);
+  mode = input<'register' | 'reschedule'>('register');
 
   ngOnInit(): void {
     const startDate = this.getInitialDate();
@@ -50,7 +49,7 @@ export class DoctorAppointmentCardComponent implements OnInit {
 
     const dateTime = date + 'T' + time;
 
-    if (this.mode === 'register') {
+    if (this.mode() === 'register') {
       void this._router.navigate(['/appointment/register'], {
         queryParams: {
           doctorId: doctorAppointmentRegister.id,

@@ -5,6 +5,8 @@ import { UserRole } from '../core/models/auth.model';
 export const INTERNAL_ROUTES: Routes = [
   {
     path: '',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN] },
     loadComponent: () =>
       import('../internal/shared/dashboard/dashboard.component').then(
         (c) => c.DashboardComponent,
