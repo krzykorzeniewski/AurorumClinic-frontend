@@ -1,13 +1,11 @@
 import {
   Component,
   computed,
-  EventEmitter,
+  effect,
   inject,
-  Input,
-  OnChanges,
-  Output,
+  input,
+  output,
   signal,
-  SimpleChanges,
 } from '@angular/core';
 import { DoctorAppointmentCardComponent } from '../../../shared/components/doctor-appointment-card/doctor-appointment-card.component';
 import { Appointment } from '../../../core/models/appointment.model';
@@ -40,22 +38,18 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './appointment-reschedule.component.html',
   styleUrl: './appointment-reschedule.component.css',
 })
-export class AppointmentRescheduleComponent implements OnChanges {
+export class AppointmentRescheduleComponent {
   private _formService = inject(FormsService);
   private _location = inject(Location);
-  @Input({ required: true }) appointment!: Appointment;
+  appointment = input.required<Appointment>();
 
-  @Output() confirmReschedule = new EventEmitter<{
-    date: string;
-    description: string;
-  }>();
+  confirmReschedule = output<{ date: string; description: string }>();
 
   additionalInformation =
     this._formService.getAdditionalInformationAppointmentForm();
   selectedDateTime = signal<string | null>(null);
   doctorAppointmentCard = computed(() => {
-    const app = this.appointment;
-    if (!app) return;
+    const app = this.appointment();
 
     return new DoctorAppointmentCard(
       app.doctor.id,
@@ -68,10 +62,11 @@ export class AppointmentRescheduleComponent implements OnChanges {
     );
   });
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['appointment'] && this.appointment) {
-      this.additionalInformation.setValue(this.appointment.description || '');
-    }
+  constructor() {
+    effect(() => {
+      const app = this.appointment();
+      this.additionalInformation.setValue(app.description || '');
+    });
   }
 
   onConfirmReschedule() {

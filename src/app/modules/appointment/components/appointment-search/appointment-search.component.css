@@ -1,0 +1,8 @@
+.min-w-200 { min-width: 200px; }
+.min-w-250 { min-width: 250px; }
+
+@media (max-width: 768px) {
+  .w-75 {
+    width: 100% !important;
+  }
+}

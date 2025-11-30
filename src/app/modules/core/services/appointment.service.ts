@@ -6,6 +6,7 @@ import { ApiResponse } from '../models/api-response.model';
 import {
   AppointmentsSlots,
   CreateAppointmentPatient,
+  CreateAppointmentPatientByEmployee,
   PaymentStatus,
   RescheduleAppointmentPatient,
 } from '../models/appointment.model';
@@ -80,6 +81,25 @@ export class AppointmentService {
             () =>
               new Error(
                 'Wystąpił błąd w trakcie umawiania wizyty. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  registerPatientForAppointmentByEmployee(
+    appointment: CreateAppointmentPatientByEmployee,
+  ): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/appointments`, appointment, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie umawiania wizyty pacjenta. Spróbuj ponownie później.',
               ),
           );
         }),

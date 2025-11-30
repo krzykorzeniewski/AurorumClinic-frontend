@@ -33,7 +33,7 @@ import {
 } from 'rxjs';
 import { PatientService } from '../../../core/services/patient.service';
 import { MatInput } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { GetPatientResponse } from '../../../core/models/patient.model';
 
 @Component({
@@ -62,6 +62,7 @@ import { GetPatientResponse } from '../../../core/models/patient.model';
 })
 export class PatientTableComponent implements AfterViewInit, OnDestroy {
   private _patientService = inject(PatientService);
+  private _router = inject(Router);
   displayedColumns: string[] = [
     'name',
     'surname',
@@ -147,6 +148,14 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  onCreateAppointment(patient: GetPatientResponse) {
+    void this._router.navigate(['/appointment/search'], {
+      state: {
+        patient: patient,
+      },
+    });
   }
 
   ngOnDestroy(): void {

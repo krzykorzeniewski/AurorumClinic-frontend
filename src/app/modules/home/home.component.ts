@@ -1,133 +1,47 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  MatError,
-  MatFormField,
-  MatInput,
-  MatLabel,
-} from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { DoctorCardComponent } from '../shared/components/doctor-card/doctor-card.component';
 import { DoctorService } from '../core/services/doctor.service';
-import {
-  DoctorRecommended,
-  SpecializationWithServices,
-} from '../core/models/doctor.model';
-import { FormsService } from '../core/services/forms.service';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
-import { Service } from '../core/models/service.model';
-import { MatIcon } from '@angular/material/icon';
-import { startWith } from 'rxjs';
+import { DoctorRecommended } from '../core/models/doctor.model';
 import { Router } from '@angular/router';
+import { DoctorAppointmentSearchComponent } from '../shared/components/doctor-appointment-search/doctor-appointment-search.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatInput,
-    MatFormField,
-    MatLabel,
     ReactiveFormsModule,
-    MatButton,
     NgForOf,
     DoctorCardComponent,
-    MatOption,
-    MatSelect,
-    MatIcon,
-    MatError,
     NgIf,
+    DoctorAppointmentSearchComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
   private _doctorService = inject(DoctorService);
-  private _formService = inject(FormsService);
   private _router = inject(Router);
-  readonly searchForm = this._formService.getSearchFrom();
+  private numberOfRecommendedDoctors = 6;
   recommendedDoctors: DoctorRecommended[] = [];
-  specializations: SpecializationWithServices[] = [];
-  selectedServices: Service[] = [];
 
   ngOnInit(): void {
-    this._doctorService.getRecommendedDoctors(0, 6).subscribe({
-      next: (res) => {
-        this.recommendedDoctors = res;
-      },
-    });
-    const specAndServices = localStorage.getItem('services');
-    if (specAndServices) {
-      this.specializations = JSON.parse(specAndServices);
-    } else {
-      this._doctorService.getSpecializationsWithServices().subscribe({
+    this._doctorService
+      .getRecommendedDoctors(0, this.numberOfRecommendedDoctors)
+      .subscribe({
         next: (res) => {
-          this.specializations = res;
-          localStorage.setItem('services', JSON.stringify(res));
+          this.recommendedDoctors = res;
         },
       });
-    }
-
-    this.controls.specialization.valueChanges
-      .pipe(startWith(this.controls.specialization.value))
-      .subscribe((specId) => {
-        const selectedSpec = this.specializations.find(
-          (spec) => spec.id === Number(specId),
-        );
-
-        this.selectedServices = selectedSpec?.services || [];
-
-        this.controls.service.setValue('');
-        this.controls.service.markAsPristine();
-        this.controls.service.markAsUntouched();
-
-        if (this.selectedServices.length > 0) {
-          this.controls.service.setValidators([Validators.required]);
-          this.controls.service.enable({ emitEvent: false });
-        } else {
-          this.controls.service.clearValidators();
-          this.controls.service.disable({ emitEvent: false });
-        }
-
-        this.controls.service.updateValueAndValidity({ emitEvent: false });
-        this.searchForm.updateValueAndValidity();
-      });
   }
 
-  onSearch() {
-    if (this.searchForm.invalid) return;
-
-    const { name, service } = this.searchForm.value;
-
+  onSearch(data: { name: string; serviceId: string }) {
     void this._router.navigate(['search-results'], {
       queryParams: {
-        name: name || null,
-        serviceId: service || null,
+        name: data.name || null,
+        serviceId: data.serviceId || null,
       },
     });
-  }
-
-  get canSearch(): boolean {
-    const { specialization, service } = this.controls;
-
-    const selectedSpec = this.specializations.find(
-      (spec) => spec.id === Number(specialization.value),
-    );
-
-    const hasServices = (selectedSpec?.services?.length ?? 0) > 0;
-    if (hasServices) {
-      return this.searchForm.valid && !!service.value;
-    }
-
-    return false;
-  }
-
-  get controls() {
-    return this.searchForm.controls;
-  }
-
-  getErrorMessage(control: FormControl) {
-    return this._formService.getErrorMessage(control);
   }
 }

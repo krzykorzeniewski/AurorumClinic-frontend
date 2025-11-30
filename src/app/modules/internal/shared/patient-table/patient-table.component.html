@@ -46,7 +46,7 @@
       <ng-container matColumnDef="createAppointmentButton">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button type="button" class="btn btn-purple">Umów wizytę</button>
+          <button type="button" class="btn btn-purple" (click)="onCreateAppointment(row)">Umów wizytę</button>
         </td>
       </ng-container>
 

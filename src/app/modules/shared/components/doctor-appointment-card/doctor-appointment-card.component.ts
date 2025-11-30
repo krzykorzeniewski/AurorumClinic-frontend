@@ -3,18 +3,24 @@ import {
   EventEmitter,
   inject,
   input,
+  model,
   OnInit,
   Output,
   signal,
-  model,
 } from '@angular/core';
 import { DoctorAppointmentCard } from '../../../core/models/doctor.model';
-import { AppointmentsSlots } from '../../../core/models/appointment.model';
+import {
+  AppointmentsSlots,
+  CreateAppointmentPatient,
+  CreateAppointmentPatientByEmployee,
+} from '../../../core/models/appointment.model';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { UserRole } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-doctor-appointment-card',
@@ -24,6 +30,7 @@ import { Router } from '@angular/router';
   styleUrl: './doctor-appointment-card.component.css',
 })
 export class DoctorAppointmentCardComponent implements OnInit {
+  private _authService = inject(AuthService);
   private _appointmentService = inject(AppointmentService);
   private _router = inject(Router);
   doctor = input.required<DoctorAppointmentCard>();
@@ -35,6 +42,7 @@ export class DoctorAppointmentCardComponent implements OnInit {
   @Output() timeSelectedReschedule = new EventEmitter<string>();
   selectedDateTime = model<string | null>(null);
   mode = input<'register' | 'reschedule'>('register');
+  patientId = input<number>();
 
   ngOnInit(): void {
     const startDate = this.getInitialDate();
@@ -50,14 +58,34 @@ export class DoctorAppointmentCardComponent implements OnInit {
     const dateTime = date + 'T' + time;
 
     if (this.mode() === 'register') {
-      void this._router.navigate(['/appointment/register'], {
-        queryParams: {
+      if (this._authService.userRole === UserRole.PATIENT) {
+        const data: CreateAppointmentPatient = {
+          startedAt: dateTime,
           doctorId: doctorAppointmentRegister.id,
           serviceId: doctorAppointmentRegister.serviceId,
-          date: dateTime,
-        },
-        state: { doctorAppointmentRegister },
-      });
+          description: '',
+        };
+        void this._router.navigate(['/appointment/register'], {
+          state: {
+            appointment: data,
+            doctorAppointmentCard: doctorAppointmentRegister,
+          },
+        });
+      } else {
+        const data: CreateAppointmentPatientByEmployee = {
+          startedAt: dateTime,
+          doctorId: doctorAppointmentRegister.id,
+          serviceId: doctorAppointmentRegister.serviceId,
+          patientId: this.patientId()!,
+          description: '',
+        };
+        void this._router.navigate(['/appointment/register'], {
+          state: {
+            appointment: data,
+            doctorAppointmentCard: doctorAppointmentRegister,
+          },
+        });
+      }
     } else {
       this.selectedDateTime.set(dateTime);
     }
@@ -78,7 +106,12 @@ export class DoctorAppointmentCardComponent implements OnInit {
         short: current
           .toLocaleDateString('pl-PL', { weekday: 'short' })
           .toUpperCase(),
-        day: current.getDate() + '.' + (current.getMonth() + 1),
+        day:
+          current.getDate() +
+          '.' +
+          (current.getMonth() + 1 < 10
+            ? '0' + (current.getMonth() + 1)
+            : current.getMonth() + 1),
         date: new Date(current),
       });
       current.setDate(current.getDate() + 1);

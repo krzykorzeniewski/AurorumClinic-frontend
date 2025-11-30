@@ -13,6 +13,15 @@ export const INTERNAL_ROUTES: Routes = [
       ),
   },
   {
+    path: '',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE] },
+    loadComponent: () =>
+      import('./shared/patient-table/patient-table.component').then(
+        (c) => c.PatientTableComponent,
+      ),
+  },
+  {
     path: 'patients',
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE] },
@@ -35,17 +44,17 @@ export const INTERNAL_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE] },
     loadComponent: () =>
-      import(
-        './shared/patient-profile/patient-profile-edit/patient-profile-edit.component'
-      ).then((c) => c.PatientProfileEditComponent),
+      import('./shared/patient-profile/patient-profile-edit/patient-profile-edit.component').then(
+        (c) => c.PatientProfileEditComponent,
+      ),
   },
   {
     path: 'patients/:id/appointments/details',
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE] },
     loadComponent: () =>
-      import(
-        './shared/patient-appointment-details/patient-appointment-details.component'
-      ).then((c) => c.PatientAppointmentDetailsComponent),
+      import('./shared/patient-appointment-details/patient-appointment-details.component').then(
+        (c) => c.PatientAppointmentDetailsComponent,
+      ),
   },
 ];
