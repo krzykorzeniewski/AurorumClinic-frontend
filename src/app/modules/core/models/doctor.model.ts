@@ -10,6 +10,8 @@ export interface GetRecommendedDoctorApiResponse {
   rating: number;
 }
 
+export type GetDoctorApiResponse = GetRecommendedDoctorApiResponse;
+
 export class DoctorRecommended implements GetRecommendedDoctorApiResponse {
   constructor(
     public id: number,

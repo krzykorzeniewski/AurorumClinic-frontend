@@ -57,4 +57,13 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.PatientAppointmentDetailsComponent,
       ),
   },
+  {
+    path: 'doctors',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE] },
+    loadComponent: () =>
+      import('./employee/doctor-table/doctor-table.component').then(
+        (c) => c.DoctorTableComponent,
+      ),
+  },
 ];

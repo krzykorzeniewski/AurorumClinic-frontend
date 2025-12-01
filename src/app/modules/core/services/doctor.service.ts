@@ -7,6 +7,7 @@ import {
   DoctorAppointmentCard,
   DoctorPanelStats,
   DoctorRecommended,
+  GetDoctorApiResponse,
   GetRecommendedDoctorApiResponse,
 } from '../models/doctor.model';
 import {
@@ -52,6 +53,56 @@ export class DoctorService {
         catchError(() => {
           return throwError(
             () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
+  getDoctors(
+    page: number,
+    size: number,
+    sort: string,
+    direction: 'asc' | 'desc' | '',
+    query?: string,
+  ) {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (sort) {
+      if (direction) {
+        params = params.set('sort', `${sort},${direction}`);
+      } else {
+        params = params.set('sort', sort);
+      }
+    }
+
+    if (query) {
+      params = params.set('query', query);
+    }
+
+    return this._http
+      .get<ApiResponse<PageableResponse<GetDoctorApiResponse>>>(
+        `${this._apiUrl}`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            doctors: res.data.content,
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd podczas uzyskiwania listy lekarzy. Spróbuj ponownie później.',
+              ),
           );
         }),
       );
