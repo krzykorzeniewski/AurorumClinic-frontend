@@ -33,6 +33,14 @@ export interface CreateAppointmentPatient {
   description: string;
 }
 
+export interface CreateAppointmentPatientByEmployee {
+  patientId: number;
+  startedAt: string;
+  serviceId: number;
+  doctorId: number;
+  description: string;
+}
+
 export interface RescheduleAppointmentPatient {
   startedAt: string;
   description: string;

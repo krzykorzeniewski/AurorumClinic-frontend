@@ -5,6 +5,7 @@ import { catchError, forkJoin, map, switchMap, throwError } from 'rxjs';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import {
   DoctorAppointmentCard,
+  DoctorPanelStats,
   DoctorRecommended,
   GetRecommendedDoctorApiResponse,
 } from '../models/doctor.model';
@@ -160,6 +161,33 @@ export class DoctorService {
             () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
           ),
         ),
+      );
+  }
+
+  getPanelStatistics(startedAt: string, finishedAt: string) {
+    const params = new HttpParams()
+      .set('startedAt', startedAt)
+      .set('finishedAt', finishedAt);
+    return this._http
+      .get<ApiResponse<DoctorPanelStats>>(
+        `${environment.apiUrl + '/stats/appointments/me'}`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
       );
   }
 }

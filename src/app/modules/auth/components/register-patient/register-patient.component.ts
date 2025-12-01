@@ -36,10 +36,10 @@ import { NgIf } from '@angular/common';
     AlertComponent,
     NgIf,
   ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+  templateUrl: './register-patient.component.html',
+  styleUrl: './register-patient.component.css',
 })
-export class RegisterComponent {
+export class RegisterPatientComponent {
   private _authService = inject(AuthService);
   private _formService = inject(FormsService);
   private _router = inject(Router);

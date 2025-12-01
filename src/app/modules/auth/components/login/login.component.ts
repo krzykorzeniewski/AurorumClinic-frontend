@@ -79,7 +79,7 @@ export class LoginComponent {
             },
           });
         } else {
-          void this._router.navigate(['/']);
+          this._authService.redirectAfterLogin();
         }
       },
       error: (err) => {

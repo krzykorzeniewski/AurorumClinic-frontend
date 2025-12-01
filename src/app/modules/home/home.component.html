@@ -1,50 +1,9 @@
 <div class="container pt-3">
   <h2 class="pb-4 text-center">Wyszukaj specjalistę</h2>
 
-  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="w-100 d-flex flex-column align-items-center gap-3">
-
-    <div class="w-75 d-flex gap-3 flex-wrap justify-content-between">
-      <mat-form-field appearance="outline" class="flex-fill min-w-200">
-        <mat-label>Specjalizacja</mat-label>
-        <mat-select formControlName="specialization">
-          <mat-option [value]="null">-- Wybierz specjalizację --</mat-option>
-          <mat-option *ngFor="let spec of specializations" [value]="spec.id">{{ spec.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="controls.specialization.invalid">{{ getErrorMessage(controls.specialization) }}</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="flex-fill min-w-200">
-        <mat-label>Usługa</mat-label>
-        <mat-select formControlName="service">
-          <mat-option [value]="null">-- Wybierz usługę --</mat-option>
-          <mat-option *ngFor="let service of selectedServices" [value]="service.id">{{ service.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="controls.service.invalid">{{ getErrorMessage(controls.service) }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="w-75 d-flex gap-2 flex-wrap justify-content-between align-items-baseline">
-      <mat-form-field appearance="outline" class="flex-grow-1 min-w-250">
-        <mat-icon matPrefix>search</mat-icon>
-        <mat-label>Wyszukaj specjalistę dodatkowo po imieniu i/lub nazwisku</mat-label>
-        <input matInput formControlName="name"/>
-        <mat-error *ngIf="controls.name.invalid">{{ getErrorMessage(controls.name) }}</mat-error>
-      </mat-form-field>
-
-      <button
-        mat-flat-button
-        color="primary"
-        type="submit"
-        class="btn text-white px-4 mx-3 border-0"
-        [disabled]="!canSearch"
-        style="background-color: var(--primary-purple); white-space: nowrap;"
-      >
-        Szukaj
-      </button>
-    </div>
-
-
-  </form>
+  <app-doctor-appointment-search
+    (confirmSearch)="onSearch($event)"
+    />
 
   <div *ngIf="recommendedDoctors">
   <h2 class="pt-4 text-center">Polecani specjaliści</h2>

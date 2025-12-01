@@ -90,7 +90,7 @@ export class TwoFactorLoginComponent {
 
     this._authService.loginTwoFactor(token).subscribe({
       next: () => {
-        void this._router.navigate(['/']);
+        this._authService.redirectAfterLogin();
       },
       error: (err) => {
         this.message.set(err.message);

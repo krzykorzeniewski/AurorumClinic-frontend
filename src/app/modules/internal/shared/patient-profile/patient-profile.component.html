@@ -1,0 +1,108 @@
+<div class="container-fluid pt-4 px-md-0">
+  <div class="row" [ngClass]="{'justify-content-center': !visibleVisits(), 'gx-lg-4': visibleVisits()}">
+
+    <div [ngClass]="{
+      'col-lg-6 col-md-8 col-sm-10 col-12': !visibleVisits(),
+      'col-lg-5 col-md-12': visibleVisits()}">
+
+      <div *ngIf="patient" class="card p-4 shadow-sm border-0 rounded-3">
+        <h3 class="mb-4">Dane pacjenta</h3>
+
+        <h5 class="mb-3">{{ patient.name }} {{ patient.surname }}</h5>
+        <p class="mb-1"><strong class="me-2">Email:</strong> {{ patient.email }}</p>
+        <p class="mb-1" *ngIf="hasPesel()"><strong class="me-2">PESEL:</strong> {{ patient.pesel ? patient.pesel : '-----' }}</p>
+        <p class="mb-1"><strong class="me-2">Data urodzenia:</strong> {{ patient.birthDate | date: 'dd MMMM yyyy':'':'pl' }}</p>
+        <p class="mb-1"><strong class="me-2">Numer telefonu:</strong> {{ patient.phoneNumber }}</p>
+        <p class="mb-0"><strong class="me-2">Newsletter:</strong> {{ patient.newsletter ? 'Zapisano' : 'Nie zapisano'}}</p>
+
+        <div class="row g-2 mt-4 pt-3 border-top">
+
+          <div class="col">
+            <button
+              mat-flat-button
+              type="button"
+              class="btn border w-100"
+              style="background-color: white; color: black"
+              routerLink="/internal/patients"
+            >Powrót</button>
+          </div>
+
+          <div class="col">
+            <button
+              mat-flat-button
+              type="button"
+              class="btn text-white w-100"
+              style="background-color: var(--primary-purple)"
+              (click)="updateData(patient.id)">
+            Aktualizuj dane</button>
+          </div>
+
+          <div class="col">
+            <button
+              mat-flat-button
+              type="button"
+              class="btn text-white w-100"
+              style="background-color: #28a745"
+              (click)="toggleVisits()"
+            >{{ visibleVisits() ? 'Ukryj wizyty' : 'Pokaż wizyty' }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="visibleVisits() && patient" class="col-lg-6 col-md-12 mt-4 mt-lg-0">
+      <h3 class="mb-4">Nadchodzące wizyty</h3>
+      <h5 *ngIf="appointmentsFuture.length === 0" class="text-center fw-light mb-4">Brak nadchodzących wizyt</h5>
+      <div *ngIf="appointmentsFuture.length !== 0">
+        <div class="mb-3" *ngFor="let appointment of appointmentsFuture">
+        <app-doctor-card
+          [id]="appointment.id"
+          [name]="appointment.doctor.name"
+          [surname]="appointment.doctor.surname"
+          [specialization]="appointment.doctor.specializations[0].name"
+          [date]="appointment.startedAt"
+          [price]="appointment.service.price"
+          [profilePicture]="appointment.doctor.profilePicture"
+          [serviceName]="appointment.service.name"
+          [paymentStatus]="appointment.payment.status"
+          [mode]="'visit'"
+          (click)="goToDetails(patient.id, appointment)"
+        >
+        </app-doctor-card>
+        </div>
+      </div>
+
+      <h3 class="mb-4 mt-5">Poprzednie wizyty</h3>
+      <h5 *ngIf="appointmentsDone.length === 0" class="text-center fw-light mb-4">Brak poprzednich wizyt</h5>
+      <div *ngIf="appointmentsDone.length !== 0">
+        <div class="mb-3" *ngFor="let appointment of appointmentsDone">
+        <app-doctor-card
+          [id]="appointment.id"
+          [name]="appointment.doctor.name"
+          [surname]="appointment.doctor.surname"
+          [specialization]="appointment.doctor.specializations[0].name"
+          [date]="appointment.startedAt"
+          [price]="appointment.service.price"
+          [profilePicture]="appointment.doctor.profilePicture"
+          [serviceName]="appointment.service.name"
+          [paymentStatus]="appointment.payment.status"
+          [mode]="'visit'"
+          (click)="goToDetails(patient.id, appointment)"
+        >
+        </app-doctor-card>
+        </div>
+        <div *ngIf="hasMoreData" class="d-flex justify-content-center mt-4">
+          <button
+          mat-flat-button
+          type="submit"
+          class="rounded-circle text-white d-flex align-items-center justify-content-center"
+          style="background-color: var(--primary-purple); width: 40px; height: 40px; min-width: 40px; padding: 0;"
+          (click)="fetchMoreData()"
+        >
+          +
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

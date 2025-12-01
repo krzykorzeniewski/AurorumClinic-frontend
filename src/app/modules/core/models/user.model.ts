@@ -1,24 +1,10 @@
+import { GetPatientApiResponse } from './patient.model';
+
 export enum communicationPreferences {
   EMAIL = 'EMAIL',
   PHONE_NUMBER = 'PHONE_NUMBER',
 }
 
-export interface GetPatientApiResponse {
-  id: number;
-  name: string;
-  surname: string;
-  pesel: string;
-  birthDate: string;
-  email: string;
-  phoneNumber: string;
-  twoFactorAuth: boolean;
-  newsletter: boolean;
-  emailVerified: boolean;
-  phoneNumberVerified: boolean;
-  communicationPreferences: communicationPreferences;
-}
-
-export type GetPatientResponse = GetPatientApiResponse;
 export type UpdateEmailTokenRequest = Partial<
   Pick<GetPatientApiResponse, 'email'>
 >;

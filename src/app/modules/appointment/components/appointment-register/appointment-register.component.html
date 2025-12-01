@@ -1,70 +1,65 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4">Rejestracja na wizytę</h2>
-    <form class="d-flex flex-column align-items-center" (ngSubmit)="onAppointmentRegister()">
-      <div class="mb-2 w-100" *ngIf="patient && service">
-      <app-doctor-card
-        [id]="doctor.id"
-        [name]="doctor.name"
-        [surname]="doctor.surname"
-        [specialization]="doctor.specializations[0].name"
-        [profilePicture]="doctor.profilePicture"
-        [price]="service.price"
-        [mode]="'appointmentRegister'"
-      />
-      </div>
-      <div class="mb-2 w-100" *ngIf="patient">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Pacjent</mat-label>
-          <input readonly matInput [value]="patient.name + ' ' + patient.surname"/>
-        </mat-form-field>
-      </div>
-      <div class="mb-3 w-100" *ngIf="date">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Data i godzina</mat-label>
-          <input readonly matInput [value]="date | date:'dd MMMM yyyy, HH:mm':'':'pl'"/>
-        </mat-form-field>
-      </div>
-      <div class="mb-3 w-100" *ngIf="patient?.pesel">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>PESEL</mat-label>
-          <input readonly matInput [value]="patient.pesel"/>
-        </mat-form-field>
-      </div>
-      <div class="mb-3 w-100" *ngIf="service">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Typ wizyty</mat-label>
-          <input readonly matInput [value]="service.name"/>
-        </mat-form-field>
-      </div>
-      <div class="mb-3 w-100">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Dodatkowe informacje</mat-label>
-          <textarea matInput placeholder="Czy muszę przynieść swoje poprzednie badania?" [formControl]="additionalInformation"></textarea>
-          @if (additionalInformation.invalid) {
-            <mat-error>{{ getErrorMessage(additionalInformation) }}</mat-error>
-          }
-        </mat-form-field>
-      </div>
-      <div class="row w-100">
-        <div class="col-sm text-center">
-          <button
-            mat-flat-button
-            type="button"
-            class="btn border"
-            style="background-color: white; color: black"
-            (click)="goBack()"
-          >Powrót</button>
-        </div>
-        <div class="col-sm text-center">
-          <button
-            mat-flat-button
-            type="submit"
-            class="btn text-white"
-            style="background-color: var(--primary-purple)"
-          >Zapisz</button>
-        </div>
-      </div>
-    </form>
+<form class="d-flex flex-column align-items-center" (ngSubmit)="onAppointmentRegister()">
+  <div class="mb-2 w-100" *ngIf="patient && service">
+  <app-doctor-card
+    [id]="doctor().id"
+    [name]="doctor().name"
+    [surname]="doctor().surname"
+    [specialization]="doctor().specializations[0].name"
+    [profilePicture]="doctor().profilePicture"
+    [price]="service.price"
+    [mode]="'appointmentRegister'"
+  />
   </div>
-</div>
+  <div class="mb-2 w-100" *ngIf="patient">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Pacjent</mat-label>
+      <input [readonly]="true" matInput [value]="patient.name + ' ' + patient.surname"/>
+    </mat-form-field>
+  </div>
+  <div class="mb-3 w-100" *ngIf="date">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Data i godzina</mat-label>
+      <input [readonly]="true" matInput [value]="date | date:'dd MMMM yyyy, HH:mm':'':'pl'"/>
+    </mat-form-field>
+  </div>
+  <div class="mb-3 w-100" *ngIf="patient?.pesel">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>PESEL</mat-label>
+      <input [readonly]="true" matInput [value]="patient.pesel"/>
+    </mat-form-field>
+  </div>
+  <div class="mb-3 w-100" *ngIf="service">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Typ wizyty</mat-label>
+      <input [readonly]="true" matInput [value]="service.name"/>
+    </mat-form-field>
+  </div>
+  <div class="mb-3 w-100">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Dodatkowe informacje</mat-label>
+      <textarea matInput placeholder="Czy muszę przynieść swoje poprzednie badania?" [formControl]="additionalInformation"></textarea>
+      @if (additionalInformation.invalid) {
+        <mat-error>{{ getErrorMessage(additionalInformation) }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="row w-100">
+    <div class="col-sm text-center">
+      <button
+        mat-flat-button
+        type="button"
+        class="btn border"
+        style="background-color: white; color: black"
+        (click)="onCancel()"
+      >Powrót</button>
+    </div>
+    <div class="col-sm text-center">
+      <button
+        mat-flat-button
+        type="submit"
+        class="btn text-white"
+        style="background-color: var(--primary-purple)"
+      >Umów</button>
+    </div>
+  </div>
+</form>

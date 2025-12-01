@@ -28,6 +28,7 @@ import {
   UpdatePhoneTokenRequest,
 } from '../models/user.model';
 import { ApiResponse } from '../models/api-response.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +36,14 @@ import { ApiResponse } from '../models/api-response.model';
 export class AuthService {
   #user = new BehaviorSubject<User | null | undefined>(undefined);
   private _apiUrl = environment.apiUrl + '/auth';
+  private _router = inject(Router);
   private _http = inject(HttpClient);
+  private readonly ROLE_MAP: Record<string, UserRole> = {
+    doctor: UserRole.DOCTOR,
+    patient: UserRole.PATIENT,
+    employee: UserRole.EMPLOYEE,
+    admin: UserRole.ADMIN,
+  };
 
   login(userData: UserLoginDataRequest): Observable<User> {
     return this._http
@@ -48,7 +56,10 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(data.twoFactorAuth, this.mapRole(data.role));
+          return new User(
+            data.twoFactorAuth,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+          );
         }),
         tap((user) => {
           if (!user.twoFactorAuth) this.#user.next(user);
@@ -85,7 +96,10 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(data.twoFactorAuth, this.mapRole(data.role));
+          return new User(
+            data.twoFactorAuth,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+          );
         }),
         tap((user) => {
           this.#user.next(user);
@@ -112,7 +126,10 @@ export class AuthService {
       .pipe(
         map((res) => {
           const data = res.data;
-          return new User(data.twoFactorAuth, this.mapRole(data.role));
+          return new User(
+            data.twoFactorAuth,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+          );
         }),
         tap((user) => this.#user.next(user)),
         catchError(() => {
@@ -235,24 +252,16 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
+    this.#user.next(null);
     return this._http
       .get<void>(`${this._apiUrl}/logout`, {
         withCredentials: true,
       })
-      .pipe(
-        tap(() => {
-          this.#user.next(null);
-        }),
-      );
+      .pipe(catchError(() => of(void 0)));
   }
 
   isLoggedIn(): boolean {
     return !!this.#user.getValue();
-  }
-
-  hasRole(role: UserRole) {
-    const currentUser = this.#user.value;
-    return !!currentUser && currentUser.role === role;
   }
 
   get user$(): Observable<User | null | undefined> {
@@ -260,7 +269,7 @@ export class AuthService {
   }
 
   get userRole() {
-    return this.#user.value?.role;
+    return this.#user.value?.role ?? UserRole.ANONYMOUS;
   }
 
   private getLoginErrorMessage(err: HttpErrorResponse) {
@@ -291,15 +300,20 @@ export class AuthService {
     return errorMsg;
   }
 
-  private mapRole(roleFromApi: string): UserRole {
-    const roleString = (roleFromApi || '').toString().toLowerCase();
-    switch (roleString) {
-      case 'patient':
-        return UserRole.PATIENT;
-      case 'doctor':
-        return UserRole.DOCTOR;
+  redirectAfterLogin(): void {
+    const role = this.userRole;
+
+    switch (role) {
+      case UserRole.DOCTOR:
+      case UserRole.EMPLOYEE:
+      case UserRole.ADMIN:
+        void this._router.navigate(['/internal']);
+        break;
+      case UserRole.PATIENT:
+        void this._router.navigate(['']);
+        break;
       default:
-        return UserRole.PATIENT;
+        void this._router.navigate(['']);
     }
   }
 }

@@ -10,23 +10,38 @@
     <div class="collapse navbar-collapse text-white" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-          <a *ngIf="user" class="nav-link d-flex align-items-center text-white" href="#">
-            <mat-icon fontIcon="notifications" class="d-none d-lg-inline"></mat-icon>
-            <span class="d-inline d-lg-none w-100 text-center">Powiadomienia</span>
-          </a>
-
         <li *ngIf="user" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle d-flex align-items-center text-white" role="button" id="accountDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
             <mat-icon fontIcon="account_box" class="d-none d-lg-inline"></mat-icon>
             <span class="d-inline d-lg-none w-100 text-center">Konto</span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
-            <li><a class="dropdown-item" routerLink="/profile">Profil</a></li>
-            <li><a class="dropdown-item" routerLink="/profile/appointments">Wizyty</a></li>
-            <li><a class="dropdown-item" routerLink="">Wiadomości</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
-          </ul>
+          <div [ngSwitch]="userRole">
+            <ul *ngSwitchCase="UserRole.PATIENT" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/profile">Profil</a></li>
+              <li><a class="dropdown-item" routerLink="/profile/appointments">Wizyty</a></li>
+              <li><a class="dropdown-item" routerLink="">Wiadomości</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
+            </ul>
+            <ul *ngSwitchCase="UserRole.EMPLOYEE" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/internal/patients">Pacjenci</a></li>
+              <li><a class="dropdown-item" routerLink="">Lekarze</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="/profile">Profil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
+            </ul>
+            <ul *ngSwitchCase="UserRole.DOCTOR" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/internal">Nic</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
+            </ul>
+            <ul *ngSwitchCase="UserRole.ADMIN" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/internal">Nic</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
+            </ul>
+          </div>
         </li>
 
         <a *ngIf="!user" routerLink="/auth/login" class="nav-link d-flex align-items-center text-white" role="button" id="accountDropdownGuest" aria-expanded="false">

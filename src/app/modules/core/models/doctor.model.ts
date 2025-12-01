@@ -47,3 +47,45 @@ export interface SpecializationWithServices {
   name: string;
   services: Service[];
 }
+
+export interface DoctorPanelStats {
+  totalScheduled: number;
+  totalFinished: number;
+  nextAppointment: string;
+}
+
+export interface ServiceStatistics {
+  scheduled: number;
+  finished: number;
+  avgDuration: number | null;
+  avgRating: number | null;
+  service: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface DoctorTotalStatistics {
+  totalScheduled: number;
+  totalFinished: number | null;
+  avgDuration: number | null;
+  avgRating: number | null;
+  services: ServiceStatistics[];
+}
+
+export interface DoctorStatisticsInfo {
+  doctorId: number;
+  name: string;
+  surname: string;
+  profilePicture: string;
+  specializations: Specialization[];
+  total: DoctorTotalStatistics[];
+}
+
+export interface DoctorStatisticsData {
+  totalScheduled: number;
+  totalFinished: number;
+  avgDuration: number;
+  avgRating: number | null;
+  doctors: DoctorStatisticsInfo[];
+}

@@ -19,6 +19,7 @@ export interface PageableResponse<T> {
 
 export class Payment {
   constructor(
+    public id: number,
     public amount: BigNumber,
     public status: PaymentStatus,
   ) {}

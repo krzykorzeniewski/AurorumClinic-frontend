@@ -11,7 +11,6 @@ import {
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
 import {
   communicationPreferences,
-  GetPatientResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
@@ -40,6 +39,7 @@ import { EditPhoneDialogComponent } from './edit-phone-dialog/edit-phone-dialog.
 import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { SetupTwoFactorDialogComponent } from './setup-two-factor-dialog/setup-two-factor-dialog.component';
+import { GetPatientResponse } from '../../../core/models/patient.model';
 
 @Component({
   selector: 'app-profile',

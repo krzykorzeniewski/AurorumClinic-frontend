@@ -1,0 +1,11 @@
+<div *ngIf="appointment() as app" class="container pt-3">
+  <h2 class="pb-2 text-center">Przełóż wizytę</h2>
+  <h5 class="pb-4 text-center">
+    {{ app.service.name }} <b style="color: #c3a71e">{{ app.service.price }} zł</b>
+  </h5>
+
+  <app-appointment-reschedule
+    [appointment]="app"
+    (confirmReschedule)="onConfirmReschedule($event)"
+  />
+</div>

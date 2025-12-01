@@ -50,5 +50,7 @@ export interface TokenVerifyRequest {
 export enum UserRole {
   DOCTOR = 'doctors',
   PATIENT = 'patients',
+  EMPLOYEE = 'employees',
   ADMIN = 'admin',
+  ANONYMOUS = 'anonymous',
 }

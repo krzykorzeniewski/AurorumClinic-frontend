@@ -9,7 +9,6 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { GetPatientResponse } from '../../../../core/models/user.model';
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import {
@@ -20,6 +19,7 @@ import {
 } from '@angular/forms';
 import { FormsService } from '../../../../core/services/forms.service';
 import { switchMap } from 'rxjs';
+import { GetPatientResponse } from '../../../../core/models/patient.model';
 
 @Component({
   selector: 'app-delete-profile-dialog',
