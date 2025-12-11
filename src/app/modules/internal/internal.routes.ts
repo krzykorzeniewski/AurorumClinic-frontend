@@ -13,15 +13,6 @@ export const INTERNAL_ROUTES: Routes = [
       ),
   },
   {
-    path: '',
-    canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
-    loadComponent: () =>
-      import('./shared/patient-table/patient-table.component').then(
-        (c) => c.PatientTableComponent,
-      ),
-  },
-  {
     path: 'patients',
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE] },
@@ -64,6 +55,15 @@ export const INTERNAL_ROUTES: Routes = [
     loadComponent: () =>
       import('./employee/doctor-table/doctor-table.component').then(
         (c) => c.DoctorTableComponent,
+      ),
+  },
+  {
+    path: 'schedules',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('./employee/schedule/schedule.component').then(
+        (c) => c.ScheduleComponent,
       ),
   },
 ];
