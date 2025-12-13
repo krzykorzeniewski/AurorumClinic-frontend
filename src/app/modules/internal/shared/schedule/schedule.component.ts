@@ -7,7 +7,7 @@ import { ScheduleService } from '../../../core/services/schedule.service';
 import { expand, map, of, reduce, takeWhile } from 'rxjs';
 import {
   DoctorsScheduleByDay,
-  EmployeeGetAllSchedules,
+  EmployeeGetSchedules,
 } from '../../../core/models/schedule.model';
 
 @Component({
@@ -34,8 +34,10 @@ export class ScheduleComponent implements OnInit {
     this.loadSlots();
   }
 
-  goToDetails(full: string, time: any) {
-    return null;
+  goToDetails(scheduleId: number) {
+    void this._router.navigate([`/internal/schedules/details`], {
+      state: { scheduleId: scheduleId },
+    });
   }
 
   fillWithWeekDays() {
@@ -188,10 +190,7 @@ export class ScheduleComponent implements OnInit {
         ),
         takeWhile((res) => res != null),
         map((res) => res!.content),
-        reduce(
-          (all, page) => all.concat(page),
-          [] as EmployeeGetAllSchedules[],
-        ),
+        reduce((all, page) => all.concat(page), [] as EmployeeGetSchedules[]),
       )
       .subscribe({
         next: (allSchedules) => {
@@ -205,6 +204,7 @@ export class ScheduleComponent implements OnInit {
             if (!mapped[date]) mapped[date] = [];
 
             mapped[date].push({
+              id: sch.id,
               startedAt,
               finishedAt,
               doctor: sch.doctor,

@@ -62,8 +62,17 @@ export const INTERNAL_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
     loadComponent: () =>
-      import('./employee/schedule/schedule.component').then(
+      import('./shared/schedule/schedule.component').then(
         (c) => c.ScheduleComponent,
+      ),
+  },
+  {
+    path: 'schedules/details',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('./shared/schedule/schedule-details/schedule-details.component').then(
+        (c) => c.ScheduleDetailsComponent,
       ),
   },
 ];

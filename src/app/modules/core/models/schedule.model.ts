@@ -1,7 +1,7 @@
 import { Doctor } from './doctor.model';
 import { Service } from './service.model';
 
-export interface EmployeeGetAllSchedules {
+export interface EmployeeGetSchedules {
   id: number;
   startedAt: string;
   finishedAt: string;
@@ -12,6 +12,7 @@ export interface EmployeeGetAllSchedules {
 export type DoctorsScheduleByDay = Record<
   string,
   {
+    id: number;
     startedAt: string;
     finishedAt: string;
     doctor: Doctor;

@@ -21,6 +21,8 @@ export class DoctorCardComponent {
   price = input<number>(0);
   serviceName = input<string>('');
   paymentStatus = input<PaymentStatus>(PaymentStatus.CREATED);
-  mode = input<'doctor' | 'visit' | 'appointmentRegister'>('doctor');
+  mode = input<'doctor' | 'visit' | 'appointmentRegister' | 'schedule'>(
+    'doctor',
+  );
   protected readonly PaymentStatus = PaymentStatus;
 }

@@ -7,7 +7,7 @@
         <button mat-icon-button
                 class="btn p-2 me-2"
                 style="background-color: var(--primary-purple); color: var(--secondary-white);"
-                [disabled]="!canGoToPreviousWeek() || isLoading()"
+                [disabled]="isLoading()"
                 (click)="goToPreviousWeek()">
           <mat-icon>arrow_back</mat-icon>
         </button>
@@ -33,7 +33,7 @@
                 type="button"
                 class="badge d-flex flex-column justify-content-center text-white mx-auto w-75 border-0"
                 style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer; min-width: 130px;"
-                (click)="goToDetails(day.full, schedule)"
+                (click)="goToDetails(schedule.id)"
               >
                 {{ schedule.startedAt }} - {{ schedule.finishedAt }} <br> <br>
                 {{ schedule.doctor.name }}  {{ schedule.doctor.surname }}

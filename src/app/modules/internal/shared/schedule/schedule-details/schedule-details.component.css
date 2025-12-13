@@ -1,0 +1,41 @@
+.btn-danger-custom {
+  background: #ac2626 !important;
+  color: var(--secondary-white) !important;
+  border: none;
+  border-radius: 0.75rem;
+  transition: 0.3s;
+}
+
+.btn-danger-custom:hover {
+  background: #d63939;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.btn-warning-custom {
+  background: #ffc107 !important;
+  color: black !important;
+  border-radius: 0.75rem;
+  transition: 0.3s;
+}
+
+.btn-warning-custom:hover {
+  background: #fbe157;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.btn-purple {
+  background: #692c9a !important;
+  color: white !important;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  transition: 0.3s;
+}
+
+.btn-purple:hover {
+  background: #b65cff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}

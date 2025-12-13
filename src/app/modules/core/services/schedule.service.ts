@@ -4,7 +4,7 @@ import { environment } from '../../../../environments/environment.development';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, map, throwError } from 'rxjs';
 import { toLocalISOString } from '../../shared/methods/dateTransform';
-import { EmployeeGetAllSchedules } from '../models/schedule.model';
+import { EmployeeGetSchedules } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +27,7 @@ export class ScheduleService {
       .set('sort', 'startedAt');
 
     return this._http
-      .get<ApiResponse<PageableResponse<EmployeeGetAllSchedules>>>(
+      .get<ApiResponse<PageableResponse<EmployeeGetSchedules>>>(
         `${this._apiUrl}`,
         {
           params: params,
@@ -37,6 +37,26 @@ export class ScheduleService {
           withCredentials: true,
         },
       )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
+  getDoctorScheduleById(scheduleId: number) {
+    return this._http
+      .get<ApiResponse<EmployeeGetSchedules>>(`${this._apiUrl}/${scheduleId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
       .pipe(
         map((res) => {
           return res.data;
