@@ -57,7 +57,7 @@ export class AppointmentRegisterPatientComponent {
       .registerPatientForAppointment(appointment)
       .subscribe({
         next: () => {
-          void this._router.navigate(['']);
+          void this._router.navigate(['/profile/appointments']);
         },
       });
   }

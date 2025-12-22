@@ -5,6 +5,7 @@ import { phoneValidator } from '../../shared/validators/phone.validator';
 import { dateValidator } from '../../shared/validators/date.validator';
 import { communicationPreferences } from '../models/user.model';
 import { GetPatientResponse } from '../models/patient.model';
+import { timeValidator } from '../../shared/validators/time.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -234,6 +235,21 @@ export class FormsService {
     });
   }
 
+  getScheduleEditForm() {
+    return new FormGroup(
+      {
+        services: new FormControl<number[]>({ value: [], disabled: true }),
+        date: new FormControl<Date>({ value: new Date(), disabled: true }),
+        startedAt: new FormControl<Date>({ value: new Date(), disabled: true }),
+        finishedAt: new FormControl<Date>({
+          value: new Date(),
+          disabled: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';
@@ -269,6 +285,18 @@ export class FormsService {
     }
     if (control.hasError('invalidPhone')) {
       return 'Numer telefonu musi zawierać dokładnie 9 cyfr.';
+    }
+    if (control.hasError('matTimepickerParse')) {
+      return 'Godzina nie jest poprawna.';
+    }
+    if (control.hasError('matTimepickerMin')) {
+      return 'Wybrana godzina jest za wczesna.';
+    }
+    if (control.hasError('matTimepickerMax')) {
+      return 'Wybrana godzina jest za późna.';
+    }
+    if (control.hasError('timeRangeInvalid')) {
+      return 'Godzina zakończenia musi być później niż rozpoczęcia';
     }
 
     return 'Niepoprawna wartość';

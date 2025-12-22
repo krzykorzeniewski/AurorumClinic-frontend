@@ -1,6 +1,7 @@
 import { Doctor } from './doctor.model';
 import { Service } from './service.model';
 import { Payment } from './api-response.model';
+import { PatientAppointmentListSchedule } from './patient.model';
 
 export interface GetAppointmentInfo {
   id: number;
@@ -55,4 +56,15 @@ export enum PaymentStatus {
 export enum AppointmentStatus {
   CREATED = 'CREATED',
   FINISHED = 'FINISHED',
+}
+
+export interface GetScheduleAppointmentInfo {
+  id: number;
+  startedAt: string;
+  status: string;
+  description: string;
+  doctor?: Doctor;
+  service: Service;
+  payment: Payment;
+  patient: PatientAppointmentListSchedule;
 }

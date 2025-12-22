@@ -1,0 +1,38 @@
+<div class="container d-flex pt-4">
+  <div class="card col-12 col-sm-12 col-md-10 col-lg-10 p-4 mx-auto shadow-lg border-0 rounded-4">
+    <h2 class="text-center mb-2 fw-bold py-3 rounded-4 shadow-sm">
+      Uwaga grafik posiada umówione wizyty
+    </h2>
+    <p class="text-center mb-4">
+      Zanim grafik zostanie zmodyfikowany, konieczne jest poinformowanie pacjentów oraz odwołanie umówionych wizyt.
+    </p>
+
+    <mat-selection-list #appointments class="horizontal-list">
+      @for (appointment of appointmentsList; track appointment) {
+        <mat-list-option>
+          <app-patient-card
+            [id]="appointment.id"
+            [name]="appointment.patient.name"
+            [surname]="appointment.patient.surname"
+            [visitName]="appointment.service.name"
+            [date]="appointment.startedAt"
+            [phoneNumber]="appointment.patient.phoneNumber"
+            [email]="appointment.patient.email"
+            />
+        </mat-list-option>
+      }
+    </mat-selection-list>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center w-100 gap-2 mt-3">
+      <div class="col-sm text-center">
+        <button mat-flat-button type="button" class="btn btn-purple w-100 w-sm-auto" (click)="onCancel()">Anuluj</button>
+      </div>
+      <div *ngIf="data.isDeleting" class="col-sm text-center">
+        <button mat-flat-button type="button" class="btn btn-danger-custom w-100 w-sm-auto" (click)="removeSchedule()" [disabled]="appointments.selectedOptions.selected.length !== appointmentsList.length">Chcę usunąć grafik</button>
+      </div>
+      <div *ngIf="!data.isDeleting" class="col-sm text-center">
+        <button mat-flat-button type="button" class="btn btn-green w-100 w-sm-auto" (click)="changeSchedule()" [disabled]="appointments.selectedOptions.selected.length !== appointmentsList.length">Chcę przełożyć grafik</button>
+      </div>
+    </div>
+  </div>
+</div>

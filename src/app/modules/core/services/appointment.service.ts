@@ -177,6 +177,13 @@ export class AppointmentService {
       );
   }
 
+  deleteAppointmentsBulk(appointmentIds: number[]) {
+    return this._http.delete<void>(`${this._apiUrl}/appointments/bulk`, {
+      body: { appointmentIds },
+      withCredentials: true,
+    });
+  }
+
   returnServiceById(
     servicesArray: SpecializationWithServices[],
     serviceId: string,

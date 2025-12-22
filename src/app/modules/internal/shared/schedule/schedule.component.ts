@@ -9,6 +9,7 @@ import {
   DoctorsScheduleByDay,
   EmployeeGetSchedules,
 } from '../../../core/models/schedule.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-schedule',
@@ -19,12 +20,26 @@ import {
 })
 export class ScheduleComponent implements OnInit {
   private _scheduleService = inject(ScheduleService);
+  private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   schedules = signal<DoctorsScheduleByDay | null>(null);
   currentWeekStart!: Date;
   currentWeekEnd!: Date;
   weekDays: { full: string; short: string; day: string; date: Date }[] = [];
   isLoading = signal<boolean>(false);
+
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
+  }
 
   ngOnInit(): void {
     const startDate = this.getInitialDate();

@@ -4,14 +4,48 @@ import { environment } from '../../../../environments/environment.development';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, map, throwError } from 'rxjs';
 import { toLocalISOString } from '../../shared/methods/dateTransform';
-import { EmployeeGetSchedules } from '../models/schedule.model';
+import {
+  EmployeeGetSchedules,
+  UpdateDoctorSchedule,
+} from '../models/schedule.model';
+import { AuthService } from './auth.service';
+import { UserRole } from '../models/auth.model';
+import { GetScheduleAppointmentInfo } from '../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleService {
+  private _authService = inject(AuthService);
   private _http = inject(HttpClient);
   private _apiUrl = environment.apiUrl + '/schedules';
+
+  getScheduleAppointmentsBasedOnRole(scheduleId: number) {
+    const role = this._authService.userRole;
+
+    const url =
+      role === UserRole.EMPLOYEE
+        ? `/${scheduleId}/appointments`
+        : `/me/${scheduleId}/appointments`;
+
+    return this._http
+      .get<ApiResponse<GetScheduleAppointmentInfo[]>>(this._apiUrl + url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
 
   getDoctorsSchedules(
     startedAt: Date,
@@ -67,5 +101,30 @@ export class ScheduleService {
           );
         }),
       );
+  }
+
+  rescheduleDoctorScheduleByEmployee(
+    scheduleId: number,
+    data: UpdateDoctorSchedule,
+  ) {
+    return this._http.put<ApiResponse<EmployeeGetSchedules>>(
+      `${this._apiUrl}/${scheduleId}`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      },
+    );
+  }
+
+  deleteDoctorScheduleByEmployee(scheduleId: number) {
+    return this._http.delete<void>(`${this._apiUrl}/${scheduleId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
   }
 }

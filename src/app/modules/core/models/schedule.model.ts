@@ -19,3 +19,9 @@ export type DoctorsScheduleByDay = Record<
     services: Service[];
   }[]
 >;
+
+export interface UpdateDoctorSchedule {
+  startedAt: string;
+  finishedAt: string;
+  serviceIds: number[];
+}
