@@ -8,6 +8,7 @@ import {
   DoctorPanelStats,
   DoctorRecommended,
   GetDoctorApiResponse,
+  GetFullDoctorApiResponse,
   GetRecommendedDoctorApiResponse,
 } from '../models/doctor.model';
 import {
@@ -102,6 +103,29 @@ export class DoctorService {
             () =>
               new Error(
                 'Wystąpił błąd podczas uzyskiwania listy lekarzy. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  getDoctorById(doctorId: number) {
+    return this._http
+      .get<ApiResponse<GetFullDoctorApiResponse>>(
+        `${this._apiUrl}/${doctorId}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd serwera podczas uzyskiwania danych lekarza. Spróbuj ponownie później.',
               ),
           );
         }),

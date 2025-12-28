@@ -24,6 +24,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { GetDoctorApiResponse } from '../../../core/models/doctor.model';
 import { DoctorService } from '../../../core/services/doctor.service';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-doctor-table',
@@ -49,13 +51,34 @@ import { DoctorService } from '../../../core/services/doctor.service';
 })
 export class DoctorTableComponent implements AfterViewInit, OnDestroy {
   private _doctorService = inject(DoctorService);
-  displayedColumns: string[] = ['name', 'surname', 'rating', 'schedule'];
+  private _snackBar = inject(MatSnackBar);
+  private _router = inject(Router);
+  displayedColumns: string[] = [
+    'name',
+    'surname',
+    'rating',
+    'daily_schedule',
+    'weekly_schedule',
+  ];
   dataSource!: MatTableDataSource<GetDoctorApiResponse>;
   totalCount = 0;
   sub = new Subscription();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
+  }
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
@@ -90,7 +113,21 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  onSchedule() {}
+  onDailySchedule(doctorId: number) {
+    void this._router.navigate(['/internal/schedules/daily'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
+  onWeeklySchedule(doctorId: number) {
+    void this._router.navigate(['/internal/schedules/weekly'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();

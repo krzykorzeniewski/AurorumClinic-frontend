@@ -20,6 +20,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-doctor-appointment-search',
+  standalone: true,
   imports: [
     MatButton,
     MatError,

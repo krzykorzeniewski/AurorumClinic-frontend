@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordRepeatValidator } from '../../shared/validators/password-repeat.validator';
 import { phoneValidator } from '../../shared/validators/phone.validator';
-import { dateValidator } from '../../shared/validators/date.validator';
+import { pastTimeDateValidator } from '../../shared/validators/past-time-date.validator';
 import { communicationPreferences } from '../models/user.model';
 import { GetPatientResponse } from '../models/patient.model';
 import { timeValidator } from '../../shared/validators/time.validator';
+import { peselValidator } from '../../shared/validators/pesel.validator';
+import { futureTimeDateValidator } from '../../shared/validators/future-time-date.validator';
+import { DayDto } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root',
@@ -95,11 +98,11 @@ export class FormsService {
           nonNullable: true,
         }),
         birthdate: new FormControl<Date | null>(null, {
-          validators: [dateValidator(), Validators.required],
+          validators: [pastTimeDateValidator(), Validators.required],
           nonNullable: true,
         }),
       },
-      { validators: passwordRepeatValidator() },
+      { validators: [passwordRepeatValidator(), peselValidator()] },
     );
   }
 
@@ -172,7 +175,7 @@ export class FormsService {
       birthdate: new FormControl<Date>(
         userData ? new Date(userData.birthDate) : new Date(),
         {
-          validators: [dateValidator(), Validators.required],
+          validators: [pastTimeDateValidator(), Validators.required],
           nonNullable: true,
         },
       ),
@@ -235,6 +238,76 @@ export class FormsService {
     });
   }
 
+  getScheduleDailyForm() {
+    return new FormGroup(
+      {
+        services: new FormControl<number[]>([], {
+          validators: [Validators.minLength(1), Validators.required],
+          nonNullable: true,
+        }),
+        date: new FormControl<Date | null>(null, {
+          validators: [futureTimeDateValidator(), Validators.required],
+          nonNullable: true,
+        }),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
+  getScheduleWeeklyForm() {
+    return new FormGroup(
+      {
+        mon: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        tue: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        wed: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        thu: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        fri: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
   getScheduleEditForm() {
     return new FormGroup(
       {
@@ -259,11 +332,11 @@ export class FormsService {
     }
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength')?.requiredLength;
-      return `Minimalna długość to ${requiredLength} znaków.`;
+      return `Minimalna długość to ${requiredLength}.`;
     }
     if (control.hasError('maxlength')) {
       const requiredLength = control.getError('maxlength')?.requiredLength;
-      return `Maksymalna długość to ${requiredLength} znaków.`;
+      return `Maksymalna długość to ${requiredLength}.`;
     }
     if (control.hasError('min')) {
       return 'Wartość jest za mała.';
@@ -281,7 +354,10 @@ export class FormsService {
       return 'Niepoprawna data.';
     }
     if (control.hasError('futureDate')) {
-      return 'Data urodzenia nie może być w przyszłości.';
+      return 'Data nie może być w przyszłości.';
+    }
+    if (control.hasError('pastDate')) {
+      return 'Data nie może być w przeszłości.';
     }
     if (control.hasError('invalidPhone')) {
       return 'Numer telefonu musi zawierać dokładnie 9 cyfr.';

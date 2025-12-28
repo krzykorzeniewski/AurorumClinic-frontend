@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export function dateValidator(): ValidatorFn {
+export function pastTimeDateValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
     if (!value) return null;
@@ -11,7 +11,6 @@ export function dateValidator(): ValidatorFn {
     }
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     if (date > today) {
       return { futureDate: true };
     }

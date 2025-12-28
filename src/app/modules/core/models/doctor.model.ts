@@ -12,6 +12,20 @@ export interface GetRecommendedDoctorApiResponse {
 
 export type GetDoctorApiResponse = GetRecommendedDoctorApiResponse;
 
+export interface GetFullDoctorApiResponse {
+  id: number;
+  name: string;
+  surname: string;
+  specializations: Specialization[];
+  profilePicture: string;
+  rating: number;
+  birthdate: string;
+  phoneNumber: string;
+  education: string;
+  experience: string;
+  pwzNumber: string;
+}
+
 export class DoctorRecommended implements GetRecommendedDoctorApiResponse {
   constructor(
     public id: number,

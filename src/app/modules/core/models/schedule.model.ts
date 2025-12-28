@@ -1,6 +1,11 @@
 import { Doctor } from './doctor.model';
 import { Service } from './service.model';
 
+export interface DayDto {
+  hours: string[];
+  serviceIds: number[];
+}
+
 export interface EmployeeGetSchedules {
   id: number;
   startedAt: string;
@@ -25,3 +30,28 @@ export interface UpdateDoctorSchedule {
   finishedAt: string;
   serviceIds: number[];
 }
+
+export interface CreateDailyDoctorScheduleByEmployee {
+  startedAt: string;
+  finishedAt: string;
+  doctorId: number;
+  serviceIds: number[];
+}
+export type CreateDailyDoctorScheduleByDoctor = Omit<
+  CreateDailyDoctorScheduleByEmployee,
+  'doctorId'
+>;
+export interface CreateWeeklyDoctorScheduleByEmployee {
+  mon: DayDto;
+  tue: DayDto;
+  wed: DayDto;
+  thu: DayDto;
+  fri: DayDto;
+  startedAt: string;
+  finishedAt: string;
+  doctorId: number;
+}
+export type CreateWeeklyDoctorScheduleByDoctor = Omit<
+  CreateWeeklyDoctorScheduleByEmployee,
+  'doctorId'
+>;

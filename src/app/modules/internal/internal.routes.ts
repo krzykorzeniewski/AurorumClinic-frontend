@@ -67,6 +67,24 @@ export const INTERNAL_ROUTES: Routes = [
       ),
   },
   {
+    path: 'schedules/daily',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('./shared/schedule/create-new-daily-schedule/create-new-daily-schedule.component').then(
+        (c) => c.CreateNewDailyScheduleComponent,
+      ),
+  },
+  {
+    path: 'schedules/weekly',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('./shared/schedule/create-new-weekly-schedule/create-new-weekly-schedule.component').then(
+        (c) => c.CreateNewWeeklyScheduleComponent,
+      ),
+  },
+  {
     path: 'schedules/details',
     canActivate: [roleGuard],
     data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },

@@ -5,6 +5,8 @@ import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, map, throwError } from 'rxjs';
 import { toLocalISOString } from '../../shared/methods/dateTransform';
 import {
+  CreateDailyDoctorScheduleByEmployee,
+  CreateWeeklyDoctorScheduleByEmployee,
   EmployeeGetSchedules,
   UpdateDoctorSchedule,
 } from '../models/schedule.model';
@@ -103,11 +105,33 @@ export class ScheduleService {
       );
   }
 
+  createDoctorDailyScheduleByEmployee(
+    data: CreateDailyDoctorScheduleByEmployee,
+  ) {
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
+  }
+
+  createDoctorWeeklyScheduleByEmployee(
+    data: CreateWeeklyDoctorScheduleByEmployee,
+  ) {
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/weekly`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
+  }
+
   rescheduleDoctorScheduleByEmployee(
     scheduleId: number,
     data: UpdateDoctorSchedule,
   ) {
-    return this._http.put<ApiResponse<EmployeeGetSchedules>>(
+    return this._http.put<ApiResponse<void>>(
       `${this._apiUrl}/${scheduleId}`,
       data,
       {

@@ -21,10 +21,17 @@
         <td mat-cell *matCellDef="let row">{{row.rating}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="schedule">
+      <ng-container matColumnDef="daily_schedule">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button type="button" class="btn btn-green" (click)="onSchedule()">Grafik</button>
+          <button type="button" class="btn btn-green" (click)="onDailySchedule(row.id)">Grafik dzienny</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="weekly_schedule">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-green" (click)="onWeeklySchedule(row.id)">Grafik tygodniowy</button>
         </td>
       </ng-container>
 
