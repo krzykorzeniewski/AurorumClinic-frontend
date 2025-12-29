@@ -43,6 +43,7 @@
                       matInput
                       [ngModel]="getDayHourFrom(day.key)"
                       (ngModelChange)="onTimeFromChange(day.key, $event)"
+                      [ngModelOptions]="{standalone: true}"
                       [matTimepicker]="timePickerFrom"
                       [matTimepickerMin]="environmentVariables.startTime"
                       [matTimepickerMax]="environmentVariables.finishTime"
@@ -60,6 +61,7 @@
                       [ngModel]="getDayHourTo(day.key)"
                       (ngModelChange)="onTimeToChange(day.key, $event)"
                       [matTimepicker]="timePickerTo"
+                      [ngModelOptions]="{standalone: true}"
                       [matTimepickerMin]="environmentVariables.startTime"
                       [matTimepickerMax]="environmentVariables.finishTime"
                     />
