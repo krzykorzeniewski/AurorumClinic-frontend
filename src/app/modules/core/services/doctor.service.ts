@@ -16,6 +16,7 @@ import {
   SpecializationResponseApi,
 } from '../models/specialization.model';
 import { Service, ServiceResponseApi } from '../models/service.model';
+import { Absence, GetDoctorAbsencesByEmployee } from '../models/absences.model';
 
 @Injectable({
   providedIn: 'root',
@@ -165,6 +166,45 @@ export class DoctorService {
                 serviceId,
               ),
           );
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
+  getAllAbsences(doctorId: number, page: number, size: number) {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', 'id,desc');
+    return this._http
+      .get<ApiResponse<PageableResponse<GetDoctorAbsencesByEmployee>>>(
+        this._apiUrl + `/${doctorId}/absences`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            absence: res.data.content.map(
+              (absence) =>
+                new Absence(
+                  absence.id,
+                  absence.name,
+                  absence.startedAt,
+                  absence.finishedAt,
+                ),
+            ),
+            page: res.data.page,
+          };
         }),
         catchError(() => {
           return throwError(

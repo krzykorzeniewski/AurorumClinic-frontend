@@ -1,0 +1,23 @@
+.dialog-container {
+  min-width: 400px;
+  max-width: 600px;
+}
+
+.absence-form {
+  padding: 20px 0;
+}
+
+mat-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .dialog-container {
+    min-width: 300px;
+  }
+}

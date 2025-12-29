@@ -323,6 +323,26 @@ export class FormsService {
     );
   }
 
+  getAbsenceCreateForm() {
+    return new FormGroup(
+      {
+        name: new FormControl<string>('', {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        }),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

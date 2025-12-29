@@ -93,4 +93,13 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.ScheduleDetailsComponent,
       ),
   },
+  {
+    path: 'absences',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('./shared/absences/absences.component').then(
+        (c) => c.AbsencesComponent,
+      ),
+  },
 ];

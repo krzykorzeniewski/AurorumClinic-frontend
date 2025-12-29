@@ -59,6 +59,7 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
     'rating',
     'daily_schedule',
     'weekly_schedule',
+    'absences',
   ];
   dataSource!: MatTableDataSource<GetDoctorApiResponse>;
   totalCount = 0;
@@ -123,6 +124,14 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
 
   onWeeklySchedule(doctorId: number) {
     void this._router.navigate(['/internal/schedules/weekly'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
+  onAbsence(doctorId: number) {
+    void this._router.navigate(['/internal/absences'], {
       state: {
         doctorId: doctorId,
       },
