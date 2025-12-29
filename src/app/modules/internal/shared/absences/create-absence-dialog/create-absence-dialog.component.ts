@@ -72,11 +72,15 @@ export class CreateAbsenceDialogComponent {
     this.errorMessage = '';
 
     const formValue = this.absenceForm.getRawValue();
+    const endOfDay = formValue.finishedAt!;
+    endOfDay.setHours(23);
+    endOfDay.setMinutes(59);
+    endOfDay.setSeconds(59);
 
     const absenceData: DoctorCreateAbsenceByEmployee = {
       name: formValue.name,
       startedAt: toLocalISOString(formValue.startedAt!),
-      finishedAt: toLocalISOString(formValue.finishedAt!),
+      finishedAt: toLocalISOString(endOfDay),
       doctorId: this._data.doctorId,
     };
 
