@@ -1,0 +1,80 @@
+<div class="container pt-4">
+  <div *ngIf="doctor() as doctor">
+    <app-doctor-card
+      [id]="doctor.id"
+      [name]="doctor.name"
+      [surname]="doctor.surname"
+      [specialization]="doctor.specializations[0].name"
+      [profilePicture]="doctor.profilePicture"
+      [email]="doctor.email"
+      [rating]="doctor.rating"
+      [education]="doctor.education"
+      [experience]="doctor.experience"
+      [description]="doctor.description"
+      [mode]="'profile'"
+    />
+  </div>
+  <div class="d-flex row justify-content-center pt-3">
+    <h4 class="text-center">Opinie</h4>
+
+    <mat-form-field appearance="outline" class="pt-3 w-50">
+      <mat-label>Sortowanie po</mat-label>
+      <mat-select
+        [value]="selectedSort()"
+        (selectionChange)="sortSelection($event.value)"
+      >
+        <mat-option>-- None --</mat-option>
+        @for (group of opinionSortGroup; track group) {
+          <mat-optgroup [label]="group.name">
+            @for (sortType of group.sortType; track sortType) {
+              <mat-option [value]="sortType.value">{{ sortType.viewValue }}</mat-option>
+            }
+          </mat-optgroup>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="col-12">
+      @if (opinions().length > 0) {
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-10">
+            @for (opinion of opinions(); track opinion.id) {
+              <app-opinion-card
+                [patientId]="opinion.patient.id"
+                [patientName]="opinion.patient.name"
+                [patientSurname]="opinion.patient.surname"
+                [rating]="opinion.rating"
+                [comment]="opinion.comment"
+                [createdAt]="opinion.createdAt"
+                [answer]="opinion.answer"
+                [answeredAt]="opinion.answeredAt"
+                [doctorName]="doctor()?.name"
+                [doctorSurname]="doctor()?.surname"
+                [doctorPicture]="doctor()?.profilePicture"
+              />
+            }
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <button class="btn btn-purple d-flex align-items-center gap-2" (click)="goBack()">
+            Powrót
+          </button>
+
+          <mat-paginator
+            [length]="totalElements()"
+            [pageSize]="pageSize()"
+            [pageIndex]="currentPage()"
+            [hidePageSize]="true"
+            (page)="onPageChange($event)"
+          >
+          </mat-paginator>
+        </div>
+      } @else {
+        <div class="text-center py-5">
+          <p class="text-muted fs-5">Brak opinii dla tego lekarza</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

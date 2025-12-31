@@ -129,7 +129,7 @@ export class CreateNewWeeklyScheduleComponent {
   }
 
   goBack() {
-    void this._router.navigate(['internal/doctors']);
+    void this._router.navigate(['/internal/doctors']);
   }
 
   createSchedule() {
@@ -176,7 +176,7 @@ export class CreateNewWeeklyScheduleComponent {
       .createDoctorWeeklyScheduleByEmployee(payload)
       .subscribe({
         next: () => {
-          void this._router.navigate(['internal/doctors'], {
+          void this._router.navigate(['/internal/doctors'], {
             state: {
               message: 'Pomyślnie utworzono grafik tygodniowy',
               status: 'success',

@@ -43,5 +43,20 @@ export const APP_ROUTES: Routes = [
         (m) => m.APPOINTMENT_ROUTES,
       ),
   },
+  {
+    path: 'doctor',
+    canActivate: [roleGuard],
+    data: {
+      roles: [
+        UserRole.ANONYMOUS,
+        UserRole.PATIENT,
+        UserRole.EMPLOYEE,
+        UserRole.DOCTOR,
+        UserRole.ADMIN,
+      ],
+    },
+    loadChildren: () =>
+      import('./modules/doctor/doctor.routes').then((m) => m.DOCTOR_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -21,7 +21,7 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
       if (currentRole === UserRole.ANONYMOUS) {
         void router.navigate(['/auth/login']);
       } else if (
-        [UserRole.DOCTOR, UserRole.EMPLOYEE, UserRole.ADMIN].includes(
+        [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN].includes(
           currentRole,
         )
       ) {

@@ -19,11 +19,10 @@ export interface GetFullDoctorApiResponse {
   specializations: Specialization[];
   profilePicture: string;
   rating: number;
-  birthdate: string;
-  phoneNumber: string;
+  email: string;
   education: string;
   experience: string;
-  pwzNumber: string;
+  description: string;
 }
 
 export class DoctorRecommended implements GetRecommendedDoctorApiResponse {

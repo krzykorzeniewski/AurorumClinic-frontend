@@ -34,3 +34,9 @@ export interface PatientAppointmentListSchedule {
   phoneNumber: string;
   email: string;
 }
+
+export interface PatientOpinion {
+  id: number;
+  name: string;
+  surname: string;
+}

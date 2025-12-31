@@ -64,7 +64,7 @@ export class DeleteProfileDialogComponent {
       .pipe(switchMap(() => this._authService.refreshCookies()))
       .subscribe({
         next: () => {
-          void this._router.navigate(['auth/login'], {
+          void this._router.navigate(['/auth/login'], {
             state: {
               message: 'Twoje konto zostało usunięte',
               variant: 'success',

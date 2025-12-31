@@ -103,7 +103,7 @@ export class CreateNewDailyScheduleComponent {
   }
 
   goBack() {
-    void this._router.navigate(['internal/doctors']);
+    void this._router.navigate(['/internal/doctors']);
   }
 
   createSchedule() {
@@ -126,7 +126,7 @@ export class CreateNewDailyScheduleComponent {
 
     this._scheduleService.createDoctorDailyScheduleByEmployee(data).subscribe({
       next: () => {
-        void this._router.navigate(['internal/doctors'], {
+        void this._router.navigate(['/internal/doctors'], {
           state: {
             message: 'Pomyślnie utworzono grafik jednodniowy',
             status: 'success',

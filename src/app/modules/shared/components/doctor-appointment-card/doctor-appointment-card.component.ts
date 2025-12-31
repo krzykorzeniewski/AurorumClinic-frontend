@@ -191,6 +191,14 @@ export class DoctorAppointmentCardComponent implements OnInit {
     return checkDate < today;
   }
 
+  protected goToProfile() {
+    void this._router.navigate(['doctor/profile'], {
+      state: {
+        doctorId: this.doctor().id,
+      },
+    });
+  }
+
   private getInitialDate(): Date {
     const now = new Date();
     const day = now.getDay();

@@ -1,7 +1,7 @@
 <div class="card p-3 mb-4 w-100 h-100 shadow-sm rounded-4">
   <div class="row g-0">
 
-    <div class="col-md-4 d-flex align-items-center mb-3 mb-md-0">
+    <button class="col-md-4 d-flex align-items-center mb-3 mb-md-0 p-0 border-0 bg-transparent text-start" (click)="goToProfile()">
       <img
         [src]="doctor().profilePicture"
         alt="doctor-image"
@@ -16,7 +16,7 @@
           {{ doctor().specializations[0].name }}
         </p>
       </div>
-    </div>
+    </button>
 
 
     <div class="col-md-8 d-flex align-items-center justify-content-around">

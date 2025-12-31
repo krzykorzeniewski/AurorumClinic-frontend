@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSearch(data: { name: string; serviceId: string }) {
-    void this._router.navigate(['search-results'], {
+    void this._router.navigate(['/search-results'], {
       queryParams: {
         name: data.name || null,
         serviceId: data.serviceId || null,

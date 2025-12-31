@@ -167,7 +167,7 @@ export class ScheduleDetailsComponent {
       .deleteDoctorScheduleByEmployee(schedule.id)
       .subscribe({
         next: () => {
-          void this._router.navigate(['internal/schedules'], {
+          void this._router.navigate(['/internal/schedules'], {
             state: {
               message: 'Pomyślnie usunięto grafik',
               status: 'success',
@@ -216,7 +216,7 @@ export class ScheduleDetailsComponent {
       dialogRef.afterClosed().subscribe((result) => {
         if (result?.success) {
           if (result.isDeleting) {
-            void this._router.navigate(['internal/schedules'], {
+            void this._router.navigate(['/internal/schedules'], {
               state: {
                 message: 'Pomyślnie usunięto grafik',
                 status: 'success',
