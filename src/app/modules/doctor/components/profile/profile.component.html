@@ -14,6 +14,11 @@
       [mode]="'profile'"
     />
   </div>
+  <div class="d-flex pt-2 pb-2 justify-content-end" *ngIf="isDoctor$ | async">
+    <button class="btn btn-purple" (click)="editProfile()">
+      Edytuj profil
+    </button>
+  </div>
   <div class="d-flex row justify-content-center pt-3">
     <h4 class="text-center">Opinie</h4>
 
@@ -23,7 +28,6 @@
         [value]="selectedSort()"
         (selectionChange)="sortSelection($event.value)"
       >
-        <mat-option>-- None --</mat-option>
         @for (group of opinionSortGroup; track group) {
           <mat-optgroup [label]="group.name">
             @for (sortType of group.sortType; track sortType) {
@@ -40,6 +44,7 @@
           <div class="col-12 col-lg-10">
             @for (opinion of opinions(); track opinion.id) {
               <app-opinion-card
+                [opinionId]="opinion.id"
                 [patientId]="opinion.patient.id"
                 [patientName]="opinion.patient.name"
                 [patientSurname]="opinion.patient.surname"
@@ -51,6 +56,7 @@
                 [doctorName]="doctor()?.name"
                 [doctorSurname]="doctor()?.surname"
                 [doctorPicture]="doctor()?.profilePicture"
+                (opinionDeleted)="onOpinionDeleted($event)"
               />
             }
           </div>

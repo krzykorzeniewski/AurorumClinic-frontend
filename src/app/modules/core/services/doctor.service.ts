@@ -133,46 +133,6 @@ export class DoctorService {
       );
   }
 
-  getDoctorOpinions(
-    doctorId: number,
-    page: number,
-    size: number,
-    sort: string,
-    direction: 'asc' | 'desc' | '',
-  ) {
-    let params = new HttpParams().set('page', page).set('size', size);
-
-    if (sort) {
-      if (direction) {
-        params = params.set('sort', `${sort},${direction}`);
-      } else {
-        params = params.set('sort', sort);
-      }
-    }
-
-    return this._http
-      .get<ApiResponse<GetFullDoctorApiResponse>>(
-        `${this._apiUrl}/${doctorId}`,
-        {
-          params: params,
-          withCredentials: true,
-        },
-      )
-      .pipe(
-        map((res) => {
-          return res.data;
-        }),
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd serwera podczas uzyskiwania opinii lekarza. Spróbuj ponownie później.',
-              ),
-          );
-        }),
-      );
-  }
-
   searchDoctors(query: string, serviceId: number, page = 0, size = 6) {
     let searchParams = new HttpParams()
       .set('page', page)

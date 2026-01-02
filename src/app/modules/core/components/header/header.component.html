@@ -33,7 +33,7 @@
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>
             <ul *ngSwitchCase="UserRole.DOCTOR" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
-              <li><a class="dropdown-item" routerLink="/internal">Nic</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/doctor/profile']" [state]="{ doctorId: user.id}">Mój profil lekarza</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>

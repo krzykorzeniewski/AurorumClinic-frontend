@@ -1,0 +1,127 @@
+<div class="container-fluid d-flex align-items-center pt-4">
+  <div class="card col-12 col-sm-12 col-md-10 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
+    <h3 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
+      Edycja profilu lekarza
+    </h3>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center w-100">
+
+      <mat-card class="mb-4 w-100 shadow-sm rounded-4">
+        <mat-card-title class="fw-semibold">Zdjęcie profilowe</mat-card-title>
+        <mat-card-content>
+          <div class="d-flex align-items-center gap-4 mt-3">
+            <div
+              class="border rounded d-flex align-items-center justify-content-center"
+              style="width: 120px; height: 120px; overflow: hidden;"
+            >
+              <img
+                [src]="imagePreview"
+                alt="profile preview"
+                class="w-100 h-100"
+                style="object-fit: cover;"
+              />
+              <span *ngIf="!imagePreview" class="text-muted text-center">
+                Brak zdjęcia
+              </span>
+            </div>
+
+            <div class="d-flex row gap-2 w-75">
+              <input
+                #fileInput
+                type="file"
+                id="profilePicture"
+                hidden
+                accept="image/*"
+                (change)="onImageSelected($event)"
+              />
+              <button
+                mat-flat-button
+                class="btn btn-warning-custom"
+                type="button"
+                (click)="fileInput.click()"
+              >
+                Wybierz zdjęcie
+              </button>
+              <button
+                mat-flat-button
+                class="btn btn-danger-custom"
+                type="button"
+                (click)="defaultImage()"
+              >
+                Wybierz domyślne zdjęcie
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="mb-4 w-100 shadow-sm rounded-4">
+        <mat-card-title class="fw-semibold">Ogólne informacje</mat-card-title>
+        <mat-card-content class="pt-3">
+
+          <mat-form-field appearance="outline" class="w-100 mb-3">
+            <mat-label>Doświadczenie</mat-label>
+            <textarea
+              matInput rows="2"
+              formControlName="experience"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="4">
+            </textarea>
+            @if (controls.experience.invalid) {
+              <mat-error>{{ getErrorMessage(controls.experience) }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-3">
+            <mat-label>Wykształcenie</mat-label>
+            <textarea
+              matInput
+              rows="2"
+              formControlName="education"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="4"
+            ></textarea>
+            @if (controls.education.invalid) {
+              <mat-error>{{ getErrorMessage(controls.education) }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Opis</mat-label>
+            <textarea
+              matInput
+              rows="4"
+              formControlName="description"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="6"
+            ></textarea>
+            @if (controls.description.invalid) {
+              <mat-error>{{ getErrorMessage(controls.description) }}</mat-error>
+            }
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+
+      <div class="row w-100 gap-2">
+        <div class="col-sm text-center">
+          <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="goBack()">Powrót</button>
+        </div>
+        <div class="col-sm text-center">
+          <button
+            mat-flat-button
+            type="submit"
+            class="btn btn-green w-100"
+            [disabled]="profileForm.invalid"
+          >
+            Zmień dane
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { timeValidator } from '../../shared/validators/time.validator';
 import { peselValidator } from '../../shared/validators/pesel.validator';
 import { futureTimeDateValidator } from '../../shared/validators/future-time-date.validator';
 import { DayDto } from '../models/schedule.model';
+import { UpdateDoctorProfileData } from '../models/doctor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -343,6 +344,36 @@ export class FormsService {
     );
   }
 
+  getFulfilledUpdateDoctorProfileForm(
+    image: string | null,
+    doctorData: UpdateDoctorProfileData | null,
+  ) {
+    return new FormGroup({
+      doctorImage: new FormControl<string | null>(image ?? null),
+      experience: new FormControl<string>(
+        doctorData ? doctorData.experience : '',
+        {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        },
+      ),
+      education: new FormControl<string>(
+        doctorData ? doctorData.education : '',
+        {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        },
+      ),
+      description: new FormControl<string>(
+        doctorData ? doctorData.description : '',
+        {
+          validators: [Validators.required, Validators.maxLength(500)],
+          nonNullable: true,
+        },
+      ),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';
@@ -366,6 +397,12 @@ export class FormsService {
     }
     if (control.hasError('passwordMismatch')) {
       return 'Hasła się nie zgadzają.';
+    }
+    if (control.hasError('passwordMismatch')) {
+      return 'Hasła się nie zgadzają.';
+    }
+    if (control.hasError('peselBirthdateMismatch')) {
+      return 'Data urodzenia nie zgadza się z numerem PESEL.';
     }
     if (control.hasError('textMismatch')) {
       return 'Tekst się nie zgadza.';

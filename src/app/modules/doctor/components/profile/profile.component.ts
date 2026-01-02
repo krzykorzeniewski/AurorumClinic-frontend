@@ -3,7 +3,7 @@ import { GetFullDoctorApiResponse } from '../../../core/models/doctor.model';
 import { Router } from '@angular/router';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
-import { Location, NgIf } from '@angular/common';
+import { AsyncPipe, Location, NgIf } from '@angular/common';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOptgroup, MatOption, MatSelect } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +11,9 @@ import { Opinion, OpinionGroup } from '../../../core/models/opinion.model';
 import { OpinionService } from '../../../core/services/opinion.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { OpinionCardComponent } from '../../shared/opinion-card/opinion-card.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { map } from 'rxjs';
+import { UserRole } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-doctor-profile',
@@ -26,15 +29,20 @@ import { OpinionCardComponent } from '../../shared/opinion-card/opinion-card.com
     ReactiveFormsModule,
     MatPaginator,
     OpinionCardComponent,
+    AsyncPipe,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
+  private _authService = inject(AuthService);
   private _opinionService = inject(OpinionService);
   private _doctorService = inject(DoctorService);
   private _location = inject(Location);
   private _router = inject(Router);
+  isDoctor$ = this._authService.user$.pipe(
+    map((user) => user?.role === UserRole.DOCTOR),
+  );
   doctor = signal<GetFullDoctorApiResponse | null>(null);
   opinions = signal<Opinion[]>([]);
   currentPage = signal<number>(0);
@@ -80,21 +88,17 @@ export class ProfileComponent {
     });
   }
 
-  loadOpinions(doctorId: number) {
-    this._opinionService
-      .getDoctorOpinions(
-        doctorId,
-        this.currentPage(),
-        this.pageSize(),
-        this.selectedSort(),
-      )
-      .subscribe({
-        next: (response) => {
-          this.opinions.set(response.data.content);
-          this.totalElements.set(response.data.page.totalElements);
-          this.totalPages.set(response.data.page.totalPages);
-        },
-      });
+  editProfile() {
+    const doctor = this.doctor();
+    if (!doctor) return;
+    void this._router.navigate(['/doctor/profile/edit'], {
+      state: {
+        doctorImage: doctor.profilePicture,
+        experience: doctor.experience,
+        education: doctor.education,
+        description: doctor.description,
+      },
+    });
   }
 
   sortSelection(sortValue: string): void {
@@ -117,5 +121,28 @@ export class ProfileComponent {
 
   goBack(): void {
     this._location.back();
+  }
+
+  onOpinionDeleted(opinionId: number) {
+    this.opinions.update((opinions) =>
+      opinions.filter((op) => op.id !== opinionId),
+    );
+  }
+
+  private loadOpinions(doctorId: number) {
+    this._opinionService
+      .getDoctorOpinions(
+        doctorId,
+        this.currentPage(),
+        this.pageSize(),
+        this.selectedSort(),
+      )
+      .subscribe({
+        next: (response) => {
+          this.opinions.set(response.data.content);
+          this.totalElements.set(response.data.page.totalElements);
+          this.totalPages.set(response.data.page.totalPages);
+        },
+      });
   }
 }

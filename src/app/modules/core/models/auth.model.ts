@@ -10,12 +10,14 @@ export type UserLoginDataTwoFactorTokenRequest = Omit<
 export type UserLoginDataTwoFactorRequest = TokenVerifyRequest;
 
 export interface UserLoginResponse {
+  id: number;
   twoFactorAuth: boolean;
   role: string;
 }
 
 export class User implements UserLoginResponse {
   constructor(
+    readonly id: number,
     readonly twoFactorAuth: boolean,
     readonly role: UserRole,
   ) {}

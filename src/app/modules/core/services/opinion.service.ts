@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Opinion } from '../models/opinion.model';
 
 @Injectable({
@@ -36,5 +36,22 @@ export class OpinionService {
         },
       },
     );
+  }
+
+  deletePatientOpinionByPatient(opinionId: number): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/patients/me/opinions/${opinionId}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie usuwania opinii. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
   }
 }

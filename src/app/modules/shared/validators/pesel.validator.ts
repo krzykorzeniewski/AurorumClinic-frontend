@@ -1,21 +1,21 @@
-import {
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function peselValidator(): ValidatorFn {
   return (formControl: AbstractControl): ValidationErrors | null => {
-    const peselValidator = formControl.get('pesel');
-    if (!peselValidator?.hasValidator(Validators.required)) {
+    const peselCtrl = formControl.get('pesel');
+    const birthdateCtrl = formControl.get('birthdate');
+
+    if (!peselCtrl || !birthdateCtrl) return null;
+    if (peselCtrl.disabled) {
+      clearBirthdateError(birthdateCtrl);
       return null;
     }
 
-    const pesel = formControl.get('pesel')?.value as string;
-    const birthdate = formControl.get('birthdate')?.value as Date | null;
+    const pesel = peselCtrl.value as string;
+    const birthdate = birthdateCtrl.value as Date | null;
 
     if (!pesel || pesel.length !== 11 || !birthdate) {
+      clearBirthdateError(birthdateCtrl);
       return null;
     }
 
@@ -24,16 +24,29 @@ export function peselValidator(): ValidatorFn {
     const day = birthdate.getDate();
 
     let peselMonth = month;
-
     if (year >= 2000 && year < 2100) peselMonth += 20;
 
-    const yy = year.toString().slice(-2);
-    const mm = peselMonth.toString().padStart(2, '0');
-    const dd = day.toString().padStart(2, '0');
+    const expected = `${year.toString().slice(-2)}${peselMonth
+      .toString()
+      .padStart(2, '0')}${day.toString().padStart(2, '0')}`;
 
-    const expected = `${yy}${mm}${dd}`;
     const actual = pesel.substring(0, 6);
 
-    return expected === actual ? null : { peselBirthdateMismatch: true };
+    if (expected !== actual) {
+      birthdateCtrl.setErrors({
+        ...birthdateCtrl.errors,
+        peselBirthdateMismatch: true,
+      });
+    } else {
+      clearBirthdateError(birthdateCtrl);
+    }
+
+    return null;
   };
+}
+
+function clearBirthdateError(ctrl: AbstractControl) {
+  if (!ctrl.errors?.['peselBirthdateMismatch']) return;
+  const { peselBirthdateMismatch, ...rest } = ctrl.errors;
+  ctrl.setErrors(Object.keys(rest).length ? rest : null);
 }

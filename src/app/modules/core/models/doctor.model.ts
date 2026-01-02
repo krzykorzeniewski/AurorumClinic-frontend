@@ -104,3 +104,17 @@ export interface DoctorStatisticsData {
   avgRating: number | null;
   doctors: DoctorStatisticsInfo[];
 }
+
+export interface UpdateDoctorProfileData {
+  experience: string;
+  education: string;
+  description: string;
+}
+
+export interface UpdateDoctorProfileDataResponse {
+  doctorId: number;
+  experience: string;
+  education: string;
+  description: string;
+  profilePictureUrl: string;
+}

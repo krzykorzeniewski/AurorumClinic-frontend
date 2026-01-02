@@ -1,9 +1,27 @@
 <div class="card shadow-sm mb-3">
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-start mb-3">
-      <div>
-        <h6 class="mb-1 fw-semibold">{{ patientName() }} {{ patientSurname() }}</h6>
-        <p class="mb-0 text-muted small">{{ createdAt() | date: 'd MMMM yyyy, HH:mm':'':'pl'  }}</p>
+      <div class="d-flex align-items-center gap-2">
+        <button *ngIf="isPatientOpinion$ | async" mat-icon-button [matMenuTriggerFor]="menu" aria-label="opinion menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <span>Edytuj opinię</span>
+                    </button>
+                    <button mat-menu-item (click)="deletePatientOpinion()">
+                      <span>Usuń opinię</span>
+                    </button>
+                  </mat-menu>
+
+        <div>
+          <h6 class="mb-1 fw-semibold">
+            {{ patientName() }} {{ patientSurname() }} <span *ngIf="isPatientOpinion$ | async">(Ty)</span>
+          </h6>
+          <p class="mb-0 text-muted small">
+            {{ createdAt() | date: 'd MMMM yyyy, HH:mm':'':'pl' }}
+          </p>
+        </div>
       </div>
       <div class="d-flex gap-1">
        <span *ngFor="let _ of [1,2,3,4,5]; let i = index">
