@@ -46,7 +46,7 @@ export class OpinionService {
 
   createDoctorAnswerToOpinion(opinionId: number, data: AnswerOpinionDoctor) {
     return this._http
-      .patch<void>(
+      .post<void>(
         `${this._apiUrl}/doctors/me/opinions/${opinionId}/answer`,
         data,
         {
