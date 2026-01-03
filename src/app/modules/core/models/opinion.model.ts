@@ -14,8 +14,21 @@ export interface Opinion {
   id: number;
   rating: number;
   comment: string;
-  answer: string;
   createdAt: string;
-  answeredAt: string;
+  answer: string | null;
+  answeredAt: string | null;
   patient: PatientOpinion;
 }
+
+export interface CreateOpinionPatient {
+  rating: number;
+  comment: string;
+}
+
+export type UpdateOpinionPatient = CreateOpinionPatient;
+
+export interface AnswerOpinionDoctor {
+  answer: string;
+}
+
+export type UpdateAnswerOpinionDoctor = AnswerOpinionDoctor;

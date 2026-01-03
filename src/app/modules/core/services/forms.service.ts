@@ -374,6 +374,28 @@ export class FormsService {
     });
   }
 
+  getOpinionPatientForm() {
+    return new FormGroup({
+      rating: new FormControl<number>(5, {
+        validators: [Validators.required, Validators.min(1), Validators.max(5)],
+        nonNullable: true,
+      }),
+      comment: new FormControl<string>('', {
+        validators: [Validators.required, Validators.maxLength(2000)],
+        nonNullable: true,
+      }),
+    });
+  }
+
+  getOpinionDoctorForm() {
+    return new FormGroup({
+      answer: new FormControl<string>('', {
+        validators: [Validators.required, Validators.maxLength(2000)],
+        nonNullable: true,
+      }),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

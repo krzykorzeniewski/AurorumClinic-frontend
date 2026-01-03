@@ -2,21 +2,40 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-start mb-3">
       <div class="d-flex align-items-center gap-2">
-        <button *ngIf="isPatientOpinion$ | async" mat-icon-button [matMenuTriggerFor]="menu" aria-label="opinion menu">
+        <button *ngIf="isPatient$ | async" mat-icon-button [matMenuTriggerFor]="menuPatient" aria-label="opinion menu patient">
           <mat-icon>more_vert</mat-icon>
         </button>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
+                  <mat-menu #menuPatient="matMenu">
+                    <button mat-menu-item (click)="editOpinion()">
                       <span>Edytuj opinię</span>
                     </button>
                     <button mat-menu-item (click)="deletePatientOpinion()">
                       <span>Usuń opinię</span>
                     </button>
                   </mat-menu>
+        <button *ngIf="isDoctor$ | async" mat-icon-button [matMenuTriggerFor]="menuDoctor" aria-label="opinion menu doctor">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menuDoctor="matMenu">
+          <button *ngIf="answer() === null" mat-menu-item (click)="createOpinionDoctor()">
+            <span>Odpowiedz</span>
+          </button>
+          <button *ngIf="answer() !== null" mat-menu-item (click)="editOpinionDoctor()">
+            <span>Edytuj opinię</span>
+          </button>
+        </mat-menu>
+        <button *ngIf="isAdmin$ | async" mat-icon-button [matMenuTriggerFor]="menuAdmin" aria-label="opinion menu admin">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menuAdmin="matMenu">
+          <button mat-menu-item (click)="deletePatientOpinionByAdmin()">
+            <span>Usuń opinię</span>
+          </button>
+        </mat-menu>
 
         <div>
           <h6 class="mb-1 fw-semibold">
-            {{ patientName() }} {{ patientSurname() }} <span *ngIf="isPatientOpinion$ | async">(Ty)</span>
+            {{ patientName() }} {{ patientSurname() }} <span *ngIf="isPatient$ | async">(Ty)</span>
           </h6>
           <p class="mb-0 text-muted small">
             {{ createdAt() | date: 'd MMMM yyyy, HH:mm':'':'pl' }}

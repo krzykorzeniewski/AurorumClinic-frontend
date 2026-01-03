@@ -70,7 +70,10 @@
       </div>
       <div class="row w-100">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-outline-custom w-50" routerLink="/profile/appointments">Powrót</button>
+          <button mat-flat-button type="button" class="btn btn-purple w-50" routerLink="/profile/appointments">Powrót</button>
+        </div>
+        <div *ngIf="!app.hasOpinion && app.status === AppointmentStatus.FINISHED" class="col-sm text-center">
+          <button mat-flat-button type="button" class="btn btn-green w-50" (click)="createOpinion()">Oceń</button>
         </div>
       </div>
     </div>

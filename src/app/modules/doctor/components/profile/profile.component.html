@@ -38,7 +38,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div class="col-12">
+    <div class="col-12" *ngIf="doctor() as doctor">
       @if (opinions().length > 0) {
         <div class="row justify-content-center">
           <div class="col-12 col-lg-10">
@@ -53,9 +53,10 @@
                 [createdAt]="opinion.createdAt"
                 [answer]="opinion.answer"
                 [answeredAt]="opinion.answeredAt"
-                [doctorName]="doctor()?.name"
-                [doctorSurname]="doctor()?.surname"
-                [doctorPicture]="doctor()?.profilePicture"
+                [doctorId]="doctor.id"
+                [doctorName]="doctor.name"
+                [doctorSurname]="doctor.surname"
+                [doctorPicture]="doctor.profilePicture"
                 (opinionDeleted)="onOpinionDeleted($event)"
               />
             }

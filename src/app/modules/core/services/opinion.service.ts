@@ -3,7 +3,13 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Opinion } from '../models/opinion.model';
+import {
+  AnswerOpinionDoctor,
+  CreateOpinionPatient,
+  Opinion,
+  UpdateAnswerOpinionDoctor,
+  UpdateOpinionPatient,
+} from '../models/opinion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +42,89 @@ export class OpinionService {
         },
       },
     );
+  }
+
+  createDoctorAnswerToOpinion(opinionId: number, data: AnswerOpinionDoctor) {
+    return this._http
+      .patch<void>(
+        `${this._apiUrl}/doctors/me/opinions/${opinionId}/answer`,
+        data,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie dodawania odpowiedzi na opinie. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  createDoctorOpinionByPatient(
+    appointmentId: number,
+    data: CreateOpinionPatient,
+  ) {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/patients/me/appointments/${appointmentId}/opinion`,
+        data,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie dodawania opinii. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  patchDoctorOpinionByPatient(opinionId: number, data: UpdateOpinionPatient) {
+    return this._http
+      .patch<void>(`${this._apiUrl}/patients/me/opinions/${opinionId}`, data, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie edytowania opinii. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  patchDoctorOpinion(opinionId: number, data: UpdateAnswerOpinionDoctor) {
+    return this._http
+      .patch<void>(
+        `${this._apiUrl}/doctors/me/opinions/${opinionId}/answer`,
+        data,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie edytowania opinii. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
   }
 
   deletePatientOpinionByPatient(opinionId: number): Observable<void> {

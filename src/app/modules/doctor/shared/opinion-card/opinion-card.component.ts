@@ -7,6 +7,9 @@ import { map } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { OpinionService } from '../../../core/services/opinion.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserRole } from '../../../core/models/auth.model';
+import { Router } from '@angular/router';
+import { Opinion } from '../../../core/models/opinion.model';
 
 @Component({
   selector: 'app-opinion-card',
@@ -27,6 +30,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class OpinionCardComponent {
   private _opinionService = inject(OpinionService);
+  private _router = inject(Router);
   private _authService = inject(AuthService);
   private _snackBar = inject(MatSnackBar);
   opinionId = input.required<number>();
@@ -36,15 +40,77 @@ export class OpinionCardComponent {
   rating = input.required<number>();
   comment = input.required<string>();
   createdAt = input.required<string>();
-  answer = input<string | null>();
-  answeredAt = input<string | null>();
+  answer = input.required<string | null>();
+  answeredAt = input.required<string | null>();
+  doctorId = input<number>();
   doctorName = input<string>();
   doctorSurname = input<string>();
   doctorPicture = input<string>();
   opinionDeleted = output<number>();
-  isPatientOpinion$ = this._authService.user$.pipe(
-    map((user) => user?.id === this.patientId()),
+  isPatient$ = this._authService.user$.pipe(
+    map(
+      (user) =>
+        user?.id === this.patientId() && user?.role === UserRole.PATIENT,
+    ),
   );
+  isDoctor$ = this._authService.user$.pipe(
+    map(
+      (user) => user?.id === this.doctorId() && user?.role === UserRole.DOCTOR,
+    ),
+  );
+  isAdmin$ = this._authService.user$.pipe(
+    map((user) => user?.role === UserRole.ADMIN),
+  );
+
+  createOpinionDoctor() {
+    const opinion: Opinion = {
+      id: this.opinionId(),
+      createdAt: this.createdAt(),
+      answeredAt: this.answeredAt() ? this.answeredAt() : null,
+      comment: this.comment(),
+      answer: this.answer() ? this.answer() : null,
+      rating: this.rating(),
+      patient: {
+        id: this.patientId(),
+        name: this.patientName(),
+        surname: this.patientSurname(),
+      },
+    };
+    void this._router.navigate(['/doctor/profile/opinion/answer'], {
+      state: { opinion: opinion },
+    });
+  }
+
+  editOpinionDoctor() {
+    const opinion: Opinion = {
+      id: this.opinionId(),
+      createdAt: this.createdAt(),
+      answeredAt: this.answeredAt() ? this.answeredAt() : null,
+      comment: this.comment(),
+      answer: this.answer() ? this.answer() : null,
+      rating: this.rating(),
+      patient: {
+        id: this.patientId(),
+        name: this.patientName(),
+        surname: this.patientSurname(),
+      },
+    };
+    void this._router.navigate(['/doctor/profile/opinion/answer/edit'], {
+      state: { opinion: opinion },
+    });
+  }
+
+  editOpinion() {
+    void this._router.navigate(['/profile/appointments/opinion/edit'], {
+      state: {
+        opinionId: this.opinionId(),
+        opinion: {
+          rating: this.rating(),
+          comment: this.comment(),
+        },
+      },
+    });
+  }
 
   deletePatientOpinion() {
     this._opinionService
@@ -69,4 +135,6 @@ export class OpinionCardComponent {
         },
       });
   }
+
+  deletePatientOpinionByAdmin() {}
 }

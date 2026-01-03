@@ -19,4 +19,22 @@ export const DOCTOR_ROUTES: Routes = [
         (c) => c.ProfileEditComponent,
       ),
   },
+  {
+    path: 'profile/opinion/answer',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('../doctor/components/profile/create-opinion/create-opinion.component').then(
+        (c) => c.CreateOpinionComponent,
+      ),
+  },
+  {
+    path: 'profile/opinion/answer/edit',
+    canActivate: [roleGuard],
+    data: { roles: [UserRole.DOCTOR] },
+    loadComponent: () =>
+      import('../doctor/components/profile/edit-opinion/edit-opinion.component').then(
+        (c) => c.EditOpinionComponent,
+      ),
+  },
 ];

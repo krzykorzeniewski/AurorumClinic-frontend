@@ -14,6 +14,7 @@ import { OpinionCardComponent } from '../../shared/opinion-card/opinion-card.com
 import { AuthService } from '../../../core/services/auth.service';
 import { map } from 'rxjs';
 import { UserRole } from '../../../core/models/auth.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-doctor-profile',
@@ -37,6 +38,7 @@ import { UserRole } from '../../../core/models/auth.model';
 export class ProfileComponent {
   private _authService = inject(AuthService);
   private _opinionService = inject(OpinionService);
+  private _snackBar = inject(MatSnackBar);
   private _doctorService = inject(DoctorService);
   private _location = inject(Location);
   private _router = inject(Router);
@@ -69,6 +71,15 @@ export class ProfileComponent {
 
   constructor() {
     const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
     const state = navigation?.extras.state as {
       doctorId: number;
     };
