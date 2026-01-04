@@ -1,0 +1,64 @@
+<div class="container-fluid d-flex align-items-center pt-4">
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
+    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm">
+      Szczegóły wizyty
+    </h2>
+    <div *ngIf="appointment() as app" class="d-flex flex-column align-items-center">
+
+      <div *ngIf="app.payment.status === PaymentStatus.CREATED"
+           class="mb-3 w-100 text-center py-2 rounded-3 alert-unpaid">
+        Ta wizyta nie została opłacona!
+      </div>
+
+
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię i nazwisko</mat-label>
+          <input readonly matInput [value]="app.patient.name + ' ' + app.patient.surname"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Numer telefonu</mat-label>
+          <input readonly matInput [value]="app.patient.phoneNumber"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię i nazwisko</mat-label>
+          <input readonly matInput [value]="app.patient.email"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data i godzina</mat-label>
+          <input readonly matInput [value]="app.startedAt | date:'dd MMMM yyyy, HH:mm':'':'pl'"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Status płatności</mat-label>
+          <input readonly matInput [value]="mapPaymentToVisibleStatus(app.payment.status)"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Typ wizyty</mat-label>
+          <input readonly matInput [value]="app.service.name"/>
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Dodatkowe informacje</mat-label>
+          <textarea style="resize: none"  readonly matInput [value]="app.description"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="row w-100">
+        <div class="col-sm text-center">
+          <button mat-flat-button type="button" class="btn btn-purple w-50" (click)="goBack()">Powrót</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

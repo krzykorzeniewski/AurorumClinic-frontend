@@ -3,6 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import {
+  Absence,
+  DoctorCreateAbsence,
   DoctorCreateAbsenceByEmployee,
   GetDoctorAbsences,
 } from '../models/absences.model';
@@ -19,7 +21,7 @@ export class AbsenceService {
     const params = new HttpParams()
       .set('page', page)
       .set('size', size)
-      .set('sort', 'id');
+      .set('sort', 'id,desc');
     return this._http
       .get<ApiResponse<PageableResponse<GetDoctorAbsences>>>(
         this._apiUrl + '/me',
@@ -33,7 +35,18 @@ export class AbsenceService {
       )
       .pipe(
         map((res) => {
-          return res.data;
+          return {
+            absence: res.data.content.map(
+              (absence) =>
+                new Absence(
+                  absence.id,
+                  absence.name,
+                  absence.startedAt,
+                  absence.finishedAt,
+                ),
+            ),
+            page: res.data.page,
+          };
         }),
         catchError(() => {
           return throwError(
@@ -62,9 +75,9 @@ export class AbsenceService {
       );
   }
 
-  createAbsence(absence: DoctorCreateAbsenceByEmployee): Observable<void> {
+  createAbsence(absence: DoctorCreateAbsence): Observable<void> {
     return this._http
-      .post<void>(`${this._apiUrl}`, absence, {
+      .post<void>(`${this._apiUrl}/me`, absence, {
         withCredentials: true,
       })
       .pipe(

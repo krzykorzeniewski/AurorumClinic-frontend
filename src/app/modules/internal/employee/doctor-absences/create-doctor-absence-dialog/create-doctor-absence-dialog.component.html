@@ -1,0 +1,74 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="text-center fw-bold mb-4">Utwórz nową nieobecność</h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="absenceForm" class="absence-form">
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nazwa nieobecności</mat-label>
+        <input
+          matInput
+          [formControl]="controls.name"
+          placeholder="np. Urlop, Zwolnienie lekarskie"
+        />
+        <mat-error *ngIf="controls.name.invalid">
+          {{ getErrorMessage(controls.name) }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Data rozpoczęcia</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerStart"
+          [formControl]="controls.startedAt"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <mat-datepicker #pickerStart></mat-datepicker>
+        @if (controls.startedAt.invalid) {
+          <mat-error>{{ getErrorMessage(controls.startedAt) }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Data zakończenia</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerEnd"
+          [formControl]="controls.finishedAt"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+        @if (controls.finishedAt.invalid) {
+          <mat-error>{{ getErrorMessage(controls.finishedAt) }}</mat-error>
+        }
+      </mat-form-field>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+        {{ errorMessage }}
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="gap-2 p-3">
+    <button
+      mat-flat-button
+      type="button"
+      class="btn btn-purple"
+      (click)="cancel()"
+      [disabled]="isSubmitting"
+    >
+      Anuluj
+    </button>
+    <button
+      mat-flat-button
+      type="button"
+      class="btn btn-green"
+      (click)="createAbsence()"
+      [disabled]="absenceForm.invalid || isSubmitting"
+    >
+      {{ isSubmitting ? 'Tworzenie...' : 'Utwórz' }}
+    </button>
+  </mat-dialog-actions>
+</div>

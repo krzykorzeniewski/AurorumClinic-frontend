@@ -1,7 +1,7 @@
 import { Doctor } from './doctor.model';
 import { Service } from './service.model';
 import { Payment } from './api-response.model';
-import { PatientAppointmentListSchedule } from './patient.model';
+import { PatientAppointmentListSchedule, PatientShort } from './patient.model';
 
 export interface GetAppointmentInfo {
   id: number;
@@ -69,4 +69,15 @@ export interface GetScheduleAppointmentInfo {
   service: Service;
   payment: Payment;
   patient: PatientAppointmentListSchedule;
+}
+
+export interface GetDailyAppointmentInfo {
+  id: number;
+  status: AppointmentStatus;
+  startedAt: string;
+  description: string;
+  doctor: Doctor;
+  service: Service;
+  payment: Payment;
+  patient: PatientShort;
 }

@@ -14,6 +14,13 @@ export interface EmployeeGetSchedules {
   services: Service[];
 }
 
+export interface DoctorGetSchedules {
+  id: number;
+  startedAt: string;
+  finishedAt: string;
+  services: Service[];
+}
+
 export type DoctorsScheduleByDay = Record<
   string,
   {
@@ -21,6 +28,16 @@ export type DoctorsScheduleByDay = Record<
     startedAt: string;
     finishedAt: string;
     doctor: Doctor;
+    services: Service[];
+  }[]
+>;
+
+export type DoctorScheduleByDay = Record<
+  string,
+  {
+    id: number;
+    startedAt: string;
+    finishedAt: string;
     services: Service[];
   }[]
 >;

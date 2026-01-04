@@ -50,7 +50,6 @@ export class ProfileComponent {
   currentPage = signal<number>(0);
   pageSize = signal<number>(10);
   totalElements = signal<number>(0);
-  totalPages = signal<number>(0);
   selectedSort = signal<string>('createdAt,desc');
   opinionSortGroup: OpinionGroup[] = [
     {
@@ -152,7 +151,6 @@ export class ProfileComponent {
         next: (response) => {
           this.opinions.set(response.data.content);
           this.totalElements.set(response.data.page.totalElements);
-          this.totalPages.set(response.data.page.totalPages);
         },
       });
   }

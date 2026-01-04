@@ -40,3 +40,11 @@ export interface PatientOpinion {
   name: string;
   surname: string;
 }
+
+export interface PatientShort {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+}

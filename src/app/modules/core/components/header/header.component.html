@@ -24,6 +24,7 @@
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>
             <ul *ngSwitchCase="UserRole.EMPLOYEE" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/internal/appointments">Wizyty</a></li>
               <li><a class="dropdown-item" routerLink="/internal/patients">Pacjenci</a></li>
               <li><a class="dropdown-item" routerLink="/internal/doctors">Lekarze</a></li>
               <li><a class="dropdown-item" routerLink="/internal/schedules">Grafik</a></li>
@@ -33,6 +34,9 @@
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>
             <ul *ngSwitchCase="UserRole.DOCTOR" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
+              <li><a class="dropdown-item" routerLink="/internal/appointments">Wizyty</a></li>
+              <li><a class="dropdown-item" routerLink="/internal/my-schedules">Grafik</a></li>
+              <li><a class="dropdown-item" routerLink="/internal/my-absences">Nieobecności</a></li>
               <li><a class="dropdown-item" [routerLink]="['/doctor/profile']" [state]="{ doctorId: user.id}">Mój profil lekarza</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
