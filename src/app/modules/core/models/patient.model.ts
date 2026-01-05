@@ -26,3 +26,25 @@ export interface UpdatePatientEmployeeRequest {
   phoneNumber: string;
   newsletter: boolean;
 }
+
+export interface PatientAppointmentListSchedule {
+  id: number;
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  email: string;
+}
+
+export interface PatientOpinion {
+  id: number;
+  name: string;
+  surname: string;
+}
+
+export interface PatientShort {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+}

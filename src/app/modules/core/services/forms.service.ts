@@ -2,9 +2,14 @@ import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordRepeatValidator } from '../../shared/validators/password-repeat.validator';
 import { phoneValidator } from '../../shared/validators/phone.validator';
-import { dateValidator } from '../../shared/validators/date.validator';
+import { pastTimeDateValidator } from '../../shared/validators/past-time-date.validator';
 import { communicationPreferences } from '../models/user.model';
 import { GetPatientResponse } from '../models/patient.model';
+import { timeValidator } from '../../shared/validators/time.validator';
+import { peselValidator } from '../../shared/validators/pesel.validator';
+import { futureTimeDateValidator } from '../../shared/validators/future-time-date.validator';
+import { DayDto } from '../models/schedule.model';
+import { UpdateDoctorProfileData } from '../models/doctor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -94,11 +99,11 @@ export class FormsService {
           nonNullable: true,
         }),
         birthdate: new FormControl<Date | null>(null, {
-          validators: [dateValidator(), Validators.required],
+          validators: [pastTimeDateValidator(), Validators.required],
           nonNullable: true,
         }),
       },
-      { validators: passwordRepeatValidator() },
+      { validators: [passwordRepeatValidator(), peselValidator()] },
     );
   }
 
@@ -171,7 +176,7 @@ export class FormsService {
       birthdate: new FormControl<Date>(
         userData ? new Date(userData.birthDate) : new Date(),
         {
-          validators: [dateValidator(), Validators.required],
+          validators: [pastTimeDateValidator(), Validators.required],
           nonNullable: true,
         },
       ),
@@ -234,6 +239,163 @@ export class FormsService {
     });
   }
 
+  getScheduleDailyForm() {
+    return new FormGroup(
+      {
+        services: new FormControl<number[]>([], {
+          validators: [Validators.minLength(1), Validators.required],
+          nonNullable: true,
+        }),
+        date: new FormControl<Date | null>(null, {
+          validators: [futureTimeDateValidator(), Validators.required],
+          nonNullable: true,
+        }),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
+  getScheduleWeeklyForm() {
+    return new FormGroup(
+      {
+        mon: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        tue: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        wed: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        thu: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        fri: new FormControl<DayDto | null>(
+          { hours: ['', ''], serviceIds: [] },
+          {
+            nonNullable: true,
+          },
+        ),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
+  getScheduleEditForm() {
+    return new FormGroup(
+      {
+        services: new FormControl<number[]>({ value: [], disabled: true }),
+        date: new FormControl<Date>({ value: new Date(), disabled: true }),
+        startedAt: new FormControl<Date>({ value: new Date(), disabled: true }),
+        finishedAt: new FormControl<Date>({
+          value: new Date(),
+          disabled: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
+  getAbsenceCreateForm() {
+    return new FormGroup(
+      {
+        name: new FormControl<string>('', {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        }),
+        startedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        finishedAt: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: timeValidator() },
+    );
+  }
+
+  getFulfilledUpdateDoctorProfileForm(
+    image: string | null,
+    doctorData: UpdateDoctorProfileData | null,
+  ) {
+    return new FormGroup({
+      doctorImage: new FormControl<string | null>(image ?? null),
+      experience: new FormControl<string>(
+        doctorData ? doctorData.experience : '',
+        {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        },
+      ),
+      education: new FormControl<string>(
+        doctorData ? doctorData.education : '',
+        {
+          validators: [Validators.required, Validators.maxLength(100)],
+          nonNullable: true,
+        },
+      ),
+      description: new FormControl<string>(
+        doctorData ? doctorData.description : '',
+        {
+          validators: [Validators.required, Validators.maxLength(500)],
+          nonNullable: true,
+        },
+      ),
+    });
+  }
+
+  getOpinionPatientForm() {
+    return new FormGroup({
+      rating: new FormControl<number>(5, {
+        validators: [Validators.required, Validators.min(1), Validators.max(5)],
+        nonNullable: true,
+      }),
+      comment: new FormControl<string>('', {
+        validators: [Validators.required, Validators.maxLength(2000)],
+        nonNullable: true,
+      }),
+    });
+  }
+
+  getOpinionDoctorForm() {
+    return new FormGroup({
+      answer: new FormControl<string>('', {
+        validators: [Validators.required, Validators.maxLength(2000)],
+        nonNullable: true,
+      }),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';
@@ -243,11 +405,11 @@ export class FormsService {
     }
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength')?.requiredLength;
-      return `Minimalna długość to ${requiredLength} znaków.`;
+      return `Minimalna długość to ${requiredLength}.`;
     }
     if (control.hasError('maxlength')) {
       const requiredLength = control.getError('maxlength')?.requiredLength;
-      return `Maksymalna długość to ${requiredLength} znaków.`;
+      return `Maksymalna długość to ${requiredLength}.`;
     }
     if (control.hasError('min')) {
       return 'Wartość jest za mała.';
@@ -258,6 +420,12 @@ export class FormsService {
     if (control.hasError('passwordMismatch')) {
       return 'Hasła się nie zgadzają.';
     }
+    if (control.hasError('passwordMismatch')) {
+      return 'Hasła się nie zgadzają.';
+    }
+    if (control.hasError('peselBirthdateMismatch')) {
+      return 'Data urodzenia nie zgadza się z numerem PESEL.';
+    }
     if (control.hasError('textMismatch')) {
       return 'Tekst się nie zgadza.';
     }
@@ -265,10 +433,25 @@ export class FormsService {
       return 'Niepoprawna data.';
     }
     if (control.hasError('futureDate')) {
-      return 'Data urodzenia nie może być w przyszłości.';
+      return 'Data nie może być w przyszłości.';
+    }
+    if (control.hasError('pastDate')) {
+      return 'Data nie może być w przeszłości.';
     }
     if (control.hasError('invalidPhone')) {
       return 'Numer telefonu musi zawierać dokładnie 9 cyfr.';
+    }
+    if (control.hasError('matTimepickerParse')) {
+      return 'Godzina nie jest poprawna.';
+    }
+    if (control.hasError('matTimepickerMin')) {
+      return 'Wybrana godzina jest za wczesna.';
+    }
+    if (control.hasError('matTimepickerMax')) {
+      return 'Wybrana godzina jest za późna.';
+    }
+    if (control.hasError('timeRangeInvalid')) {
+      return 'Godzina zakończenia musi być później niż rozpoczęcia';
     }
 
     return 'Niepoprawna wartość';

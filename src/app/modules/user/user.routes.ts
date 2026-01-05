@@ -10,16 +10,7 @@ export const USER_ROUTES: Routes = [
   },
   {
     path: 'appointments',
-    loadComponent: () =>
-      import('./components/appointments/appointments.component').then(
-        (c) => c.AppointmentsComponent,
-      ),
-  },
-  {
-    path: 'appointments/details',
-    loadComponent: () =>
-      import(
-        './components/appointments/appointments-details/appointments-details.component'
-      ).then((c) => c.AppointmentsDetailsComponent),
+    loadChildren: () =>
+      import('../patient/patient.routes').then((m) => m.PATIENT_ROUTES),
   },
 ];

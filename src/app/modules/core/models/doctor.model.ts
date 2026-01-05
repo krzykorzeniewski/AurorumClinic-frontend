@@ -10,6 +10,21 @@ export interface GetRecommendedDoctorApiResponse {
   rating: number;
 }
 
+export type GetDoctorApiResponse = GetRecommendedDoctorApiResponse;
+
+export interface GetFullDoctorApiResponse {
+  id: number;
+  name: string;
+  surname: string;
+  specializations: Specialization[];
+  profilePicture: string;
+  rating: number;
+  email: string;
+  education: string;
+  experience: string;
+  description: string;
+}
+
 export class DoctorRecommended implements GetRecommendedDoctorApiResponse {
   constructor(
     public id: number,
@@ -88,4 +103,18 @@ export interface DoctorStatisticsData {
   avgDuration: number;
   avgRating: number | null;
   doctors: DoctorStatisticsInfo[];
+}
+
+export interface UpdateDoctorProfileData {
+  experience: string;
+  education: string;
+  description: string;
+}
+
+export interface UpdateDoctorProfileDataResponse {
+  doctorId: number;
+  experience: string;
+  education: string;
+  description: string;
+  profilePictureUrl: string;
 }

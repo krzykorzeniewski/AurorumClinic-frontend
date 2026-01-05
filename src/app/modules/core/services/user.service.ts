@@ -19,7 +19,11 @@ import {
   AppointmentStatus,
   GetAppointmentInfo,
 } from '../models/appointment.model';
-import { Doctor } from '../models/doctor.model';
+import {
+  Doctor,
+  UpdateDoctorProfileData,
+  UpdateDoctorProfileDataResponse,
+} from '../models/doctor.model';
 import { Service } from '../models/service.model';
 import {
   GetPatientApiResponse,
@@ -102,6 +106,7 @@ export class UserService {
                     value.payment.amount,
                     value.payment.status,
                   ),
+                  value.hasOpinion,
                 ),
             ),
             page: res.data.page,
@@ -138,6 +143,38 @@ export class UserService {
             () =>
               new Error(
                 'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateDoctorProfile(image: File | null, doctorData: UpdateDoctorProfileData) {
+    const formData = new FormData();
+
+    if (image) {
+      formData.append('doctorImage', image);
+    }
+
+    formData.append(
+      'command',
+      new Blob([JSON.stringify(doctorData)], { type: 'application/json' }),
+    );
+
+    return this._http
+      .put<ApiResponse<UpdateDoctorProfileDataResponse>>(
+        `${this._apiUrl}/users/doctors/me/profile`,
+        formData,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania profilu. Spróbuj ponownie później.',
               ),
           );
         }),

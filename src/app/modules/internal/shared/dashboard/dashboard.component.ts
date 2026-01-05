@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { UserRole } from '../../../core/models/auth.model';
 import { toLocalISOString } from '../../../shared/methods/dateTransform';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,17 +14,24 @@ import { toLocalISOString } from '../../../shared/methods/dateTransform';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private _authService = inject(AuthService);
   private _doctorService = inject(DoctorService);
   private _employeeService = inject(EmployeeService);
+  private destroy$ = new Subject<void>();
+  private interval = setInterval(() => {
+    this.todayDate = new Date();
+  }, 1000);
+
   finishedAppointments!: number;
   futureAppointments!: number;
   todayDate!: Date;
   role!: UserRole | undefined;
 
   ngOnInit(): void {
-    this._authService.user$.subscribe((user) => (this.role = user?.role));
+    this._authService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => (this.role = user?.role));
     const startDate = new Date();
     startDate.setHours(8, 0, 0, 0);
     const endDate = new Date();
@@ -55,10 +63,6 @@ export class DashboardComponent implements OnInit {
           },
         });
     }
-
-    setInterval(() => {
-      this.todayDate = new Date();
-    }, 1000);
   }
 
   mapRoleToPolish(userRole: UserRole | undefined) {
@@ -69,6 +73,15 @@ export class DashboardComponent implements OnInit {
         return 'ADMIN';
       default:
         return 'PRACOWNIK';
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    if (this.interval) {
+      clearInterval(this.interval);
     }
   }
 }

@@ -8,6 +8,8 @@ export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
   const spinner = inject(SpinnerService);
-  spinner.showSpinner();
-  return next(req).pipe(finalize(() => spinner.hideSpinner()));
+  queueMicrotask(() => spinner.showSpinner());
+  return next(req).pipe(
+    finalize(() => queueMicrotask(() => spinner.hideSpinner())),
+  );
 };

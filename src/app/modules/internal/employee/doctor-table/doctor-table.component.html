@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <div class="title-container">
+    <h2>Lista lekarzy</h2>
+  </div>
+
+  <div class="mat-elevation-z8 border">
+    <table mat-table [dataSource]="dataSource" matSort class="table table-striped align-middle">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Imię</th>
+        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nazwisko</th>
+        <td mat-cell *matCellDef="let row">{{ row.surname }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef> Ocena</th>
+        <td mat-cell *matCellDef="let row">{{ row.rating }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="daily_schedule">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-green" (click)="onDailySchedule(row.id)">Dodaj grafik dzienny</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="weekly_schedule">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-green" (click)="onWeeklySchedule(row.id)">Dodaj grafik tygodniowy
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="absences">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-green" (click)="onAbsence(row.id)">Nieobecności</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [length]="totalCount" [pageSizeOptions]="[5, 10, 25, 100]"
+                   aria-label="Wybierz stronę"></mat-paginator>
+  </div>
+</div>

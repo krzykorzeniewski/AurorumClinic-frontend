@@ -105,6 +105,15 @@ export class AppointmentsDetailsComponent implements OnInit {
     });
   }
 
+  createOpinion() {
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    void this._router.navigate(['/profile/appointments/opinion'], {
+      state: { appointment: currentAppointment },
+    });
+  }
+
   mapPaymentToVisibleStatus(payment: PaymentStatus) {
     return this._appointmentService.mapPaymentToVisibleStatus(payment);
   }

@@ -57,6 +57,7 @@ export class AuthService {
         map((res) => {
           const data = res.data;
           return new User(
+            data.id,
             data.twoFactorAuth,
             this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
           );
@@ -97,6 +98,7 @@ export class AuthService {
         map((res) => {
           const data = res.data;
           return new User(
+            data.id,
             data.twoFactorAuth,
             this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
           );
@@ -127,6 +129,7 @@ export class AuthService {
         map((res) => {
           const data = res.data;
           return new User(
+            data.id,
             data.twoFactorAuth,
             this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
           );

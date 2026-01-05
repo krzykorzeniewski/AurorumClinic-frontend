@@ -7,6 +7,8 @@ import {
   DoctorAppointmentCard,
   DoctorPanelStats,
   DoctorRecommended,
+  GetDoctorApiResponse,
+  GetFullDoctorApiResponse,
   GetRecommendedDoctorApiResponse,
 } from '../models/doctor.model';
 import {
@@ -14,6 +16,7 @@ import {
   SpecializationResponseApi,
 } from '../models/specialization.model';
 import { Service, ServiceResponseApi } from '../models/service.model';
+import { Absence, GetDoctorAbsencesByEmployee } from '../models/absences.model';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +60,79 @@ export class DoctorService {
       );
   }
 
+  getDoctors(
+    page: number,
+    size: number,
+    sort: string,
+    direction: 'asc' | 'desc' | '',
+    query?: string,
+  ) {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (sort) {
+      if (direction) {
+        params = params.set('sort', `${sort},${direction}`);
+      } else {
+        params = params.set('sort', sort);
+      }
+    }
+
+    if (query) {
+      params = params.set('query', query);
+    }
+
+    return this._http
+      .get<ApiResponse<PageableResponse<GetDoctorApiResponse>>>(
+        `${this._apiUrl}`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            doctors: res.data.content,
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd podczas uzyskiwania listy lekarzy. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  getDoctorById(doctorId: number) {
+    return this._http
+      .get<ApiResponse<GetFullDoctorApiResponse>>(
+        `${this._apiUrl}/${doctorId}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd serwera podczas uzyskiwania danych lekarza. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   searchDoctors(query: string, serviceId: number, page = 0, size = 6) {
     let searchParams = new HttpParams()
       .set('page', page)
@@ -90,6 +166,45 @@ export class DoctorService {
                 serviceId,
               ),
           );
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
+  getAllAbsences(doctorId: number, page: number, size: number) {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', 'id,desc');
+    return this._http
+      .get<ApiResponse<PageableResponse<GetDoctorAbsencesByEmployee>>>(
+        this._apiUrl + `/${doctorId}/absences`,
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            absence: res.data.content.map(
+              (absence) =>
+                new Absence(
+                  absence.id,
+                  absence.name,
+                  absence.startedAt,
+                  absence.finishedAt,
+                ),
+            ),
+            page: res.data.page,
+          };
         }),
         catchError(() => {
           return throwError(

@@ -1,0 +1,52 @@
+<div *ngIf="mode() === 'collision'" class="card border-0 w-100 p-2 mb-2 bg-transparent">
+
+  <div class="d-flex flex-column text-start"> <div class="mb-2">
+    <h6 class="fw-bold mb-0 text-dark">
+      {{ name() }} {{ surname() }}
+    </h6>
+    <small class="text-primary fw-semibold">
+      {{ visitName() }} <span *ngIf="doctor() as doctor">- {{ doctor.name }} {{ doctor.surname }}</span>
+    </small>
+    <p> {{ date() | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' }}</p>
+  </div>
+
+    <div class="d-flex flex-wrap gap-3 text-muted small" style="font-size: 0.85rem;">
+
+      <div class="d-flex align-items-center">
+        <i class="bi bi-telephone me-1"></i> <span>Tel: <span class="text-dark">{{ phoneNumber() }}</span></span>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <i class="bi bi-envelope me-1"></i>
+        <span>Email: <span class="text-dark">{{ email() }}</span></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+<button *ngIf="mode() === 'profileDoctor'" class="card border-0 w-100 p-2 mb-2" (click)="goToProfile()">
+
+  <div class="d-flex flex-column text-start"> <div class="mb-2">
+    <h6 class="fw-bold mb-0 text-dark">
+      {{ name() }} {{ surname() }}
+    </h6>
+    <small class="text-primary fw-semibold">
+      {{ visitName() }} <span *ngIf="doctor() as doctor">- {{ doctor.name }} {{ doctor.surname }}</span>
+    </small>
+    <p> {{ date() | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' }}</p>
+  </div>
+
+    <div class="d-flex flex-wrap gap-3 text-muted small" style="font-size: 0.85rem;">
+
+      <div class="d-flex align-items-center">
+        <i class="bi bi-telephone me-1"></i> <span>Tel: <span class="text-dark">{{ phoneNumber() }}</span></span>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <i class="bi bi-envelope me-1"></i>
+        <span>Email: <span class="text-dark">{{ email() }}</span></span>
+      </div>
+
+    </div>
+  </div>
+</button>

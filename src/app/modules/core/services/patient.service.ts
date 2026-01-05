@@ -142,6 +142,7 @@ export class PatientService {
                     value.payment.amount,
                     value.payment.status,
                   ),
+                  value.hasOpinion,
                 ),
             ),
             page: res.data.page,

@@ -1,6 +1,7 @@
 import { Doctor } from './doctor.model';
 import { Service } from './service.model';
 import { Payment } from './api-response.model';
+import { PatientAppointmentListSchedule, PatientShort } from './patient.model';
 
 export interface GetAppointmentInfo {
   id: number;
@@ -10,6 +11,7 @@ export interface GetAppointmentInfo {
   doctor: Doctor;
   service: Service;
   payment: Payment;
+  hasOpinion: boolean;
 }
 
 export class Appointment implements GetAppointmentInfo {
@@ -21,6 +23,7 @@ export class Appointment implements GetAppointmentInfo {
     public doctor: Doctor,
     public service: Service,
     public payment: Payment,
+    public hasOpinion: boolean,
   ) {}
 }
 
@@ -55,4 +58,26 @@ export enum PaymentStatus {
 export enum AppointmentStatus {
   CREATED = 'CREATED',
   FINISHED = 'FINISHED',
+}
+
+export interface GetScheduleAppointmentInfo {
+  id: number;
+  startedAt: string;
+  status: string;
+  description: string;
+  doctor?: Doctor;
+  service: Service;
+  payment: Payment;
+  patient: PatientAppointmentListSchedule;
+}
+
+export interface GetDailyAppointmentInfo {
+  id: number;
+  status: AppointmentStatus;
+  startedAt: string;
+  description: string;
+  doctor: Doctor;
+  service: Service;
+  payment: Payment;
+  patient: PatientShort;
 }

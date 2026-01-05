@@ -1,0 +1,27 @@
+.horizontal-list {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 10px;
+  gap: 16px;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  mat-list-option {
+    flex: 1 0 auto;
+    width: auto;
+    height: auto;
+    padding: 0 !important;
+
+    ::ng-deep .mdc-list-item__content {
+      padding: 0;
+    }
+  }
+}

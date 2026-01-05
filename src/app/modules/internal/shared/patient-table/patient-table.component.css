@@ -43,7 +43,7 @@ tr.mat-mdc-row:hover {
   background-color: #faf5fb;
 }
 
-.btn-purple {
+.btn-green {
   background-color: #149519;
   color: white;
   border: none;
@@ -51,7 +51,7 @@ tr.mat-mdc-row:hover {
   border-radius: 0.4rem;
 }
 
-.btn-purple:hover {
+.btn-green:hover {
   background-color: #246726;
 }
 

@@ -1,4 +1,4 @@
-<div *ngIf="mode() === 'doctor'" class="card p-3 mb-4 w-100 h-75 doctor-card-hover">
+<button *ngIf="mode() === 'doctor'" class="card p-3 mb-4 w-100 h-75 doctor-card-hover text-start" (click)="goToProfile()">
   <div class="d-flex align-items-center">
     <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
 
@@ -14,7 +14,7 @@
       <p class="mb-0 text-muted" style="font-size: 1rem;">{{ specialization() }}</p>
     </div>
   </div>
-</div>
+</button>
 <div *ngIf="mode() === 'visit'" [class]="'card p-3 mb-4 w-100 h-75 doctor-card-hover' + (paymentStatus() === PaymentStatus.CREATED ? ' border border-warning':'')">
   <div class="d-flex align-items-center">
     <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
@@ -35,7 +35,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="mode() === 'appointmentRegister'" class="card p-3 mb-4 w-100 h-75">
+<button *ngIf="mode() === 'appointmentRegister'" class="card p-3 mb-4 w-100 h-75 text-start" (click)="goToProfile()">
   <div class="d-flex align-items-center">
     <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
 
@@ -48,4 +48,78 @@
       </div>
     </div>
   </div>
+</button>
+<button *ngIf="mode() === 'schedule'" class="card p-3 mb-4 w-100 h-75 text-start" (click)="goToProfile()">
+  <div class="d-flex align-items-center">
+    <img [src]="profilePicture()" alt="doctor-image" class="rounded me-4" style="width:64px; height:64px; object-fit: cover;">
+
+    <div class="flex-grow-1">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">{{ name() }} {{ surname() }} ({{specialization()}})</h5>
+      </div>
+    </div>
+  </div>
+</button>
+<div *ngIf="mode() === 'profile'" class="card p-3 w-100">
+  <div class="row g-3">
+
+    <div class="col-12 col-md-4">
+
+      <div class="row mb-3">
+        <div class="col-12 col-md-auto d-flex justify-content-center mb-2">
+          <img
+            [src]="profilePicture()"
+            alt="doctor-image"
+            class="rounded"
+            width="140"
+            height="140"
+            style="object-fit: cover"
+          />
+        </div>
+
+        <div class="col-12 col-md align-content-center text-center text-md-start">
+          <h5 class="mb-1">
+            lek. {{ name() }} {{ surname() }}
+          </h5>
+
+          <p class="mb-1 text-muted" style="font-size: 1rem;">{{ specialization() }}</p>
+
+          <div class="mb-1">
+            <span *ngFor="let _ of [1,2,3,4,5]; let i = index">
+              <mat-icon class="{{ i+1 <= +rating() ? 'text-warning' : 'text-secondary' }}">star</mat-icon>
+            </span>
+          </div>
+
+          <a class="mb-2 fw-bold" [href]="`mailto:${email()}`" target="_top" style="font-size: 1rem;">{{ email() }}</a>
+        </div>
+      </div>
+
+
+        <h4>Edukacja</h4>
+        <p class="text-muted mb-1">
+          {{ education() }}
+        </p>
+
+        <h4>Doświadczenie</h4>
+        <p class="text-muted mb-1">
+          {{ experience() }}
+        </p>
+
+    </div>
+
+    <div class="col">
+    <h4>Opis lekarza</h4>
+        <div
+          class="overflow-auto"
+          style="max-height: 280px;"
+        >
+        <p class="text-muted mb-0">
+          {{ description() }}
+        </p>
+      </div>
+    </div>
+
+
+  </div>
 </div>
+
