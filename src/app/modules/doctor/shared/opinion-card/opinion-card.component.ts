@@ -137,5 +137,27 @@ export class OpinionCardComponent {
       });
   }
 
-  deletePatientOpinionByAdmin() {}
+  deletePatientOpinionByAdmin() {
+    this._opinionService
+      .deletePatientOpinionByAdmin(this.opinionId())
+      .subscribe({
+        next: () => {
+          this.opinionDeleted.emit(this.opinionId());
+          this._snackBar.open('Pomyślnie usunięto opinię', 'zamknij', {
+            duration: 5000,
+            panelClass: 'xxx-alert-info',
+          });
+        },
+        error: () => {
+          this._snackBar.open(
+            'Wystąpił błąd podczas usuwania opinii',
+            'zamknij',
+            {
+              duration: 5000,
+              panelClass: 'xxx-alert-error',
+            },
+          );
+        },
+      });
+  }
 }

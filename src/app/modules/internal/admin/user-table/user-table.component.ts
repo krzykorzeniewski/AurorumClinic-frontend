@@ -72,6 +72,7 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './user-table.component.css',
 })
 export class UserTableComponent implements AfterViewInit, OnDestroy {
+  protected readonly UserRole = UserRole;
   private _authService = inject(AuthService);
   private _userService = inject(UserService);
   private _snackBar = inject(MatSnackBar);
@@ -86,6 +87,7 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
     'phoneNumber',
     'createdAt',
     'passwordReset',
+    'doctorProfile',
   ];
   dataSource!: MatTableDataSource<GetUserApiResponse>;
   totalCount = 0;
@@ -185,9 +187,15 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
     void this._router.navigate(['/internal/users/register-doctor']);
   }
 
+  onDoctorProfile(doctorId: number) {
+    void this._router.navigate(['/doctor/profile'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
-
-  protected readonly UserRole = UserRole;
 }

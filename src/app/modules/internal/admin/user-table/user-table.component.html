@@ -66,9 +66,22 @@
           <button
             type="button"
             *ngIf="row.role === UserRole.EMPLOYEE || row.role === UserRole.DOCTOR"
-            class="btn btn-info"
+            class="btn btn-warning-custom"
             (click)="onPasswordReset(row.id)">
             Resetuj hasło
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="doctorProfile">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            *ngIf="row.role === UserRole.DOCTOR"
+            class="btn btn-green"
+            (click)="onDoctorProfile(row.id)">
+            Profil doktora
           </button>
         </td>
       </ng-container>
