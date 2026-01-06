@@ -19,11 +19,11 @@ export class User implements UserLoginResponse {
   constructor(
     readonly id: number,
     readonly twoFactorAuth: boolean,
-    readonly role: UserRole,
+    readonly role: UserRoleMap,
   ) {}
 }
 
-export interface UserRegisterRequest {
+export interface PatientRegisterRequest {
   name: string;
   surname: string;
   pesel: string | null;
@@ -32,6 +32,7 @@ export interface UserRegisterRequest {
   password: string;
   phoneNumber: string;
 }
+
 export interface UserPasswordRecoverEmailRequest {
   email: string;
 }
@@ -49,10 +50,33 @@ export interface TokenVerifyRequest {
   email: string;
 }
 
-export enum UserRole {
+export interface DoctorRegisterRequest {
+  name: string;
+  surname: string;
+  pesel: string | null;
+  birthDate: string;
+  email: string;
+  phoneNumber: string;
+  description: string;
+  education: string;
+  experience: string;
+  pwzNumber: string;
+  specializationIds: number[];
+}
+
+export type EmployeeRegisterRequest = Omit<PatientRegisterRequest, 'password'>;
+
+export enum UserRoleMap {
   DOCTOR = 'doctors',
   PATIENT = 'patients',
   EMPLOYEE = 'employees',
   ADMIN = 'admin',
   ANONYMOUS = 'anonymous',
+}
+
+export enum UserRole {
+  DOCTOR = 'DOCTOR',
+  PATIENT = 'PATIENT',
+  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'ADMIN',
 }

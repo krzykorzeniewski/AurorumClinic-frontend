@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { ScheduleService } from '../../../core/services/schedule.service';
@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ScheduleComponent implements OnInit {
   private _scheduleService = inject(ScheduleService);
+  private _location = inject(Location);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   schedules = signal<DoctorScheduleByDay | null>(null);
@@ -34,6 +35,7 @@ export class ScheduleComponent implements OnInit {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngOnInit(): void {

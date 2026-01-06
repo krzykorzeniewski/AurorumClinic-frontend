@@ -1,8 +1,24 @@
 import { GetPatientApiResponse } from './patient.model';
+import { UserRole } from './auth.model';
 
 export enum communicationPreferences {
   EMAIL = 'EMAIL',
   PHONE_NUMBER = 'PHONE_NUMBER',
+}
+
+export interface GetUserApiResponse {
+  id: number;
+  name: string;
+  surname: string;
+  pesel: string;
+  birthDate: string;
+  email: string;
+  phoneNumber: string;
+  twoFactorAuth: boolean;
+  emailVerified: boolean;
+  phoneNumberVerified: boolean;
+  role: UserRole;
+  createdAt: string;
 }
 
 export type UpdateEmailTokenRequest = Partial<

@@ -7,7 +7,7 @@ import { GetDailyAppointmentInfo } from '../../../core/models/appointment.model'
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { map } from 'rxjs';
-import { UserRole } from '../../../core/models/auth.model';
+import { UserRoleMap } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -35,7 +35,7 @@ export class AppointmentsComponent {
   totalElements = signal<number>(0);
   infoMessage = signal<string>('');
   isEmployee$ = this._authService.user$.pipe(
-    map((user) => user?.role === UserRole.EMPLOYEE),
+    map((user) => user?.role === UserRoleMap.EMPLOYEE),
   );
 
   onDateChange(date: Date): void {

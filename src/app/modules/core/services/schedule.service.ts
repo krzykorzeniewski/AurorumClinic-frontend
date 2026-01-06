@@ -18,7 +18,7 @@ import {
   UpdateDoctorSchedule,
 } from '../models/schedule.model';
 import { AuthService } from './auth.service';
-import { UserRole } from '../models/auth.model';
+import { UserRoleMap } from '../models/auth.model';
 import { GetScheduleAppointmentInfo } from '../models/appointment.model';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class ScheduleService {
     const role = this._authService.userRole;
 
     const url =
-      role === UserRole.EMPLOYEE
+      role === UserRoleMap.EMPLOYEE
         ? `/${scheduleId}/appointments`
         : `/me/${scheduleId}/appointments`;
 

@@ -216,7 +216,7 @@ export class DoctorService {
 
   getSpecializations() {
     return this._http
-      .get<ApiResponse<PageableResponse<SpecializationResponseApi>>>(
+      .get<ApiResponse<SpecializationResponseApi[]>>(
         `${environment.apiUrl + '/specializations'}`,
         {
           headers: {
@@ -226,7 +226,7 @@ export class DoctorService {
       )
       .pipe(
         map((res) => {
-          return res.data.content.map(
+          return res.data.map(
             (doctor) => new Specialization(doctor.id, doctor.name),
           );
         }),

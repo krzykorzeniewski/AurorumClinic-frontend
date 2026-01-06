@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
-import { UserRole } from '../models/auth.model';
+import { UserRoleMap } from '../models/auth.model';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { filter, map } from 'rxjs';
@@ -19,7 +19,11 @@ export const authStateGuard: CanActivateFn = (
       if (!requireAuth && isAuthenticated) {
         const role = user.role;
         if (
-          [UserRole.DOCTOR, UserRole.EMPLOYEE, UserRole.ADMIN].includes(role)
+          [
+            UserRoleMap.DOCTOR,
+            UserRoleMap.EMPLOYEE,
+            UserRoleMap.ADMIN,
+          ].includes(role)
         ) {
           void router.navigate(['/internal']);
         } else {

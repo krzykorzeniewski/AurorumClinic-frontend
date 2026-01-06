@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 import { roleGuard } from '../core/guards/role.guard';
-import { UserRole } from '../core/models/auth.model';
+import { UserRoleMap } from '../core/models/auth.model';
 
 export const INTERNAL_ROUTES: Routes = [
   {
     path: '',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN] },
+    data: {
+      roles: [UserRoleMap.EMPLOYEE, UserRoleMap.DOCTOR, UserRoleMap.ADMIN],
+    },
     loadComponent: () =>
       import('../internal/shared/dashboard/dashboard.component').then(
         (c) => c.DashboardComponent,
@@ -15,7 +17,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'patients',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./shared/patient-table/patient-table.component').then(
         (c) => c.PatientTableComponent,
@@ -24,7 +26,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'patients/:id',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./shared/patient-profile/patient-profile.component').then(
         (c) => c.PatientProfileComponent,
@@ -33,7 +35,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'patients/:id/edit',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./shared/patient-profile/patient-profile-edit/patient-profile-edit.component').then(
         (c) => c.PatientProfileEditComponent,
@@ -42,7 +44,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'patients/:id/appointments/details',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./shared/patient-appointment-details/patient-appointment-details.component').then(
         (c) => c.PatientAppointmentDetailsComponent,
@@ -51,7 +53,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'doctors',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-table/doctor-table.component').then(
         (c) => c.DoctorTableComponent,
@@ -60,7 +62,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'my-schedules',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/schedule/schedule.component').then(
         (c) => c.ScheduleComponent,
@@ -69,7 +71,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'my-schedules/daily',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/schedule/create-new-daily-schedule/create-new-daily-schedule.component').then(
         (c) => c.CreateNewDailyScheduleComponent,
@@ -78,7 +80,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'my-schedules/weekly',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/schedule/create-new-weekly-schedule/create-new-weekly-schedule.component').then(
         (c) => c.CreateNewWeeklyScheduleComponent,
@@ -87,7 +89,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'my-schedules/details',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/schedule/schedule-details/schedule-details.component').then(
         (c) => c.ScheduleDetailsComponent,
@@ -96,7 +98,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'schedules',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-schedules/doctor-schedules.component').then(
         (c) => c.DoctorSchedulesComponent,
@@ -105,7 +107,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'schedules/daily',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-schedules/create-new-daily-doctor-schedule/create-new-daily-doctor-schedule.component').then(
         (c) => c.CreateNewDailyDoctorScheduleComponent,
@@ -114,7 +116,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'schedules/weekly',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-schedules/create-new-weekly-doctor-schedule/create-new-weekly-doctor-schedule.component').then(
         (c) => c.CreateNewWeeklyDoctorScheduleComponent,
@@ -123,7 +125,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'schedules/details',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-schedules/doctor-schedule-details/doctor-schedule-details.component').then(
         (c) => c.DoctorScheduleDetailsComponent,
@@ -132,7 +134,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'my-absences',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/absences/absences.component').then(
         (c) => c.AbsencesComponent,
@@ -141,7 +143,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'absences',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-absences/doctor-absences.component').then(
         (c) => c.DoctorAbsencesComponent,
@@ -150,7 +152,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'appointments',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE, UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./shared/appointments/appointments.component').then(
         (c) => c.AppointmentsComponent,
@@ -159,10 +161,37 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'appointments/details',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.DOCTOR] },
+    data: { roles: [UserRoleMap.DOCTOR] },
     loadComponent: () =>
       import('./doctor/patient-appointment-details/patient-appointment-details.component').then(
         (c) => c.PatientAppointmentDetailsComponent,
+      ),
+  },
+  {
+    path: 'users',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/user-table/user-table.component').then(
+        (c) => c.UserTableComponent,
+      ),
+  },
+  {
+    path: 'users/register-doctor',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/register-doctor/register-doctor.component').then(
+        (c) => c.RegisterDoctorComponent,
+      ),
+  },
+  {
+    path: 'users/register-employee',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/register-employee/register-employee.component').then(
+        (c) => c.RegisterEmployeeComponent,
       ),
   },
 ];

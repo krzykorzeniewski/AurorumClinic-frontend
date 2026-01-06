@@ -59,7 +59,7 @@ export class FormsService {
     );
   }
 
-  getRegisterForm() {
+  getPatientRegisterForm() {
     return new FormGroup(
       {
         firstName: new FormControl('', {
@@ -104,6 +104,105 @@ export class FormsService {
         }),
       },
       { validators: [passwordRepeatValidator(), peselValidator()] },
+    );
+  }
+
+  getDoctorRegisterForm() {
+    return new FormGroup(
+      {
+        firstName: new FormControl('', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        surname: new FormControl('', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        email: new FormControl('', {
+          validators: [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.required,
+          ],
+          nonNullable: true,
+        }),
+        pesel: new FormControl('', {
+          validators: [
+            Validators.minLength(11),
+            Validators.maxLength(11),
+            Validators.required,
+          ],
+          nonNullable: false,
+        }),
+        phone: new FormControl('', {
+          validators: [Validators.required, phoneValidator()],
+          nonNullable: true,
+        }),
+        description: new FormControl('', {
+          validators: [Validators.maxLength(100), Validators.required],
+          nonNullable: true,
+        }),
+        education: new FormControl('', {
+          validators: [Validators.maxLength(100), Validators.required],
+          nonNullable: true,
+        }),
+        experience: new FormControl('', {
+          validators: [Validators.maxLength(100), Validators.required],
+          nonNullable: true,
+        }),
+        pwzNumber: new FormControl('', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        birthdate: new FormControl<Date | null>(null, {
+          validators: [pastTimeDateValidator(), Validators.required],
+          nonNullable: true,
+        }),
+        specializationIds: new FormControl<number[]>([], {
+          validators: [Validators.min(1), Validators.required],
+        }),
+      },
+      { validators: [peselValidator()] },
+    );
+  }
+
+  getEmployeeRegisterForm() {
+    return new FormGroup(
+      {
+        firstName: new FormControl('', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        surname: new FormControl('', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        email: new FormControl('', {
+          validators: [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.required,
+          ],
+          nonNullable: true,
+        }),
+        pesel: new FormControl('', {
+          validators: [
+            Validators.minLength(11),
+            Validators.maxLength(11),
+            Validators.required,
+          ],
+          nonNullable: false,
+        }),
+        phone: new FormControl('', {
+          validators: [Validators.required, phoneValidator()],
+          nonNullable: true,
+        }),
+        birthdate: new FormControl<Date | null>(null, {
+          validators: [pastTimeDateValidator(), Validators.required],
+          nonNullable: true,
+        }),
+      },
+      { validators: [peselValidator()] },
     );
   }
 

@@ -1,0 +1,89 @@
+<div class="container mt-4">
+
+  <div class="search-container">
+    <h2 class="text-center">Lista użytkowników</h2>
+    <div class="mb-3">
+      <p class="form-label fw-bold">Filtrowanie:</p>
+      <input matInput [formControl]="filterValue" placeholder="Wpisz frazę" class="form-control" #input>
+    </div>
+    <div class="mb-3">
+      <mat-form-field appearance="outline" class="d-flex mx-auto w-50">
+        <mat-label>Typ użytkownika</mat-label>
+        <mat-select [formControl]="userType">
+          @for (userType of userTypes; track userType) {
+            <mat-option [value]="userType.key">{{ userType.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="d-flex col gap-2 justify-content-end">
+      <button type="button" class="btn btn-purple" (click)="onEmployeeRegister()">Stwórz konto pracownika</button>
+      <button type="button" class="btn btn-purple" (click)="onDoctorRegister()">Stwórz konto doktora</button>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8 border">
+    <table mat-table [dataSource]="dataSource" matSort class="table table-striped align-middle">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Imię </th>
+        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nazwisko </th>
+        <td mat-cell *matCellDef="let row">{{row.surname}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pesel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> PESEL </th>
+        <td mat-cell *matCellDef="let row">{{row.pesel}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="birthDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data urodzenia </th>
+        <td mat-cell *matCellDef="let row">{{row.birthDate | date:'dd MMMM yyyy':'':'pl'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+        <td mat-cell *matCellDef="let row">{{row.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Numer telefonu </th>
+        <td mat-cell *matCellDef="let row">{{row.phoneNumber}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Utworzony </th>
+        <td mat-cell *matCellDef="let row">{{row.createdAt | date:'dd MMMM yyyy':'':'pl'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="passwordReset">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            *ngIf="row.role === UserRole.EMPLOYEE || row.role === UserRole.DOCTOR"
+            class="btn btn-info"
+            (click)="onPasswordReset(row.id)">
+            Resetuj hasło
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell text-center text-muted py-3" colspan="7">
+          Brak danych do pasującego filtra "{{input.value}}"
+        </td>
+      </tr>
+
+    </table>
+
+    <mat-paginator [length]="totalCount" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Wybierz stronę"></mat-paginator>
+  </div>
+</div>

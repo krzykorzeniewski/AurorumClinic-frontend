@@ -42,7 +42,7 @@
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>
             <ul *ngSwitchCase="UserRole.ADMIN" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
-              <li><a class="dropdown-item" routerLink="/internal">Nic</a></li>
+              <li><a class="dropdown-item" routerLink="/internal/users">Pracownicy</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>

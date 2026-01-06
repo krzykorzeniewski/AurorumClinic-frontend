@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf, NgIf } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AbsenceService } from '../../../core/services/absence.service';
@@ -25,6 +25,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AbsencesComponent {
   private _absenceService = inject(AbsenceService);
+  private _location = inject(Location);
   private _snackBar = inject(MatSnackBar);
   private _dialog = inject(MatDialog);
   private _router = inject(Router);
@@ -46,6 +47,7 @@ export class AbsencesComponent {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
     this.fetchAbsences();
   }
 

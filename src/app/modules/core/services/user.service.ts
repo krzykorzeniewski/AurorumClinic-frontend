@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import {
+  GetUserApiResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
@@ -38,12 +39,69 @@ export class UserService {
   private _authService = inject(AuthService);
   private _apiUrl = environment.apiUrl;
 
+  getAllUsers(
+    page: number,
+    size: number,
+    sort: string,
+    direction: 'asc' | 'desc' | '',
+    role: string | null,
+    query?: string,
+  ) {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (sort) {
+      if (direction) {
+        params = params.set('sort', `${sort},${direction}`);
+      } else {
+        params = params.set('sort', sort);
+      }
+    }
+
+    if (query) {
+      params = params.set('query', query);
+    }
+    if (role) {
+      params = params.set('role', role);
+    }
+
+    return this._http
+      .get<ApiResponse<PageableResponse<GetUserApiResponse>>>(
+        `${this._apiUrl}/users`,
+        {
+          params: params,
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .pipe(
+        map((res) => {
+          return {
+            users: res.data.content,
+            page: res.data.page,
+          };
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   getUser(): Observable<GetPatientResponse> {
     return this._http
       .get<ApiResponse<GetPatientApiResponse>>(
         `${this._apiUrl}/${this._authService.userRole}/me`,
         {
           withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
       )
       .pipe(

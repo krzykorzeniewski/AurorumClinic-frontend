@@ -14,7 +14,7 @@ import {
   NgSwitch,
   NgSwitchCase,
 } from '@angular/common';
-import { User, UserRole } from '../../models/auth.model';
+import { User, UserRoleMap } from '../../models/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -100,5 +100,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this._routeSub) this._routeSub.unsubscribe();
   }
 
-  protected readonly UserRole = UserRole;
+  protected readonly UserRole = UserRoleMap;
 }

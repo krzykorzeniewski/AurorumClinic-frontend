@@ -9,7 +9,7 @@ import {
 import { expand, map, of, reduce, takeWhile } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
-import { NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-doctor-schedules',
@@ -19,6 +19,7 @@ import { NgForOf, NgIf } from '@angular/common';
 })
 export class DoctorSchedulesComponent implements OnInit {
   private _scheduleService = inject(ScheduleService);
+  private _location = inject(Location);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   schedules = signal<DoctorsScheduleByDay | null>(null);
@@ -38,6 +39,7 @@ export class DoctorSchedulesComponent implements OnInit {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngOnInit(): void {

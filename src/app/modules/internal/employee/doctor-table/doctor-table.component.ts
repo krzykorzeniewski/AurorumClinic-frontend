@@ -26,6 +26,7 @@ import { GetDoctorApiResponse } from '../../../core/models/doctor.model';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-doctor-table',
@@ -52,6 +53,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class DoctorTableComponent implements AfterViewInit, OnDestroy {
   private _doctorService = inject(DoctorService);
   private _snackBar = inject(MatSnackBar);
+  private _location = inject(Location);
   private _router = inject(Router);
   displayedColumns: string[] = [
     'name',
@@ -79,6 +81,7 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngAfterViewInit(): void {

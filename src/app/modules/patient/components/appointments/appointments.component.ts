@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf, NgIf } from '@angular/common';
 import { Appointment } from '../../../core/models/appointment.model';
 import { map } from 'rxjs';
 import { MatButton } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { UserService } from '../../../core/services/user.service';
 })
 export class AppointmentsComponent implements OnInit {
   private _userService = inject(UserService);
+  private _location = inject(Location);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   private _page = 0;
@@ -36,6 +37,7 @@ export class AppointmentsComponent implements OnInit {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngOnInit(): void {

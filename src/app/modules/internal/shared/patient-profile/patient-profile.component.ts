@@ -59,6 +59,7 @@ export class PatientProfileComponent implements OnInit {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngOnInit(): void {
