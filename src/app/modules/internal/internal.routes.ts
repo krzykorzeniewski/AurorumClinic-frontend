@@ -194,4 +194,13 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.RegisterEmployeeComponent,
       ),
   },
+  {
+    path: 'specializations',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/specialization-table/specialization-table.component').then(
+        (c) => c.SpecializationTableComponent,
+      ),
+  },
 ];
