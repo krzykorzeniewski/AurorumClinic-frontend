@@ -70,17 +70,11 @@ export class DoctorAppointmentSearchComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const specAndServices = localStorage.getItem('services');
-    if (specAndServices) {
-      this.specializations = JSON.parse(specAndServices);
-    } else {
-      this._doctorService.getSpecializationsWithServices().subscribe({
-        next: (res) => {
-          this.specializations = res;
-          localStorage.setItem('services', JSON.stringify(res));
-        },
-      });
-    }
+    this._doctorService.getSpecializationsWithServices().subscribe({
+      next: (res) => {
+        this.specializations = res;
+      },
+    });
 
     this.controls.specialization.valueChanges
       .pipe(startWith(this.controls.specialization.value))
@@ -105,7 +99,6 @@ export class DoctorAppointmentSearchComponent implements OnInit {
 
         this.controls.service.updateValueAndValidity({ emitEvent: false });
         this.searchForm.updateValueAndValidity();
-        localStorage.setItem('services', JSON.stringify(this.specializations));
       });
   }
 

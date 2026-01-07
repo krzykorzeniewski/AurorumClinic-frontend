@@ -9,3 +9,9 @@ export class Specialization {
     public name: string,
   ) {}
 }
+
+export interface CreateSpecialization {
+  name: string;
+}
+
+export type UpdateSpecialization = CreateSpecialization;

@@ -495,6 +495,37 @@ export class FormsService {
     });
   }
 
+  getSpecializationForm() {
+    return new FormControl<string>('', {
+      validators: [Validators.maxLength(150), Validators.required],
+      nonNullable: true,
+    });
+  }
+
+  getServiceForm() {
+    return new FormGroup({
+      name: new FormControl<string>('', {
+        validators: [Validators.maxLength(150), Validators.required],
+        nonNullable: true,
+      }),
+      duration: new FormControl<number>(0, {
+        validators: [Validators.required, Validators.min(1)],
+        nonNullable: true,
+      }),
+      price: new FormControl<BigNumber | null>(null, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      description: new FormControl<number | null>(null, {
+        validators: [Validators.required, Validators.minLength(500)],
+        nonNullable: true,
+      }),
+      specializationIds: new FormControl<number[]>([], {
+        validators: [Validators.min(1), Validators.required],
+      }),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

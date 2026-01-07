@@ -100,7 +100,6 @@ export class ScheduleDetailsComponent {
     this._doctorService.getSpecializationsWithServices().subscribe({
       next: (res) => {
         this.specializations = res;
-        localStorage.setItem('services', JSON.stringify(res));
       },
     });
   }

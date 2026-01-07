@@ -214,11 +214,13 @@ export class DoctorService {
       );
   }
 
-  getSpecializations() {
+  getSpecializations(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
     return this._http
-      .get<ApiResponse<SpecializationResponseApi[]>>(
+      .get<ApiResponse<PageableResponse<SpecializationResponseApi>>>(
         `${environment.apiUrl + '/specializations'}`,
         {
+          params: params,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -226,9 +228,12 @@ export class DoctorService {
       )
       .pipe(
         map((res) => {
-          return res.data.map(
-            (doctor) => new Specialization(doctor.id, doctor.name),
-          );
+          return {
+            specializations: res.data.content.map(
+              (doctor) => new Specialization(doctor.id, doctor.name),
+            ),
+            page: res.data.page,
+          };
         }),
         catchError(() => {
           return throwError(

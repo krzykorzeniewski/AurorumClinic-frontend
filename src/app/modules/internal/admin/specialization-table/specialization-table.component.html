@@ -1,7 +1,7 @@
 <div class="container-sm mt-4">
 
   <div class="search-container mb-3">
-    <h2 class="text-center">Lista specjalizacji</h2>
+    <h2 class="text-center mb-4">Lista specjalizacji</h2>
     <div class="d-flex col justify-content-end">
       <button type="button" class="btn btn-purple" (click)="onSpecializationCreate()">Stwórz nową specjalizację</button>
     </div>
@@ -21,7 +21,7 @@
           <button
             type="button"
             class="btn btn-warning-custom"
-            (click)="onSpecializationEdit(row.id)">
+            (click)="onSpecializationEdit(row)">
             Edytuj
           </button>
         </td>
@@ -31,5 +31,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
+    <mat-paginator [length]="totalCount" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Wybierz stronę"></mat-paginator>
   </div>
 </div>

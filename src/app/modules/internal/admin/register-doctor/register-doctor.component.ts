@@ -24,6 +24,7 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { Specialization } from '../../../core/models/specialization.model';
+import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 
 @Component({
   selector: 'app-register-doctor',
@@ -59,11 +60,31 @@ export class RegisterDoctorComponent {
   specializations: Specialization[] = [];
 
   constructor() {
-    this._doctorService.getSpecializations().subscribe({
-      next: (res) => {
-        this.specializations = res;
-      },
-    });
+    const pageSize = 15;
+    this._doctorService
+      .getSpecializations(0, pageSize)
+      .pipe(
+        expand((res) => {
+          const hasMorePages = res.page.number < res.page.totalPages - 1;
+
+          if (hasMorePages) {
+            return this._doctorService.getSpecializations(
+              res.page.number + 1,
+              pageSize,
+            );
+          } else {
+            return EMPTY;
+          }
+        }),
+        map((res) => res.specializations),
+        scan((acc, curr) => [...acc, ...curr], [] as Specialization[]),
+        takeLast(1),
+      )
+      .subscribe({
+        next: (res) => {
+          this.specializations = res;
+        },
+      });
   }
 
   onRegister(): void {
