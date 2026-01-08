@@ -1,0 +1,51 @@
+<div class="container-sm mt-4">
+
+  <div class="search-container mb-3">
+    <h2 class="text-center mb-4">Lista serwisów</h2>
+    <div class="d-flex col justify-content-end">
+      <button type="button" class="btn btn-purple" (click)="onServiceCreate()">Stwórz nowy serwis</button>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8 border">
+    <table mat-table [dataSource]="dataSource" matSort class="table table-striped align-middle">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
+        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cena </th>
+        <td mat-cell *matCellDef="let row">{{row.price}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Długość </th>
+        <td mat-cell *matCellDef="let row">{{row.duration}} minut</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Opis </th>
+        <td mat-cell *matCellDef="let row">{{row.description}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            class="btn btn-warning-custom"
+            (click)="onServiceEdit(row)">
+            Edytuj
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <mat-paginator [length]="totalCount" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Wybierz stronę"></mat-paginator>
+  </div>
+</div>

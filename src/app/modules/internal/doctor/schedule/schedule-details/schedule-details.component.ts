@@ -188,12 +188,15 @@ export class ScheduleDetailsComponent {
     const schedule = this.schedule();
     if (!schedule) return;
 
+    console.log(err.error?.status === 'fail');
+    console.log(err.error?.data);
     if (err.error?.status === 'fail' && err.error?.data) {
       const appointmentsIds: number[] = Array.isArray(
         err.error.data.appointments,
       )
         ? err.error.data.appointments
         : JSON.parse(err.error.data.appointments);
+      console.log('tutaj');
 
       const dialogRef = this._dialog.open(ScheduleAppointmentsListComponent, {
         data: {

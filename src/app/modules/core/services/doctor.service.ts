@@ -230,7 +230,7 @@ export class DoctorService {
         map((res) => {
           return {
             specializations: res.data.content.map(
-              (doctor) => new Specialization(doctor.id, doctor.name),
+              (spec) => new Specialization(spec.id, spec.name),
             ),
             page: res.data.page,
           };

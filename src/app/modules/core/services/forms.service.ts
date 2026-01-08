@@ -10,6 +10,7 @@ import { peselValidator } from '../../shared/validators/pesel.validator';
 import { futureTimeDateValidator } from '../../shared/validators/future-time-date.validator';
 import { DayDto } from '../models/schedule.model';
 import { UpdateDoctorProfileData } from '../models/doctor.model';
+import BigNumber from 'bignumber.js';
 
 @Injectable({
   providedIn: 'root',
@@ -512,16 +513,41 @@ export class FormsService {
         validators: [Validators.required, Validators.min(1)],
         nonNullable: true,
       }),
-      price: new FormControl<BigNumber | null>(null, {
-        validators: [Validators.required],
+      price: new FormControl<BigNumber>(BigNumber(0), {
+        validators: [Validators.required, Validators.min(1)],
         nonNullable: true,
       }),
-      description: new FormControl<number | null>(null, {
-        validators: [Validators.required, Validators.minLength(500)],
+      description: new FormControl<string>('', {
+        validators: [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(500),
+        ],
         nonNullable: true,
       }),
       specializationIds: new FormControl<number[]>([], {
         validators: [Validators.min(1), Validators.required],
+      }),
+    });
+  }
+
+  getUpdateServiceForm() {
+    return new FormGroup({
+      name: new FormControl<string>('', {
+        validators: [Validators.maxLength(150), Validators.required],
+        nonNullable: true,
+      }),
+      price: new FormControl<BigNumber>(BigNumber(0), {
+        validators: [Validators.required, Validators.min(1)],
+        nonNullable: true,
+      }),
+      description: new FormControl<string>('', {
+        validators: [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(500),
+        ],
+        nonNullable: true,
       }),
     });
   }

@@ -146,33 +146,25 @@ export class ScheduleService {
     scheduleId: number,
     data: UpdateDoctorSchedule,
   ) {
-    return this._http
-      .put<ApiResponse<void>>(`${this._apiUrl}/${scheduleId}`, data, {
+    return this._http.put<ApiResponse<void>>(
+      `${this._apiUrl}/${scheduleId}`,
+      data,
+      {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
-      })
-      .pipe(
-        catchError((err) => {
-          return throwError(() => new Error(this.mapError(err)));
-        }),
-      );
+      },
+    );
   }
 
   deleteDoctorScheduleByEmployee(scheduleId: number) {
-    return this._http
-      .delete<void>(`${this._apiUrl}/${scheduleId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
-      .pipe(
-        catchError((err) => {
-          return throwError(() => new Error(this.mapError(err)));
-        }),
-      );
+    return this._http.delete<void>(`${this._apiUrl}/${scheduleId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
   }
 
   getSchedules(startedAt: Date, finishedAt: Date, page: number, size: number) {
@@ -253,33 +245,25 @@ export class ScheduleService {
   }
 
   rescheduleSchedule(scheduleId: number, data: UpdateDoctorSchedule) {
-    return this._http
-      .put<ApiResponse<void>>(`${this._apiUrl}/me/${scheduleId}`, data, {
+    return this._http.put<ApiResponse<void>>(
+      `${this._apiUrl}/me/${scheduleId}`,
+      data,
+      {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
-      })
-      .pipe(
-        catchError((err) => {
-          return throwError(() => new Error(this.mapError(err)));
-        }),
-      );
+      },
+    );
   }
 
   deleteSchedule(scheduleId: number) {
-    return this._http
-      .delete<void>(`${this._apiUrl}/me/${scheduleId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
-      .pipe(
-        catchError((err) => {
-          return throwError(() => new Error(this.mapError(err)));
-        }),
-      );
+    return this._http.delete<void>(`${this._apiUrl}/me/${scheduleId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
   }
 
   private mapError(err: HttpErrorResponse) {

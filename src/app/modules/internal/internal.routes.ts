@@ -203,4 +203,13 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.SpecializationTableComponent,
       ),
   },
+  {
+    path: 'services',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/services-table/services-table.component').then(
+        (c) => c.ServicesTableComponent,
+      ),
+  },
 ];
