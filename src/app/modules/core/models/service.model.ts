@@ -30,6 +30,5 @@ export interface CreateService {
 
 export interface UpdateService {
   name: string;
-  price: BigNumber;
   description: string;
 }

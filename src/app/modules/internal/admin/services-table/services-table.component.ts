@@ -115,7 +115,8 @@ export class ServicesTableComponent implements AfterViewInit, OnDestroy {
         service: service,
       },
       disableClose: true,
-      maxWidth: '600px',
+      maxWidth: '800px',
+      minWidth: '600px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -132,7 +133,8 @@ export class ServicesTableComponent implements AfterViewInit, OnDestroy {
   onServiceCreate() {
     const dialogRef = this._dialog.open(CreateServiceDialogComponent, {
       disableClose: true,
-      maxWidth: '600px',
+      maxWidth: '800px',
+      minWidth: '600px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {

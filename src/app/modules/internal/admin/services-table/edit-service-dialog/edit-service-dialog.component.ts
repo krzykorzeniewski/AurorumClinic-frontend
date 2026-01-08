@@ -91,7 +91,6 @@ export class EditServiceDialogComponent {
 
     this.updateForm.patchValue({
       name: this.data.service.name,
-      price: this.data.service.price,
       description: this.data.service.description,
     });
   }
@@ -101,7 +100,6 @@ export class EditServiceDialogComponent {
 
     const data: UpdateService = {
       name: this.updateForm.value.name!,
-      price: this.updateForm.value.price!,
       description: this.updateForm.value.description!,
     };
 

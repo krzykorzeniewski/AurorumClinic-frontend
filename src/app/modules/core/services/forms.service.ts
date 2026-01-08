@@ -537,10 +537,6 @@ export class FormsService {
         validators: [Validators.maxLength(150), Validators.required],
         nonNullable: true,
       }),
-      price: new FormControl<BigNumber>(BigNumber(0), {
-        validators: [Validators.required, Validators.min(1)],
-        nonNullable: true,
-      }),
       description: new FormControl<string>('', {
         validators: [
           Validators.required,

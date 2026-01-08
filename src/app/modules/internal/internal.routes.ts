@@ -212,4 +212,13 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.ServicesTableComponent,
       ),
   },
+  {
+    path: 'newsletter',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/newsletter/newsletter-table/newsletter-table.component').then(
+        (c) => c.NewsletterTableComponent,
+      ),
+  },
 ];
