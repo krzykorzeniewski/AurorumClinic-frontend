@@ -64,11 +64,9 @@ export class RegisterPatientComponent {
     this._authService.registerPatient(userData).subscribe({
       next: () => {
         localStorage.setItem('email', userData.email);
-        void this._router.navigate(['/auth/login'], {
+        void this._router.navigate(['/auth/email-resend'], {
           state: {
-            message:
-              'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.',
-            variant: 'info',
+            email: userData.email,
           },
         });
       },

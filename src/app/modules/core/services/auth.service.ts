@@ -145,7 +145,23 @@ export class AuthService {
   }
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
-    return this._http.post<void>(`${this._apiUrl}/verify-email-token`, request);
+    return this._http
+      .post<void>(`${this._apiUrl}/verify-email-token`, request, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          let errorMsg =
+            'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.';
+
+          if (err.error?.status === 429) {
+            errorMsg =
+              'Hola hola, zwolnij trochę. Poczekaj chwilę, może email w końcu dotrze na twoją pocztę!';
+          }
+
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
   }
 
   verifyUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {

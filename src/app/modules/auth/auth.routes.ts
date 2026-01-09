@@ -25,22 +25,29 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'recover/:uid',
     loadComponent: () =>
-      import(
-        './components/password-recovery-form/password-recovery-form.component'
-      ).then((c) => c.PasswordRecoveryFormComponent),
+      import('./components/password-recovery-form/password-recovery-form.component').then(
+        (c) => c.PasswordRecoveryFormComponent,
+      ),
   },
   {
     path: 'account-activate/:uid',
     loadComponent: () =>
-      import(
-        './components/account-activation/account-activation.component'
-      ).then((c) => c.AccountActivationComponent),
+      import('./components/account-activation/account-activation.component').then(
+        (c) => c.AccountActivationComponent,
+      ),
   },
   {
     path: 'twoFactorAuthorization',
     loadComponent: () =>
       import('./components/two-factor-login/two-factor-login.component').then(
         (c) => c.TwoFactorLoginComponent,
+      ),
+  },
+  {
+    path: 'email-resend',
+    loadComponent: () =>
+      import('./components/email-resend/email-resend.component').then(
+        (c) => c.EmailResendComponent,
       ),
   },
 ];

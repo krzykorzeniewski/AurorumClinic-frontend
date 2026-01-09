@@ -1,23 +1,21 @@
 <div class="container d-flex align-items-center pt-5">
   <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
     <h2 class="text-center mb-3">
-      Weryfikacja dwuetapowa
+      Ponowna wysyłka emaila weryfikacyjnego
     </h2>
     <p class="text-center mb-5">
-      Wprowadź kod wysłany na twój numer telefonu
+      Email nie przyszedł? Spokojnie, po upływie czasu możesz poprosić o email weryfikacyjny
     </p>
-    <form class="d-flex flex-column align-items-center " (ngSubmit)="onTwoFactorLogin()">
+    <form class="d-flex flex-column align-items-center " (ngSubmit)="onResend()">
       <div class="mb-2 w-75">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Kod weryfikacji dwuetapowej</mat-label>
+          <mat-label>Email</mat-label>
           <input
-            id="two-factor-login"
+            [readonly]="!canModify()"
+            id="email-aurorum-recovery"
             matInput
-            [formControl]="confirmForm"
+            [value]="email()"
           />
-          @if (confirmForm.invalid) {
-            <mat-error>{{ getErrorMessage(confirmForm) }}</mat-error>
-          }
         </mat-form-field>
       </div>
       <app-alert class="mt-3 w-75" *ngIf="message()" [text]="message()"></app-alert>
@@ -29,27 +27,19 @@
             class="btn border"
             style="background-color: white; color: black"
             routerLink="/auth/login"
-          >Anuluj</button>
+          >Zaloguj</button>
         </div>
-        <button
+        <div class="col-sm text-center">
+          <button
           mat-flat-button
-          type="button"
+          type="submit"
           class="btn text-white"
           [disabled]="!canResend()"
           style="background-color: var(--primary-purple)"
-          (click)="onResendToken()"
-        >
-          Wyślij token ponownie
-          <span *ngIf="!canResend()"> ({{resendTimer()}}s)</span>
-        </button>
-        <div class="col-sm text-center">
-          <button
-            mat-flat-button
-            type="submit"
-            [disabled]="!isLoginTokenRequestSent && confirmForm.invalid"
-            class="btn text-white"
-            style="background-color: var(--primary-purple)"
-          >Zaloguj</button>
+          >
+          Wyślij email ponownie
+          <span *ngIf="!canResend()"> ({{timer()}}s)</span>
+          </button>
         </div>
       </div>
     </form>

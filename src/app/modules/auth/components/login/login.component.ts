@@ -79,6 +79,8 @@ export class LoginComponent {
             },
           });
         } else {
+          localStorage.removeItem('emailResendTimestamp');
+          localStorage.removeItem('email');
           this._authService.redirectAfterLogin();
         }
       },
