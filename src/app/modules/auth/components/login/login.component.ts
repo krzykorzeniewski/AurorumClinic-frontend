@@ -85,8 +85,20 @@ export class LoginComponent {
         }
       },
       error: (err) => {
-        this.variant.set('warning');
-        this.infoMessage.set(err.message);
+        if (
+          err.message ===
+          'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.'
+        ) {
+          localStorage.setItem('email', userData.email);
+          void this._router.navigate(['/auth/email-resend'], {
+            state: {
+              email: userData.email,
+            },
+          });
+        } else {
+          this.variant.set('warning');
+          this.infoMessage.set(err.message);
+        }
       },
     });
   }
