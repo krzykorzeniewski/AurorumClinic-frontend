@@ -214,8 +214,13 @@ export class AuthService {
           let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
 
           if (err.error?.status === 'fail') {
-            const failError = Object.values(err.error.data || {})[0];
-            errorMsg = typeof failError === 'string' ? failError : errorMsg;
+            if (err.error.data.password) {
+              errorMsg =
+                'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
+            } else {
+              const failError = Object.values(err.error.data || {})[0];
+              errorMsg = typeof failError === 'string' ? failError : errorMsg;
+            }
           } else if (err.error?.status === 'error') {
             errorMsg = err.error.message || errorMsg;
           }

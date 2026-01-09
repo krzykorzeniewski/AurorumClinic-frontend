@@ -11,6 +11,7 @@ import { futureTimeDateValidator } from '../../shared/validators/future-time-dat
 import { DayDto } from '../models/schedule.model';
 import { UpdateDoctorProfileData } from '../models/doctor.model';
 import BigNumber from 'bignumber.js';
+import { passwordStrengthValidator } from '../../shared/validators/password-strength.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -92,7 +93,11 @@ export class FormsService {
           nonNullable: true,
         }),
         password: new FormControl('', {
-          validators: [Validators.maxLength(200), Validators.required],
+          validators: [
+            Validators.maxLength(200),
+            Validators.required,
+            passwordStrengthValidator(),
+          ],
           nonNullable: true,
         }),
         repeatedPassword: new FormControl('', {
@@ -625,6 +630,19 @@ export class FormsService {
     }
     if (control.hasError('timeRangeInvalid')) {
       return 'Godzina zakończenia musi być później niż rozpoczęcia';
+    }
+    if (control.hasError('missingUpperCase')) {
+      return 'Hasło musi zawierać przynajmniej jedną dużą literę.';
+    }
+    if (control.hasError('missingLowerCase')) {
+      return 'Hasło musi zawierać przynajmniej jedną małą literę.';
+    }
+    if (control.hasError('missingNumber')) {
+      return 'Hasło musi zawierać przynajmniej jedną cyfrę.';
+    }
+    if (control.hasError('minLength')) {
+      const { requiredLength, actualLength } = control.getError('minLength');
+      return `Hasło musi mieć minimum ${requiredLength} znaków (obecnie ${actualLength}).`;
     }
 
     return 'Niepoprawna wartość';
