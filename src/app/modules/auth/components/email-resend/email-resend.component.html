@@ -18,7 +18,7 @@
           />
         </mat-form-field>
       </div>
-      <app-alert class="mt-3 w-75" *ngIf="message()" [text]="message()"></app-alert>
+      <app-alert class="mt-3 w-75" *ngIf="message()" [text]="message()" [variant]="variant()"></app-alert>
       <div class="row w-100" [class]="message() ? 'mb-3' : 'mt-3 mb-3'">
         <div class="col-sm text-center">
           <button

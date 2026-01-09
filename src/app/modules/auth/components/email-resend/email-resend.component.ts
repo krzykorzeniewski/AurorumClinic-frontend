@@ -1,5 +1,8 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import {
+  AlertComponent,
+  AlertVariant,
+} from '../../../shared/components/alert/alert.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
@@ -30,6 +33,7 @@ export class EmailResendComponent implements OnInit, OnDestroy {
   private _location = inject(Location);
   private _router = inject(Router);
   message = signal('');
+  variant = signal<AlertVariant>('warning');
   email = signal('');
   canModify = signal(false);
   timer = signal(0);
@@ -62,11 +66,13 @@ export class EmailResendComponent implements OnInit, OnDestroy {
     const email = this.email();
     if (!email) void this._router.navigate(['/auth/login']);
     this.message.set('');
+    this.variant.set('warning');
 
     const userData: VerifyEmailTokenRequest = { email };
 
     this._authService.verifyEmail(userData).subscribe({
       next: () => {
+        this.variant.set('success');
         this.message.set('Wysłano ponownie email weryfikacyjny');
         this.startTimer(120);
       },
