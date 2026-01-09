@@ -31,17 +31,6 @@
             routerLink="/auth/login"
           >Anuluj</button>
         </div>
-        <button
-          mat-flat-button
-          type="button"
-          class="btn text-white"
-          [disabled]="!canResend()"
-          style="background-color: var(--primary-purple)"
-          (click)="onResendToken()"
-        >
-          Wyślij token ponownie
-          <span *ngIf="!canResend()"> ({{resendTimer()}}s)</span>
-        </button>
         <div class="col-sm text-center">
           <button
             mat-flat-button

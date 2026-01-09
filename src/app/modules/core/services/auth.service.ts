@@ -146,9 +146,7 @@ export class AuthService {
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
     return this._http
-      .post<void>(`${this._apiUrl}/verify-email-token`, request, {
-        withCredentials: true,
-      })
+      .post<void>(`${this._apiUrl}/verify-email-token`, request)
       .pipe(
         catchError((err) => {
           let errorMsg =
