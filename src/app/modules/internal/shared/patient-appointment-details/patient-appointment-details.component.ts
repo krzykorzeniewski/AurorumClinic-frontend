@@ -89,7 +89,16 @@ export class PatientAppointmentDetailsComponent {
     });
   }
 
-  onPayment() {}
+  onPayment() {
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    void this._router.navigate(['/appointment/payment'], {
+      state: {
+        paymentId: currentAppointment.payment.id,
+      },
+    });
+  }
 
   onCancelAppointment() {
     const currentAppointment = this.appointment();

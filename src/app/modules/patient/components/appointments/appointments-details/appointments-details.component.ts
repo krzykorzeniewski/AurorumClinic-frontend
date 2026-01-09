@@ -93,7 +93,14 @@ export class AppointmentsDetailsComponent implements OnInit {
   }
 
   onPayment() {
-    void this._router.navigate(['/profile/appointments']);
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    void this._router.navigate(['/appointment/payment'], {
+      state: {
+        paymentId: currentAppointment.payment.id,
+      },
+    });
   }
 
   onRescheduleAppointment() {

@@ -49,4 +49,13 @@ export const APPOINTMENT_ROUTES: Routes = [
         (c) => c.AppointmentReschedulePatientComponent,
       ),
   },
+  {
+    path: 'payment',
+    canMatch: [roleGuard],
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.PATIENT] },
+    loadComponent: () =>
+      import('../appointment/payment/payment.component').then(
+        (c) => c.PaymentComponent,
+      ),
+  },
 ];

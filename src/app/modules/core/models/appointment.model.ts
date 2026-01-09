@@ -81,3 +81,15 @@ export interface GetDailyAppointmentInfo {
   payment: Payment;
   patient: PatientShort;
 }
+
+export enum PaymentMethod {
+  OFFLINE = 'OFFLINE',
+  CREDIT_CARD = 'CREDIT_CARD',
+  BLIK = 'BLIK',
+  GOOGLE_PAY = 'GOOGLE_PAY',
+  APPLE_PAY = 'APPLE_PAY',
+}
+
+export interface PaymentRequest {
+  paymentMethod: PaymentMethod;
+}
