@@ -548,6 +548,27 @@ export class FormsService {
     });
   }
 
+  getReviewPromptForm() {
+    return new FormGroup({
+      subject: new FormControl<string>('', {
+        validators: [Validators.minLength(1), Validators.required],
+        nonNullable: true,
+      }),
+      text: new FormControl<string>('', {
+        validators: [Validators.minLength(1), Validators.required],
+        nonNullable: true,
+      }),
+      date: new FormControl<Date | null>(null, {
+        validators: [futureTimeDateValidator(), Validators.required],
+        nonNullable: true,
+      }),
+      time: new FormControl<Date | null>(null, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+    });
+  }
+
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';

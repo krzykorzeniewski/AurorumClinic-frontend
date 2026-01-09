@@ -24,4 +24,9 @@ export interface CreateNewsletter {
   approved: boolean;
 }
 
-export type UpdateNewsletterMessagePrompt = Omit<CreateNewsletter, 'id'>;
+export interface UpdateNewsletterMessagePrompt {
+  subject: string;
+  text: string;
+  scheduledAt?: string;
+  approved: boolean;
+}

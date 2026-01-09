@@ -151,8 +151,16 @@ export class NewsletterTableComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  onDetails(messageId: number) {
-    console.log(messageId);
+  onCreate() {
+    void this._router.navigate(['/internal/newsletter/create']);
+  }
+
+  onDetails(newsletterId: number) {
+    void this._router.navigate(['/internal/newsletter/details'], {
+      state: {
+        newsletterId: newsletterId,
+      },
+    });
   }
 
   ngOnDestroy(): void {

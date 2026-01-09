@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, map, throwError } from 'rxjs';
 import {
+  CreateNewsletter,
   NewsletterMessageResponse,
   UpdateNewsletterMessagePrompt,
 } from '../models/newsletter.model';
@@ -95,6 +96,29 @@ export class NewsletterService {
       );
   }
 
+  getMessageById(messageId: number) {
+    return this._http
+      .get<ApiResponse<NewsletterMessageResponse>>(
+        `${this._apiUrl}/messages/${messageId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
+          );
+        }),
+      );
+  }
+
   reviewMessagePrompt(messageId: number, data: UpdateNewsletterMessagePrompt) {
     return this._http
       .put<void>(`${this._apiUrl}/messages/${messageId}`, data, {
@@ -112,14 +136,16 @@ export class NewsletterService {
       );
   }
 
-  createNewNewsletterMessagePrompt(message: string) {
-    const params = new HttpParams();
+  createNewNewsletterMessagePrompt(message: string | null) {
+    let params = new HttpParams();
+
     if (message) {
-      params.set('prompt', message);
+      params = params.append('prompt', message);
     }
+
     return this._http
-      .post<void>(
-        `${this._apiUrl}`,
+      .post<ApiResponse<CreateNewsletter>>(
+        `${this._apiUrl}/messages`,
         {},
         {
           params: params,

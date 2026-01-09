@@ -221,4 +221,22 @@ export const INTERNAL_ROUTES: Routes = [
         (c) => c.NewsletterTableComponent,
       ),
   },
+  {
+    path: 'newsletter/create',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/newsletter/newsletter-prompt/newsletter-prompt.component').then(
+        (c) => c.NewsletterPromptComponent,
+      ),
+  },
+  {
+    path: 'newsletter/details',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('../internal/admin/newsletter/newsletter-details/newsletter-details.component').then(
+        (c) => c.NewsletterDetailsComponent,
+      ),
+  },
 ];
