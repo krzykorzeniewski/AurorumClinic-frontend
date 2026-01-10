@@ -34,8 +34,11 @@ export class AppointmentsComponent {
   pageSize = signal<number>(10);
   totalElements = signal<number>(0);
   infoMessage = signal<string>('');
-  isEmployee$ = this._authService.user$.pipe(
-    map((user) => user?.role === UserRoleMap.EMPLOYEE),
+  isEmployeeOrAdmin$ = this._authService.user$.pipe(
+    map(
+      (user) =>
+        user?.role === UserRoleMap.EMPLOYEE || user?.role === UserRoleMap.ADMIN,
+    ),
   );
 
   onDateChange(date: Date): void {
