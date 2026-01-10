@@ -30,6 +30,7 @@ import {
   GetPatientApiResponse,
   GetPatientResponse,
 } from '../models/patient.model';
+import { UserPasswordChangeRequest } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -439,6 +440,20 @@ export class UserService {
               'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
           }
           return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  changePassword(password: UserPasswordChangeRequest): Observable<void> {
+    return this._http
+      .put<void>(`${this._apiUrl}/users/me/password`, password, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd. Proszę spróbować później'),
+          );
         }),
       );
   }

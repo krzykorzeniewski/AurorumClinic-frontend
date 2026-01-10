@@ -49,7 +49,11 @@ export class FormsService {
     return new FormGroup(
       {
         password: new FormControl('', {
-          validators: [Validators.maxLength(200), Validators.required],
+          validators: [
+            Validators.maxLength(200),
+            Validators.required,
+            passwordStrengthValidator(),
+          ],
           nonNullable: true,
         }),
         repeatedPassword: new FormControl('', {

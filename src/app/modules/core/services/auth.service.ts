@@ -1,5 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  DoctorRegisterRequest,
+  EmployeeRegisterRequest,
+  PatientRegisterRequest,
   TokenVerifyRequest,
   User,
   UserLoginDataRequest,
@@ -8,11 +11,8 @@ import {
   UserLoginResponse,
   UserPasswordRecoverEmailRequest,
   UserPasswordResetRequest,
-  PatientRegisterRequest,
   UserRoleMap,
   VerifyEmailTokenRequest,
-  DoctorRegisterRequest,
-  EmployeeRegisterRequest,
 } from '../models/auth.model';
 import {
   BehaviorSubject,
@@ -26,8 +26,8 @@ import {
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
-  UpdateTokenRequest,
   UpdatePhoneTokenRequest,
+  UpdateTokenRequest,
 } from '../models/user.model';
 import { ApiResponse } from '../models/api-response.model';
 import { Router } from '@angular/router';

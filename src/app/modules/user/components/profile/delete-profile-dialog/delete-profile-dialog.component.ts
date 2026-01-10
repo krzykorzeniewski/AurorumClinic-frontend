@@ -36,7 +36,6 @@ import { GetPatientResponse } from '../../../../core/models/patient.model';
     MatInput,
   ],
   templateUrl: './delete-profile-dialog.component.html',
-  styleUrl: './delete-profile-dialog.component.css',
 })
 export class DeleteProfileDialogComponent {
   readonly DELETE_ACCOUNT_CONFIRM_MESSAGE = 'USUWAM KONTO AURORUM';

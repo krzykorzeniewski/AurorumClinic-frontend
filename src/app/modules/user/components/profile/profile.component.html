@@ -104,6 +104,17 @@
               <button *ngIf="!userResponse.twoFactorAuth" mat-raised-button style="background-color: #ffc107" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
             </mat-expansion-panel>
 
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title> Hasło </mat-panel-title>
+              <mat-panel-description>
+                Zmień swoje hasło
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Kliknij poniżej, aby zmienić swoje hasło</p>
+            <button mat-raised-button style="background-color: #ffc107" (click)="onPasswordChange()">Zmień hasło</button>
+          </mat-expansion-panel>
+
           <form id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">
             <mat-expansion-panel>
               <mat-expansion-panel-header>

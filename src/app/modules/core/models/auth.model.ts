@@ -43,6 +43,10 @@ export interface UserPasswordResetRequest {
   email: string;
 }
 
+export interface UserPasswordChangeRequest {
+  password: string;
+}
+
 export type VerifyEmailTokenRequest = UserPasswordRecoverEmailRequest;
 
 export interface TokenVerifyRequest {
