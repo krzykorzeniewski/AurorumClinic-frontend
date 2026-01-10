@@ -7,7 +7,7 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'search',
     canActivate: [roleGuard],
-    data: { roles: [UserRoleMap.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
     loadComponent: () =>
       import('../appointment/components/appointment-search/appointment-search.component').then(
         (c) => c.AppointmentSearchComponent,
