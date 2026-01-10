@@ -15,7 +15,6 @@ import { PaymentDialogComponent } from './payment-dialog/payment-dialog.componen
   standalone: true,
   imports: [AlertComponent, NgSwitch, NgSwitchCase, NgIf],
   templateUrl: './payment.component.html',
-  styleUrl: './payment.component.css',
 })
 export class PaymentComponent {
   private _paymentService = inject(PaymentService);

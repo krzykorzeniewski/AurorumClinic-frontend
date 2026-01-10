@@ -7,7 +7,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="redirectNow()">
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    class="btn text-white px-4 mx-3 border-0"
+    style="background-color: var(--primary-purple); white-space: nowrap;"
+    (click)="redirectNow()">
     Przekieruj teraz
   </button>
 </mat-dialog-actions>

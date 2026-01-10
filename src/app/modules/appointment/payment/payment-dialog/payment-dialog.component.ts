@@ -13,7 +13,6 @@ import { MatButton } from '@angular/material/button';
   standalone: true,
   imports: [MatDialogContent, MatDialogActions, MatButton, MatDialogTitle],
   templateUrl: './payment-dialog.component.html',
-  styleUrl: './payment-dialog.component.css',
 })
 export class PaymentDialogComponent implements OnInit, OnDestroy {
   private _dialogRef = inject(MatDialogRef<PaymentDialogComponent>);

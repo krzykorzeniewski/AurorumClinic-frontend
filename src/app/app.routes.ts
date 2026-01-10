@@ -32,7 +32,14 @@ export const APP_ROUTES: Routes = [
   {
     path: 'profile',
     canActivate: [roleGuard],
-    data: { roles: [UserRoleMap.PATIENT] },
+    data: {
+      roles: [
+        UserRoleMap.PATIENT,
+        UserRoleMap.EMPLOYEE,
+        UserRoleMap.DOCTOR,
+        UserRoleMap.ADMIN,
+      ],
+    },
     loadChildren: () =>
       import('./modules/user/user.routes').then((m) => m.USER_ROUTES),
   },

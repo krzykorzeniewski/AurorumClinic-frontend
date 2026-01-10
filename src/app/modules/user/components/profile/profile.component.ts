@@ -11,11 +11,12 @@ import {
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
 import {
   communicationPreferences,
+  GetUserProfileResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
 } from '../../../core/models/user.model';
-import { DatePipe, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatError,
@@ -42,6 +43,8 @@ import { SetupTwoFactorDialogComponent } from './setup-two-factor-dialog/setup-t
 import { GetPatientResponse } from '../../../core/models/patient.model';
 import { DeleteTwoFactorDialogComponent } from './delete-two-factor-dialog/delete-two-factor-dialog.component';
 import { EditPasswordDialogComponent } from './edit-password-dialog/edit-password-dialog.component';
+import { map } from 'rxjs';
+import { UserRoleMap } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-profile',
@@ -70,6 +73,7 @@ import { EditPasswordDialogComponent } from './edit-password-dialog/edit-passwor
     MatButton,
     AlertComponent,
     MatIcon,
+    AsyncPipe,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -84,11 +88,14 @@ export class ProfileComponent implements OnInit {
   phoneProfileForm = this._formService.getFulfilledPhoneProfileForm(null);
   additionalInformationProfileForm =
     this._formService.getFulfilledAdditionalInformationProfileForm(null);
-  userResponse!: GetPatientResponse | null;
+  userResponse!: GetPatientResponse | GetUserProfileResponse | null;
   protected readonly communicationPreferences = communicationPreferences;
   variant = signal<AlertVariant>('warning');
   infoMessage = signal('');
   @ViewChild(MatAccordion) accordion!: MatAccordion;
+  isPatient$ = this._authService.user$.pipe(
+    map((user) => user?.role === UserRoleMap.PATIENT),
+  );
 
   constructor() {
     const navigation = this._router.getCurrentNavigation();
@@ -300,15 +307,45 @@ export class ProfileComponent implements OnInit {
     return this.additionalInformationProfileForm.controls;
   }
 
-  private completeAllForm(userResponse: GetPatientResponse) {
+  get isAdditionalInfoDisabled(): boolean {
+    if (
+      !this.userResponse ||
+      !this.isPatient(this.userResponse) ||
+      !this.additionalInformationProfileForm
+    ) {
+      return true;
+    }
+
+    const patient = this.userResponse;
+    const controls = this.additionalInfoControls;
+
+    return (
+      (patient.communicationPreferences ===
+        controls.communicationPreferences.value &&
+        patient.newsletter === controls.newsletter.value) ||
+      this.additionalInformationProfileForm.invalid
+    );
+  }
+
+  private completeAllForm(
+    userResponse: GetPatientResponse | GetUserProfileResponse,
+  ) {
     this.emailProfileForm =
       this._formService.getFulfilledEmailProfileForm(userResponse);
     this.phoneProfileForm =
       this._formService.getFulfilledPhoneProfileForm(userResponse);
-    this.additionalInformationProfileForm =
-      this._formService.getFulfilledAdditionalInformationProfileForm(
-        userResponse,
-      );
+    if (this.isPatient(userResponse)) {
+      this.additionalInformationProfileForm =
+        this._formService.getFulfilledAdditionalInformationProfileForm(
+          userResponse,
+        );
+    }
     this.userResponse = userResponse;
+  }
+
+  private isPatient(
+    user: GetPatientResponse | GetUserProfileResponse,
+  ): user is GetPatientResponse {
+    return 'communicationPreferences' in user;
   }
 }

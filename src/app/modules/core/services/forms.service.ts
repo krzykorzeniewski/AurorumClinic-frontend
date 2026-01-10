@@ -3,7 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordRepeatValidator } from '../../shared/validators/password-repeat.validator';
 import { phoneValidator } from '../../shared/validators/phone.validator';
 import { pastTimeDateValidator } from '../../shared/validators/past-time-date.validator';
-import { communicationPreferences } from '../models/user.model';
+import {
+  communicationPreferences,
+  GetUserProfileResponse,
+} from '../models/user.model';
 import { GetPatientResponse } from '../models/patient.model';
 import { timeValidator } from '../../shared/validators/time.validator';
 import { peselValidator } from '../../shared/validators/pesel.validator';
@@ -216,7 +219,9 @@ export class FormsService {
     );
   }
 
-  getFulfilledEmailProfileForm(userData: GetPatientResponse | null) {
+  getFulfilledEmailProfileForm(
+    userData: GetPatientResponse | GetUserProfileResponse | null,
+  ) {
     return new FormGroup({
       email: new FormControl<string>(userData ? userData.email : '', {
         validators: [
@@ -229,7 +234,9 @@ export class FormsService {
     });
   }
 
-  getFulfilledPhoneProfileForm(userData: GetPatientResponse | null) {
+  getFulfilledPhoneProfileForm(
+    userData: GetPatientResponse | GetUserProfileResponse | null,
+  ) {
     return new FormGroup({
       phoneNumber: new FormControl<string>(
         userData ? userData.phoneNumber : '',
@@ -560,11 +567,19 @@ export class FormsService {
   getReviewPromptForm() {
     return new FormGroup({
       subject: new FormControl<string>('', {
-        validators: [Validators.minLength(1), Validators.required],
+        validators: [
+          Validators.minLength(1),
+          Validators.required,
+          Validators.maxLength(100),
+        ],
         nonNullable: true,
       }),
       text: new FormControl<string>('', {
-        validators: [Validators.minLength(1), Validators.required],
+        validators: [
+          Validators.minLength(1),
+          Validators.required,
+          Validators.maxLength(1000),
+        ],
         nonNullable: true,
       }),
       date: new FormControl<Date | null>(null, {

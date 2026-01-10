@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment.development';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import {
   GetUserApiResponse,
+  GetUserProfileResponse,
   PatchUserRequest,
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
@@ -30,7 +31,7 @@ import {
   GetPatientApiResponse,
   GetPatientResponse,
 } from '../models/patient.model';
-import { UserPasswordChangeRequest } from '../models/auth.model';
+import { UserPasswordChangeRequest, UserRoleMap } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -94,34 +95,57 @@ export class UserService {
       );
   }
 
-  getUser(): Observable<GetPatientResponse> {
-    return this._http
-      .get<ApiResponse<GetPatientApiResponse>>(
-        `${this._apiUrl}/${this._authService.userRole}/me`,
-        {
+  getUser(): Observable<GetPatientResponse | GetUserProfileResponse> {
+    const role = this._authService.userRole;
+
+    if (role === UserRoleMap.PATIENT) {
+      return this._http
+        .get<ApiResponse<GetPatientApiResponse>>(`${this._apiUrl}/${role}/me`, {
           withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .pipe(
+          map(
+            (apiResponse): GetPatientResponse => ({
+              ...apiResponse.data,
+              birthDate: new Date(
+                apiResponse.data.birthDate,
+              ).toLocaleDateString(),
+            }),
+          ),
+          catchError(() =>
+            throwError(
+              () =>
+                new Error(
+                  'Wystąpił błąd w trakcie uzyskiwania danych pacjenta.',
+                ),
+            ),
+          ),
+        );
+    }
+
+    return this._http
+      .get<ApiResponse<GetUserProfileResponse>>(`${this._apiUrl}/users/me`, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' },
+      })
       .pipe(
         map(
-          (apiResponse): GetPatientResponse => ({
+          (apiResponse): GetUserProfileResponse => ({
             ...apiResponse.data,
             birthDate: new Date(
               apiResponse.data.birthDate,
             ).toLocaleDateString(),
           }),
         ),
-        catchError(() => {
-          return throwError(
+        catchError(() =>
+          throwError(
             () =>
               new Error(
-                'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
+                'Wystąpił błąd w trakcie uzyskiwania danych użytkownika.',
               ),
-          );
-        }),
+          ),
+        ),
       );
   }
 

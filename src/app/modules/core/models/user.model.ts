@@ -33,3 +33,16 @@ export interface UpdateTokenRequest {
 export type PatchUserRequest = Partial<
   Pick<GetPatientApiResponse, 'newsletter' | 'communicationPreferences'>
 >;
+
+export interface GetUserProfileResponse {
+  id: number;
+  name: string;
+  surname: string;
+  pesel: string;
+  birthDate: string;
+  email: string;
+  phoneNumber: string;
+  twoFactorAuth: boolean;
+  emailVerified: boolean;
+  phoneNumberVerified: boolean;
+}

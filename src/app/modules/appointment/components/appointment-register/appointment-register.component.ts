@@ -21,8 +21,8 @@ import {
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { FormsService } from '../../../core/services/forms.service';
 import { GetPatientResponse } from '../../../core/models/patient.model';
-import { PatientService } from '../../../core/services/patient.service';
 import { forkJoin } from 'rxjs';
+import { GetUserProfileResponse } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-appointment-register',
@@ -48,7 +48,6 @@ export class AppointmentRegisterComponent implements OnInit {
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _userService = inject(UserService);
-  private _patientService = inject(PatientService);
   private _location = inject(Location);
   private _router = inject(Router);
   createAppointment = input.required<
@@ -58,7 +57,7 @@ export class AppointmentRegisterComponent implements OnInit {
   confirmRegister = output<
     CreateAppointmentPatient | CreateAppointmentPatientByEmployee
   >();
-  patient!: GetPatientResponse;
+  patient!: GetPatientResponse | GetUserProfileResponse;
   service!: Service;
   date!: string;
   additionalInformation =
@@ -69,19 +68,12 @@ export class AppointmentRegisterComponent implements OnInit {
 
     this.date = appointmentData.startedAt;
 
-    if ('patientId' in appointmentData) {
-      this._patientService.getPatient(appointmentData.patientId).subscribe({
-        next: (patient) => {
-          this.patient = patient;
-        },
-      });
-    } else {
-      this._userService.getUser().subscribe({
-        next: (user) => {
-          this.patient = user;
-        },
-      });
-    }
+    this._userService.getUser().subscribe({
+      next: (user) => {
+        this.patient = user;
+      },
+    });
+
     forkJoin({
       services: this._doctorService.getSpecializationsWithServices(),
     }).subscribe({
