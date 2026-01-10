@@ -173,8 +173,16 @@ export class UserService {
       );
   }
 
-  getPatientAppointments(page: number, size: number) {
-    const params = new HttpParams().set('page', page).set('size', size);
+  getPatientAppointments(
+    page: number,
+    size: number,
+    status: AppointmentStatus,
+  ) {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', 'startedAt,asc')
+      .set('status', status);
     return this._http
       .get<ApiResponse<PageableResponse<GetAppointmentInfo>>>(
         `${this._apiUrl}/appointments/me`,
