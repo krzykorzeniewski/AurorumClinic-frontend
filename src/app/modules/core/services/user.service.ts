@@ -150,6 +150,29 @@ export class UserService {
       );
   }
 
+  getUserByIdByUser(userId: number) {
+    return this._http
+      .get<ApiResponse<GetUserApiResponse>>(`${this._apiUrl}/users/${userId}`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   getPatientAppointments(page: number, size: number) {
     const params = new HttpParams().set('page', page).set('size', size);
     return this._http
@@ -235,7 +258,7 @@ export class UserService {
 
   updateUser(userId: number, userData: UpdateUser) {
     return this._http
-      .put<ApiResponse<void>>(`${this._apiUrl}/${userId}`, userData, {
+      .put<ApiResponse<void>>(`${this._apiUrl}/users/${userId}`, userData, {
         withCredentials: true,
       })
       .pipe(

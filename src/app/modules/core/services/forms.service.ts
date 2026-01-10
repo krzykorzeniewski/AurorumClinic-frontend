@@ -5,6 +5,7 @@ import { phoneValidator } from '../../shared/validators/phone.validator';
 import { pastTimeDateValidator } from '../../shared/validators/past-time-date.validator';
 import {
   communicationPreferences,
+  GetUserApiResponse,
   GetUserProfileResponse,
 } from '../models/user.model';
 import { GetPatientResponse } from '../models/patient.model';
@@ -390,7 +391,7 @@ export class FormsService {
     );
   }
 
-  getFulfilledUserProfileForm(userData: GetPatientResponse | null) {
+  getFulfilledUserProfileForm(userData: GetUserApiResponse | null) {
     return new FormGroup(
       {
         firstName: new FormControl<string>(userData ? userData.name : '', {
@@ -432,7 +433,7 @@ export class FormsService {
           },
         ),
         twoFactorAuth: new FormControl<boolean>(
-          userData ? userData.newsletter : false,
+          userData ? userData.twoFactorAuth : false,
           {
             validators: [Validators.required],
             nonNullable: true,
