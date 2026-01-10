@@ -23,6 +23,7 @@ import { FormsService } from '../../../core/services/forms.service';
 import { GetPatientResponse } from '../../../core/models/patient.model';
 import { forkJoin } from 'rxjs';
 import { GetUserProfileResponse } from '../../../core/models/user.model';
+import { PatientService } from '../../../core/services/patient.service';
 
 @Component({
   selector: 'app-appointment-register',
@@ -45,6 +46,7 @@ import { GetUserProfileResponse } from '../../../core/models/user.model';
 })
 export class AppointmentRegisterComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);
+  private _patientService = inject(PatientService);
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _userService = inject(UserService);
@@ -68,11 +70,19 @@ export class AppointmentRegisterComponent implements OnInit {
 
     this.date = appointmentData.startedAt;
 
-    this._userService.getUser().subscribe({
-      next: (user) => {
-        this.patient = user;
-      },
-    });
+    if ('patientId' in appointmentData) {
+      this._patientService.getPatient(appointmentData.patientId).subscribe({
+        next: (patient) => {
+          this.patient = patient;
+        },
+      });
+    } else {
+      this._userService.getUser().subscribe({
+        next: (user) => {
+          this.patient = user;
+        },
+      });
+    }
 
     forkJoin({
       services: this._doctorService.getSpecializationsWithServices(),
