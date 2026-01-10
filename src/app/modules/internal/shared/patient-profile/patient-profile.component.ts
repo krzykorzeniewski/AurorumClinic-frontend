@@ -17,7 +17,6 @@ import {
   EMPTY,
   map,
   merge,
-  of,
   startWith,
   Subject,
   Subscription,
