@@ -399,6 +399,50 @@ export class UserService {
       );
   }
 
+  disableTwoFactorAuthorizationToken(): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/users/me/2fa/disable`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError((err) => {
+          let errorMsg = '';
+
+          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+            errorMsg =
+              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
+          } else if (err.error?.status === 'fail' && err.error?.data) {
+            const errorData = err.error.data;
+
+            if (errorData.token === 'Invalid token') {
+              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+            } else if (errorData.phoneNumber === 'Invalid credentials') {
+              errorMsg = 'Niepoprawny email lub hasło';
+            } else if (
+              errorData.phoneNumber === 'Phone number is not verified'
+            ) {
+              errorMsg =
+                'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
+            } else if (errorData.userId === 'User has mfa disabled') {
+              errorMsg =
+                'Ten numer telefonu ma już wyłączoną weryfikację dwuetapową.';
+            } else {
+              errorMsg =
+                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+            }
+          } else {
+            errorMsg =
+              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
+          }
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
   deleteUser(): Observable<void> {
     return this._http
       .delete<void>(`${this._apiUrl}/patients/me`, {

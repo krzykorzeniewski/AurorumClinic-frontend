@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Uwaga!<br> Za chwilę usuniesz weryfikację dwuetapową na numer telefonu</h2>
+
+<mat-dialog-content>
+  <p>
+   Czy na pewno chcesz usunąć weryfikację dwuetapową?
+    Może to obniżyć poziom bezpieczeństwa Twojego konta!
+    Prosimy, abyś przemyślał tę operację.
+    W każdej chwili możesz ponownie włączyć weryfikację dwuetapową
+    <br>
+  </p>
+
+</mat-dialog-content>
+<div class="container">
+  <app-alert *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
+</div>
+<mat-dialog-actions [class]="infoMessage() ? '' : 'mt-5'" align="end">
+  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
+  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()">
+    Usuń weryfikację dwuetapową
+  </button>
+</mat-dialog-actions>

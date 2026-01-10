@@ -40,7 +40,6 @@ import { NgIf } from '@angular/common';
     NgIf,
   ],
   templateUrl: './edit-phone-dialog.component.html',
-  styleUrl: './edit-phone-dialog.component.css',
 })
 export class EditPhoneDialogComponent {
   private _authService = inject(AuthService);

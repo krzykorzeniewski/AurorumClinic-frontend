@@ -37,7 +37,6 @@ import { NgIf } from '@angular/common';
     MatError,
   ],
   templateUrl: './setup-two-factor-dialog.component.html',
-  styleUrl: './setup-two-factor-dialog.component.css',
 })
 export class SetupTwoFactorDialogComponent {
   private _userService = inject(UserService);

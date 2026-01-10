@@ -40,6 +40,7 @@ import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { SetupTwoFactorDialogComponent } from './setup-two-factor-dialog/setup-two-factor-dialog.component';
 import { GetPatientResponse } from '../../../core/models/patient.model';
+import { DeleteTwoFactorDialogComponent } from './delete-two-factor-dialog/delete-two-factor-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -215,7 +216,21 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onTwoFactorDelete() {}
+  onTwoFactorDelete() {
+    const dialogRef = this._dialog.open(DeleteTwoFactorDialogComponent, {
+      disableClose: true,
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.success) {
+        this.getUserProfileInformation();
+        this.variant.set('success');
+        this.infoMessage.set(result.message);
+        this.accordion.closeAll();
+      }
+    });
+  }
 
   onUpdateAdditional() {
     const updatedData = this.additionalInformationProfileForm
