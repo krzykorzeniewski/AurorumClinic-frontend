@@ -32,14 +32,14 @@ import {
 } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { UserService } from '../../../core/services/user.service';
+import { UserService } from '../../../../core/services/user.service';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { GetUserApiResponse } from '../../../core/models/user.model';
+import { GetUserApiResponse } from '../../../../core/models/user.model';
 import { DatePipe, Location, NgIf } from '@angular/common';
-import { UserRole } from '../../../core/models/auth.model';
-import { AuthService } from '../../../core/services/auth.service';
+import { UserRole } from '../../../../core/models/auth.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-table',
@@ -86,6 +86,7 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
     'email',
     'phoneNumber',
     'createdAt',
+    'update',
     'passwordReset',
     'doctorProfile',
   ];
@@ -177,6 +178,36 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
         });
       },
     });
+  }
+
+  onUpdate(userId: number, role: UserRole) {
+    switch (role) {
+      case UserRole.ADMIN:
+      case UserRole.EMPLOYEE:
+        void this._router.navigate(['/internal/users/update-user'], {
+          state: {
+            userId: userId,
+            role: role,
+          },
+        });
+        break;
+      case UserRole.DOCTOR:
+        void this._router.navigate(['/internal/users/update-doctor'], {
+          state: {
+            userId: userId,
+          },
+        });
+        break;
+      case UserRole.PATIENT:
+        void this._router.navigate(['/internal/users/update-patient'], {
+          state: {
+            userId: userId,
+          },
+        });
+        break;
+      default:
+        void this._router.navigate(['/internal/dashboard']);
+    }
   }
 
   onEmployeeRegister() {

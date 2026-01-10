@@ -60,6 +60,18 @@
         <td mat-cell *matCellDef="let row">{{row.createdAt | date:'dd MMMM yyyy':'':'pl'}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="update">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            class="btn btn-green"
+            (click)="onUpdate(row.id, row.role)">
+            Zaktualizuj
+          </button>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="passwordReset">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
@@ -79,7 +91,7 @@
           <button
             type="button"
             *ngIf="row.role === UserRole.DOCTOR"
-            class="btn btn-green"
+            class="btn btn-info"
             (click)="onDoctorProfile(row.id)">
             Profil doktora
           </button>

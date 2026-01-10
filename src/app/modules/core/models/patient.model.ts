@@ -48,3 +48,13 @@ export interface PatientShort {
   email: string;
   phoneNumber: string;
 }
+
+export interface UpdatePatient {
+  name: string;
+  surname: string;
+  pesel: string | null;
+  birthdate: string;
+  phoneNumber: string;
+  email: string;
+  newsletter: boolean;
+}

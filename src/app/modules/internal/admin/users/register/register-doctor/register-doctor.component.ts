@@ -1,10 +1,10 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { FormsService } from '../../../core/services/forms.service';
+import { AuthService } from '../../../../../core/services/auth.service';
+import { FormsService } from '../../../../../core/services/forms.service';
 import { Router } from '@angular/router';
-import { DoctorRegisterRequest } from '../../../core/models/auth.model';
+import { DoctorRegisterRequest } from '../../../../../core/models/auth.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { AlertComponent } from '../../../../../shared/components/alert/alert.component';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
@@ -22,8 +22,8 @@ import {
 import { NgIf } from '@angular/common';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { DoctorService } from '../../../core/services/doctor.service';
-import { Specialization } from '../../../core/models/specialization.model';
+import { DoctorService } from '../../../../../core/services/doctor.service';
+import { Specialization } from '../../../../../core/models/specialization.model';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 
 @Component({
@@ -47,7 +47,6 @@ import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
     MatSelect,
   ],
   templateUrl: './register-doctor.component.html',
-  styleUrl: './register-doctor.component.css',
 })
 export class RegisterDoctorComponent {
   private _authService = inject(AuthService);

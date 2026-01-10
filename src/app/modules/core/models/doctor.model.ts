@@ -118,3 +118,28 @@ export interface UpdateDoctorProfileDataResponse {
   description: string;
   profilePictureUrl: string;
 }
+
+export interface UpdateDoctor {
+  name: string;
+  surname: string;
+  pesel: string | null;
+  birthdate: string;
+  phoneNumber: string;
+  email: string;
+  twoFactorAuth: boolean;
+  pwzNumber: string;
+  specializationIds: number[];
+}
+
+export interface GetDoctorToUpdate {
+  id: number;
+  name: string;
+  surname: string;
+  pesel: string;
+  birthdate: string;
+  phoneNumber: string;
+  email: string;
+  twoFactorAuth: boolean;
+  pwzNumber: string;
+  specializationIds: number[];
+}

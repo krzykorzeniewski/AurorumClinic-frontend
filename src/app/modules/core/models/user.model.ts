@@ -46,3 +46,13 @@ export interface GetUserProfileResponse {
   emailVerified: boolean;
   phoneNumberVerified: boolean;
 }
+
+export interface UpdateUser {
+  name: string;
+  surname: string;
+  pesel: string;
+  birthdate: string;
+  phoneNumber: string;
+  email: string;
+  twoFactorAuth: boolean;
+}

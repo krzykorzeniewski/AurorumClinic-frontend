@@ -12,7 +12,10 @@ import { timeValidator } from '../../shared/validators/time.validator';
 import { peselValidator } from '../../shared/validators/pesel.validator';
 import { futureTimeDateValidator } from '../../shared/validators/future-time-date.validator';
 import { DayDto } from '../models/schedule.model';
-import { UpdateDoctorProfileData } from '../models/doctor.model';
+import {
+  GetDoctorToUpdate,
+  UpdateDoctorProfileData,
+} from '../models/doctor.model';
 import BigNumber from 'bignumber.js';
 import { passwordStrengthValidator } from '../../shared/validators/password-strength.validator';
 
@@ -272,53 +275,172 @@ export class FormsService {
   }
 
   getFulfilledPatientProfileForm(userData: GetPatientResponse | null) {
-    return new FormGroup({
-      firstName: new FormControl<string>(userData ? userData.name : '', {
-        validators: [Validators.maxLength(50), Validators.required],
-        nonNullable: true,
-      }),
-      surname: new FormControl<string>(userData ? userData.surname : '', {
-        validators: [Validators.maxLength(50), Validators.required],
-        nonNullable: true,
-      }),
-      pesel: new FormControl<string>(userData ? userData.pesel : '', {
-        validators: [
-          Validators.minLength(11),
-          Validators.maxLength(11),
-          Validators.required,
-        ],
-        nonNullable: false,
-      }),
-      birthdate: new FormControl<Date>(
-        userData ? new Date(userData.birthDate) : new Date(),
-        {
-          validators: [pastTimeDateValidator(), Validators.required],
+    return new FormGroup(
+      {
+        firstName: new FormControl<string>(userData ? userData.name : '', {
+          validators: [Validators.maxLength(50), Validators.required],
           nonNullable: true,
-        },
-      ),
-      email: new FormControl<string>(userData ? userData.email : '', {
-        validators: [
-          Validators.email,
-          Validators.maxLength(100),
-          Validators.required,
-        ],
-        nonNullable: true,
-      }),
-      phoneNumber: new FormControl<string>(
-        userData ? userData.phoneNumber : '',
-        {
-          validators: [Validators.required, phoneValidator()],
+        }),
+        surname: new FormControl<string>(userData ? userData.surname : '', {
+          validators: [Validators.maxLength(50), Validators.required],
           nonNullable: true,
-        },
-      ),
-      newsletter: new FormControl<boolean>(
-        userData ? userData.newsletter : false,
-        {
-          validators: [Validators.required],
+        }),
+        pesel: new FormControl<string>(userData ? userData.pesel : '', {
+          validators: [
+            Validators.minLength(11),
+            Validators.maxLength(11),
+            Validators.required,
+          ],
+          nonNullable: false,
+        }),
+        birthdate: new FormControl<Date>(
+          userData ? new Date(userData.birthDate) : new Date(),
+          {
+            validators: [pastTimeDateValidator(), Validators.required],
+            nonNullable: true,
+          },
+        ),
+        email: new FormControl<string>(userData ? userData.email : '', {
+          validators: [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.required,
+          ],
           nonNullable: true,
-        },
-      ),
-    });
+        }),
+        phoneNumber: new FormControl<string>(
+          userData ? userData.phoneNumber : '',
+          {
+            validators: [Validators.required, phoneValidator()],
+            nonNullable: true,
+          },
+        ),
+        newsletter: new FormControl<boolean>(
+          userData ? userData.newsletter : false,
+          {
+            validators: [Validators.required],
+            nonNullable: true,
+          },
+        ),
+      },
+      { validators: [peselValidator()] },
+    );
+  }
+
+  getFulfilledDoctorProfileForm(userData: GetDoctorToUpdate | null) {
+    return new FormGroup(
+      {
+        firstName: new FormControl<string>(userData ? userData.name : '', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        surname: new FormControl<string>(userData ? userData.surname : '', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        pesel: new FormControl<string>(userData ? userData.pesel : '', {
+          validators: [
+            Validators.minLength(11),
+            Validators.maxLength(11),
+            Validators.required,
+          ],
+          nonNullable: false,
+        }),
+        birthdate: new FormControl<Date>(
+          userData ? new Date(userData.birthdate) : new Date(),
+          {
+            validators: [pastTimeDateValidator(), Validators.required],
+            nonNullable: true,
+          },
+        ),
+        email: new FormControl<string>(userData ? userData.email : '', {
+          validators: [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.required,
+          ],
+          nonNullable: true,
+        }),
+        phoneNumber: new FormControl<string>(
+          userData ? userData.phoneNumber : '',
+          {
+            validators: [Validators.required, phoneValidator()],
+            nonNullable: true,
+          },
+        ),
+        pwzNumber: new FormControl('', {
+          validators: [Validators.maxLength(50)],
+          nonNullable: true,
+        }),
+        twoFactorAuth: new FormControl<boolean>(
+          userData ? userData.twoFactorAuth : false,
+          {
+            validators: [Validators.required],
+            nonNullable: true,
+          },
+        ),
+        specializationIds: new FormControl<number[]>(
+          userData ? userData.specializationIds : [],
+          {
+            validators: [Validators.min(1), Validators.required],
+          },
+        ),
+      },
+      { validators: [peselValidator()] },
+    );
+  }
+
+  getFulfilledUserProfileForm(userData: GetPatientResponse | null) {
+    return new FormGroup(
+      {
+        firstName: new FormControl<string>(userData ? userData.name : '', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        surname: new FormControl<string>(userData ? userData.surname : '', {
+          validators: [Validators.maxLength(50), Validators.required],
+          nonNullable: true,
+        }),
+        pesel: new FormControl<string>(userData ? userData.pesel : '', {
+          validators: [
+            Validators.minLength(11),
+            Validators.maxLength(11),
+            Validators.required,
+          ],
+          nonNullable: false,
+        }),
+        birthdate: new FormControl<Date>(
+          userData ? new Date(userData.birthDate) : new Date(),
+          {
+            validators: [pastTimeDateValidator(), Validators.required],
+            nonNullable: true,
+          },
+        ),
+        email: new FormControl<string>(userData ? userData.email : '', {
+          validators: [
+            Validators.email,
+            Validators.maxLength(100),
+            Validators.required,
+          ],
+          nonNullable: true,
+        }),
+        phoneNumber: new FormControl<string>(
+          userData ? userData.phoneNumber : '',
+          {
+            validators: [Validators.required, phoneValidator()],
+            nonNullable: true,
+          },
+        ),
+        twoFactorAuth: new FormControl<boolean>(
+          userData ? userData.newsletter : false,
+          {
+            validators: [Validators.required],
+            nonNullable: true,
+          },
+        ),
+      },
+      { validators: [peselValidator()] },
+    );
   }
 
   getCodeVerificationForm() {

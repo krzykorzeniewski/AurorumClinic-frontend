@@ -37,7 +37,6 @@ import { NgIf } from '@angular/common';
     NgIf,
   ],
   templateUrl: './register-patient.component.html',
-  styleUrl: './register-patient.component.css',
 })
 export class RegisterPatientComponent {
   private _authService = inject(AuthService);

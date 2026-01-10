@@ -8,8 +8,10 @@ import {
   DoctorPanelStats,
   DoctorRecommended,
   GetDoctorApiResponse,
+  GetDoctorToUpdate,
   GetFullDoctorApiResponse,
   GetRecommendedDoctorApiResponse,
+  UpdateDoctor,
 } from '../models/doctor.model';
 import {
   Specialization,
@@ -127,6 +129,46 @@ export class DoctorService {
             () =>
               new Error(
                 'Wystąpił błąd serwera podczas uzyskiwania danych lekarza. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  getDoctorByIdByAdmin(doctorId: number) {
+    return this._http
+      .get<ApiResponse<GetDoctorToUpdate>>(
+        `${this._apiUrl}/internal/${doctorId}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd serwera podczas uzyskiwania danych lekarza. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateDoctorByAdmin(doctorId: number, doctorData: UpdateDoctor) {
+    return this._http
+      .put<ApiResponse<void>>(`${this._apiUrl}/${doctorId}`, doctorData, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
               ),
           );
         }),

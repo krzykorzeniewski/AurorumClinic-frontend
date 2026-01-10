@@ -8,6 +8,7 @@ import {
   UpdateEmailTokenRequest,
   UpdatePhoneTokenRequest,
   UpdateTokenRequest,
+  UpdateUser,
 } from '../models/user.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
@@ -221,6 +222,23 @@ export class UserService {
             ).toLocaleDateString(),
           }),
         ),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateUser(userId: number, userData: UpdateUser) {
+    return this._http
+      .put<ApiResponse<void>>(`${this._apiUrl}/${userId}`, userData, {
+        withCredentials: true,
+      })
+      .pipe(
         catchError(() => {
           return throwError(
             () =>

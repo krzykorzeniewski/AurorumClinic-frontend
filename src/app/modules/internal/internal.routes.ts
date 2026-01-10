@@ -172,7 +172,7 @@ export const INTERNAL_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRoleMap.ADMIN] },
     loadComponent: () =>
-      import('../internal/admin/user-table/user-table.component').then(
+      import('./admin/users/user-table/user-table.component').then(
         (c) => c.UserTableComponent,
       ),
   },
@@ -181,7 +181,7 @@ export const INTERNAL_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRoleMap.ADMIN] },
     loadComponent: () =>
-      import('../internal/admin/register-doctor/register-doctor.component').then(
+      import('./admin/users/register/register-doctor/register-doctor.component').then(
         (c) => c.RegisterDoctorComponent,
       ),
   },
@@ -190,8 +190,35 @@ export const INTERNAL_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [UserRoleMap.ADMIN] },
     loadComponent: () =>
-      import('../internal/admin/register-employee/register-employee.component').then(
+      import('./admin/users/register/register-employee/register-employee.component').then(
         (c) => c.RegisterEmployeeComponent,
+      ),
+  },
+  {
+    path: 'users/update-patient',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('./admin/users/update/update-patient/update-patient.component').then(
+        (c) => c.UpdatePatientComponent,
+      ),
+  },
+  {
+    path: 'users/update-doctor',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('./admin/users/update/update-doctor/update-doctor.component').then(
+        (c) => c.UpdateDoctorComponent,
+      ),
+  },
+  {
+    path: 'users/update-user',
+    canActivate: [roleGuard],
+    data: { roles: [UserRoleMap.ADMIN] },
+    loadComponent: () =>
+      import('./admin/users/update/update-user/update-user.component').then(
+        (c) => c.UpdateUserComponent,
       ),
   },
   {

@@ -1,5 +1,5 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { AlertComponent } from '../../../../../shared/components/alert/alert.component';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
@@ -16,10 +16,10 @@ import {
 } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
-import { FormsService } from '../../../core/services/forms.service';
+import { AuthService } from '../../../../../core/services/auth.service';
+import { FormsService } from '../../../../../core/services/forms.service';
 import { Router } from '@angular/router';
-import { EmployeeRegisterRequest } from '../../../core/models/auth.model';
+import { EmployeeRegisterRequest } from '../../../../../core/models/auth.model';
 
 @Component({
   selector: 'app-register-employee',
@@ -40,7 +40,6 @@ import { EmployeeRegisterRequest } from '../../../core/models/auth.model';
     ReactiveFormsModule,
   ],
   templateUrl: './register-employee.component.html',
-  styleUrl: './register-employee.component.css',
 })
 export class RegisterEmployeeComponent {
   private _authService = inject(AuthService);

@@ -54,28 +54,6 @@ tr.mat-mdc-row:hover {
   background-color: #faf5fb;
 }
 
-.btn-green {
-  background-color: #149519;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.9rem;
-  border-radius: 0.4rem;
-}
-
-.btn-green:hover {
-  background-color: #246726;
-}
-
-.btn-info {
-  background-color: #17a2b8;
-  color: white;
-  border: none;
-}
-
-.btn-info:hover {
-  background-color: #138496;
-}
-
 mat-paginator {
   background-color: white;
 }
