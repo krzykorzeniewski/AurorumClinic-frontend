@@ -1,6 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsService } from '../../../../core/services/forms.service';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { MatButton } from '@angular/material/button';
 import {
@@ -40,7 +45,9 @@ export class NewsletterPromptComponent {
   private _formService = inject(FormsService);
   private _dialog = inject(MatDialog);
   private _router = inject(Router);
-  promptForm = new FormControl('');
+  promptForm = new FormControl('', {
+    validators: [Validators.maxLength(1000)],
+  });
   message = signal('');
 
   onSubmit() {
