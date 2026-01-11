@@ -1,0 +1,101 @@
+<div class="container mt-4">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="list-group">
+
+        <button
+          class="list-group-item list-group-item-action"
+          [class.active]="selectedMethod === PaymentMethod.CREDIT_CARD"
+          (click)="selectedMethod = PaymentMethod.CREDIT_CARD"
+        >
+          💳 Karta płatnicza
+        </button>
+
+        <button
+          class="list-group-item list-group-item-action"
+          [class.active]="selectedMethod === PaymentMethod.BLIK"
+          (click)="selectedMethod = PaymentMethod.BLIK"
+        >
+          📱 BLIK
+        </button>
+
+        <button
+          class="list-group-item list-group-item-action"
+          [class.active]="selectedMethod === PaymentMethod.GOOGLE_PAY"
+          (click)="selectedMethod = PaymentMethod.GOOGLE_PAY"
+        >
+          🤖 Google Pay
+        </button>
+
+        <button
+          class="list-group-item list-group-item-action"
+          [class.active]="selectedMethod === PaymentMethod.APPLE_PAY"
+          (click)="selectedMethod = PaymentMethod.APPLE_PAY"
+        >
+          🍎 Apple Pay
+        </button>
+
+        <button
+          class="list-group-item list-group-item-action fw-bold"
+          [class.active]="selectedMethod === PaymentMethod.OFFLINE"
+          (click)="selectedMethod = PaymentMethod.OFFLINE"
+        >
+          🏢 Zapłata na miejscu
+        </button>
+
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+
+          <ng-container *ngIf="selectedMethod !== undefined; else noMethod">
+            <h5 class="card-title mb-3">Wybrana metoda płatności</h5>
+
+            <div class="alert alert-info">
+              <ng-container [ngSwitch]="selectedMethod">
+
+                <span *ngSwitchCase="PaymentMethod.CREDIT_CARD">
+                  Płatność kartą – zostaniesz obciążony kartą płatniczą.
+                </span>
+
+                <span *ngSwitchCase="PaymentMethod.BLIK">
+                  Płatność BLIK – potwierdź transakcję w aplikacji banku.
+                </span>
+
+                <span *ngSwitchCase="PaymentMethod.GOOGLE_PAY">
+                  Płatność Google Pay – szybka płatność z Twojego konta Google.
+                </span>
+
+                <span *ngSwitchCase="PaymentMethod.APPLE_PAY">
+                  Płatność Apple Pay – potwierdź płatność na urządzeniu Apple.
+                </span>
+
+                <span *ngSwitchCase="PaymentMethod.OFFLINE">
+                  Zapłata na miejscu przy okienku w dniu wizyty.
+                </span>
+
+              </ng-container>
+            </div>
+
+            <button
+              class="btn btn-success"
+              (click)="onPlacePayment(selectedMethod!)"
+            >
+              Zapłać
+            </button>
+          </ng-container>
+
+          <ng-template #noMethod>
+            <div class="text-muted">
+              Wybierz sposób płatności z listy po lewej stronie.
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-alert class="mt-3 w-75" *ngIf="errorMessage()" [text]="errorMessage()"></app-alert>
+</div>

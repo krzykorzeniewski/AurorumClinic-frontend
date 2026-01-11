@@ -35,7 +35,7 @@ import { combineLatest, EMPTY, filter, switchMap, take } from 'rxjs';
 import { CreateDailyDoctorScheduleByDoctor } from '../../../../core/models/schedule.model';
 import { toLocalISOString } from '../../../../shared/methods/dateTransform';
 import { AuthService } from '../../../../core/services/auth.service';
-import { User, UserRole } from '../../../../core/models/auth.model';
+import { User, UserRoleMap } from '../../../../core/models/auth.model';
 
 @Component({
   selector: 'app-create-new-daily-schedule',
@@ -82,7 +82,7 @@ export class CreateNewDailyScheduleComponent {
         filter((user): user is User => !!user),
         take(1),
         switchMap((user) => {
-          if (user.role !== UserRole.DOCTOR) {
+          if (user.role !== UserRoleMap.DOCTOR) {
             this._router.navigate(['/internal/my-schedules']);
             return EMPTY;
           }

@@ -18,7 +18,7 @@
       <h5 class="mb-3">Zaplanowane wizyty w wybranym dniu</h5>
 
       @if (appointments().length > 0) {
-        @if (isEmployee$ | async) {
+        @if (isEmployeeOrAdmin$ | async) {
           <div class="flex-grow-1">
             <app-patient-card
               *ngFor="let app of appointments()"

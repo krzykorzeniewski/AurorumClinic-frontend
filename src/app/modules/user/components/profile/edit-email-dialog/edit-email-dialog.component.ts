@@ -37,7 +37,6 @@ import { NgIf } from '@angular/common';
     NgIf,
   ],
   templateUrl: './edit-email-dialog.component.html',
-  styleUrl: './edit-email-dialog.component.css',
 })
 export class EditEmailDialogComponent {
   private _userService = inject(UserService);

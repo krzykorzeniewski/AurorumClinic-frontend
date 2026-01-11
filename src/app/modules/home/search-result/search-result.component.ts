@@ -5,6 +5,7 @@ import { AppointmentService } from '../../core/services/appointment.service';
 import { DoctorAppointmentCard } from '../../core/models/doctor.model';
 import { DoctorAppointmentCardComponent } from '../../shared/components/doctor-appointment-card/doctor-appointment-card.component';
 import { NgForOf } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-search-result',
@@ -36,27 +37,26 @@ export class SearchResultComponent implements OnInit {
               },
             });
 
-          const storedServices = localStorage.getItem('services');
-          let services;
-          if (storedServices) {
-            services = JSON.parse(storedServices);
-          } else {
-            this._doctorService.getSpecializationsWithServices().subscribe({
-              next: (res) => {
-                services = res;
-                localStorage.setItem('services', JSON.stringify(res));
-              },
-            });
-          }
-          const serviceFromStorage = this._appointmentService.returnServiceById(
-            services,
-            serviceIdFromQuery,
-          );
-          if (serviceFromStorage) {
-            this.nameOfTheService = serviceFromStorage.name;
-          } else {
-            void this._router.navigate(['']);
-          }
+          forkJoin({
+            services: this._doctorService.getSpecializationsWithServices(),
+          }).subscribe({
+            next: ({ services }) => {
+              const serviceFromStorage =
+                this._appointmentService.returnServiceById(
+                  services,
+                  serviceIdFromQuery,
+                );
+
+              if (serviceFromStorage) {
+                this.nameOfTheService = serviceFromStorage.name;
+              } else {
+                void this._router.navigate(['']);
+              }
+            },
+            error: () => {
+              void this._router.navigate(['']);
+            },
+          });
         } else {
           void this._router.navigate(['']);
         }

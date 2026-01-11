@@ -1,5 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  DoctorRegisterRequest,
+  EmployeeRegisterRequest,
+  PatientRegisterRequest,
   TokenVerifyRequest,
   User,
   UserLoginDataRequest,
@@ -8,8 +11,7 @@ import {
   UserLoginResponse,
   UserPasswordRecoverEmailRequest,
   UserPasswordResetRequest,
-  UserRegisterRequest,
-  UserRole,
+  UserRoleMap,
   VerifyEmailTokenRequest,
 } from '../models/auth.model';
 import {
@@ -24,8 +26,8 @@ import {
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
-  UpdateTokenRequest,
   UpdatePhoneTokenRequest,
+  UpdateTokenRequest,
 } from '../models/user.model';
 import { ApiResponse } from '../models/api-response.model';
 import { Router } from '@angular/router';
@@ -38,11 +40,11 @@ export class AuthService {
   private _apiUrl = environment.apiUrl + '/auth';
   private _router = inject(Router);
   private _http = inject(HttpClient);
-  private readonly ROLE_MAP: Record<string, UserRole> = {
-    doctor: UserRole.DOCTOR,
-    patient: UserRole.PATIENT,
-    employee: UserRole.EMPLOYEE,
-    admin: UserRole.ADMIN,
+  private readonly ROLE_MAP: Record<string, UserRoleMap> = {
+    doctor: UserRoleMap.DOCTOR,
+    patient: UserRoleMap.PATIENT,
+    employee: UserRoleMap.EMPLOYEE,
+    admin: UserRoleMap.ADMIN,
   };
 
   login(userData: UserLoginDataRequest): Observable<User> {
@@ -59,7 +61,7 @@ export class AuthService {
           return new User(
             data.id,
             data.twoFactorAuth,
-            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRoleMap.PATIENT,
           );
         }),
         tap((user) => {
@@ -100,7 +102,7 @@ export class AuthService {
           return new User(
             data.id,
             data.twoFactorAuth,
-            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRoleMap.PATIENT,
           );
         }),
         tap((user) => {
@@ -131,7 +133,7 @@ export class AuthService {
           return new User(
             data.id,
             data.twoFactorAuth,
-            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRole.PATIENT,
+            this.ROLE_MAP[data.role?.toLowerCase()] ?? UserRoleMap.PATIENT,
           );
         }),
         tap((user) => this.#user.next(user)),
@@ -143,7 +145,21 @@ export class AuthService {
   }
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
-    return this._http.post<void>(`${this._apiUrl}/verify-email-token`, request);
+    return this._http
+      .post<void>(`${this._apiUrl}/verify-email-token`, request)
+      .pipe(
+        catchError((err) => {
+          let errorMsg =
+            'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.';
+
+          if (err.error?.status === 429) {
+            errorMsg =
+              'Hola hola, zwolnij trochę. Poczekaj chwilę, może email w końcu dotrze na twoją pocztę!';
+          }
+
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
   }
 
   verifyUserPhoneToken(userPhone: UpdatePhoneTokenRequest): Observable<void> {
@@ -199,22 +215,68 @@ export class AuthService {
     return this._http.post<void>(`${this._apiUrl}/verify-email`, tokenRequest);
   }
 
-  registerPatient(patientData: UserRegisterRequest): Observable<void> {
+  registerPatient(patientData: PatientRegisterRequest): Observable<void> {
     return this._http
-      .post<ApiResponse<Record<string, string>>>(
-        `${this._apiUrl}/register-patient`,
-        patientData,
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      .post<void>(`${this._apiUrl}/register-patient`, patientData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
         },
-      )
+      })
       .pipe(
-        map(() => {
-          return;
+        catchError((err) => {
+          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+
+          if (err.error?.status === 'fail') {
+            if (err.error.data.password) {
+              errorMsg =
+                'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
+            } else {
+              const failError = Object.values(err.error.data || {})[0];
+              errorMsg = typeof failError === 'string' ? failError : errorMsg;
+            }
+          } else if (err.error?.status === 'error') {
+            errorMsg = err.error.message || errorMsg;
+          }
+
+          return throwError(() => new Error(errorMsg));
         }),
+      );
+  }
+
+  registerDoctor(doctorData: DoctorRegisterRequest): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/register-doctor`, doctorData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .pipe(
+        catchError((err) => {
+          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+
+          if (err.error?.status === 'fail') {
+            const failError = Object.values(err.error.data || {})[0];
+            errorMsg = typeof failError === 'string' ? failError : errorMsg;
+          } else if (err.error?.status === 'error') {
+            errorMsg = err.error.message || errorMsg;
+          }
+
+          return throwError(() => new Error(errorMsg));
+        }),
+      );
+  }
+
+  registerEmployee(employeeData: EmployeeRegisterRequest): Observable<void> {
+    return this._http
+      .post<void>(`${this._apiUrl}/register-employee`, employeeData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .pipe(
         catchError((err) => {
           let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
 
@@ -242,6 +304,24 @@ export class AuthService {
       );
   }
 
+  createNewPasswordStaff(staffId: number): Observable<void> {
+    return this._http
+      .post<void>(
+        `${this._apiUrl}/${staffId}/new-password`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () => new Error('Wystąpił błąd. Proszę spróbować później'),
+          );
+        }),
+      );
+  }
+
   changePassword(passwordData: UserPasswordResetRequest): Observable<void> {
     return this._http
       .post<void>(`${this._apiUrl}/reset-password`, passwordData)
@@ -255,12 +335,15 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    this.#user.next(null);
     return this._http
       .get<void>(`${this._apiUrl}/logout`, {
         withCredentials: true,
       })
-      .pipe(catchError(() => of(void 0)));
+      .pipe(
+        tap(() => {
+          this.#user.next(null);
+        }),
+      );
   }
 
   isLoggedIn(): boolean {
@@ -272,7 +355,7 @@ export class AuthService {
   }
 
   get userRole() {
-    return this.#user.value?.role ?? UserRole.ANONYMOUS;
+    return this.#user.value?.role ?? UserRoleMap.ANONYMOUS;
   }
 
   private getLoginErrorMessage(err: HttpErrorResponse) {
@@ -307,12 +390,12 @@ export class AuthService {
     const role = this.userRole;
 
     switch (role) {
-      case UserRole.DOCTOR:
-      case UserRole.EMPLOYEE:
-      case UserRole.ADMIN:
+      case UserRoleMap.DOCTOR:
+      case UserRoleMap.EMPLOYEE:
+      case UserRoleMap.ADMIN:
         void this._router.navigate(['/internal']);
         break;
-      case UserRole.PATIENT:
+      case UserRoleMap.PATIENT:
         void this._router.navigate(['']);
         break;
       default:

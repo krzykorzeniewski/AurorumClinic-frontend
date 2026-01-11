@@ -7,7 +7,7 @@ import { map } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { OpinionService } from '../../../core/services/opinion.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserRole } from '../../../core/models/auth.model';
+import { UserRoleMap } from '../../../core/models/auth.model';
 import { Router } from '@angular/router';
 import { Opinion } from '../../../core/models/opinion.model';
 
@@ -50,16 +50,17 @@ export class OpinionCardComponent {
   isPatient$ = this._authService.user$.pipe(
     map(
       (user) =>
-        user?.id === this.patientId() && user?.role === UserRole.PATIENT,
+        user?.id === this.patientId() && user?.role === UserRoleMap.PATIENT,
     ),
   );
   isDoctor$ = this._authService.user$.pipe(
     map(
-      (user) => user?.id === this.doctorId() && user?.role === UserRole.DOCTOR,
+      (user) =>
+        user?.id === this.doctorId() && user?.role === UserRoleMap.DOCTOR,
     ),
   );
   isAdmin$ = this._authService.user$.pipe(
-    map((user) => user?.role === UserRole.ADMIN),
+    map((user) => user?.role === UserRoleMap.ADMIN),
   );
 
   createOpinionDoctor() {
@@ -136,5 +137,27 @@ export class OpinionCardComponent {
       });
   }
 
-  deletePatientOpinionByAdmin() {}
+  deletePatientOpinionByAdmin() {
+    this._opinionService
+      .deletePatientOpinionByAdmin(this.opinionId())
+      .subscribe({
+        next: () => {
+          this.opinionDeleted.emit(this.opinionId());
+          this._snackBar.open('Pomyślnie usunięto opinię', 'zamknij', {
+            duration: 5000,
+            panelClass: 'xxx-alert-info',
+          });
+        },
+        error: () => {
+          this._snackBar.open(
+            'Wystąpił błąd podczas usuwania opinii',
+            'zamknij',
+            {
+              duration: 5000,
+              panelClass: 'xxx-alert-error',
+            },
+          );
+        },
+      });
+  }
 }

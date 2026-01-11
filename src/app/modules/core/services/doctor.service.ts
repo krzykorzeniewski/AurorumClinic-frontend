@@ -8,8 +8,10 @@ import {
   DoctorPanelStats,
   DoctorRecommended,
   GetDoctorApiResponse,
+  GetDoctorToUpdate,
   GetFullDoctorApiResponse,
   GetRecommendedDoctorApiResponse,
+  UpdateDoctor,
 } from '../models/doctor.model';
 import {
   Specialization,
@@ -133,6 +135,46 @@ export class DoctorService {
       );
   }
 
+  getDoctorByIdByAdmin(doctorId: number) {
+    return this._http
+      .get<ApiResponse<GetDoctorToUpdate>>(
+        `${this._apiUrl}/internal/${doctorId}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd serwera podczas uzyskiwania danych lekarza. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
+  updateDoctorByAdmin(doctorId: number, doctorData: UpdateDoctor) {
+    return this._http
+      .put<ApiResponse<void>>(`${this._apiUrl}/${doctorId}`, doctorData, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   searchDoctors(query: string, serviceId: number, page = 0, size = 6) {
     let searchParams = new HttpParams()
       .set('page', page)
@@ -214,11 +256,13 @@ export class DoctorService {
       );
   }
 
-  getSpecializations() {
+  getSpecializations(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
     return this._http
       .get<ApiResponse<PageableResponse<SpecializationResponseApi>>>(
         `${environment.apiUrl + '/specializations'}`,
         {
+          params: params,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -226,9 +270,12 @@ export class DoctorService {
       )
       .pipe(
         map((res) => {
-          return res.data.content.map(
-            (doctor) => new Specialization(doctor.id, doctor.name),
-          );
+          return {
+            specializations: res.data.content.map(
+              (spec) => new Specialization(spec.id, spec.name),
+            ),
+            page: res.data.page,
+          };
         }),
         catchError(() => {
           return throwError(

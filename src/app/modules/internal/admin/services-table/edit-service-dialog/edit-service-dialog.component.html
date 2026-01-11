@@ -1,0 +1,63 @@
+<h2 mat-dialog-title class="mb-3 text-center">
+  Tworzenie nowej specjalizacji
+</h2>
+
+<mat-dialog-content>
+  <div class="mb-3 text-center">
+    <strong>Proszę wpisać dane nowej specjalizacji</strong>
+  </div>
+
+  <div class="row g-3">
+
+    <div class="col-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Nazwa</mat-label>
+        <input matInput [formControl]="updateForm.controls.name" />
+        @if (controls.name.invalid) {
+          <mat-error>{{ getErrorMessage(updateForm.controls.name) }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Opis</mat-label>
+        <textarea
+          matInput
+          rows="4"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="3"
+          cdkAutosizeMaxRows="6"
+          [formControl]="updateForm.controls.description">
+        </textarea>
+        @if (controls.description.invalid) {
+          <mat-error>{{ getErrorMessage(updateForm.controls.description) }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<div class="container mt-3">
+  <app-alert
+    *ngIf="infoMessage()"
+    [text]="infoMessage()"
+    [variant]="variant()">
+  </app-alert>
+</div>
+
+<mat-dialog-actions class="d-flex justify-content-end gap-2 mt-3">
+  <button mat-stroked-button type="button" (click)="onNoClick()">
+    Anuluj
+  </button>
+
+  <button
+    mat-flat-button
+    class="btn text-white border-0"
+    style="background-color: var(--primary-purple)"
+    (click)="onSubmit()"
+    [disabled]="updateForm.invalid">
+    Edytuj
+  </button>
+</mat-dialog-actions>

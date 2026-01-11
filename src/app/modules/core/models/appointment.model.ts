@@ -12,6 +12,7 @@ export interface GetAppointmentInfo {
   service: Service;
   payment: Payment;
   hasOpinion: boolean;
+  hasChat: boolean;
 }
 
 export class Appointment implements GetAppointmentInfo {
@@ -24,6 +25,7 @@ export class Appointment implements GetAppointmentInfo {
     public service: Service,
     public payment: Payment,
     public hasOpinion: boolean,
+    public hasChat: boolean,
   ) {}
 }
 
@@ -80,4 +82,16 @@ export interface GetDailyAppointmentInfo {
   service: Service;
   payment: Payment;
   patient: PatientShort;
+}
+
+export enum PaymentMethod {
+  OFFLINE = 'OFFLINE',
+  CREDIT_CARD = 'CREDIT_CARD',
+  BLIK = 'BLIK',
+  GOOGLE_PAY = 'GOOGLE_PAY',
+  APPLE_PAY = 'APPLE_PAY',
+}
+
+export interface PaymentRequest {
+  paymentMethod: PaymentMethod;
 }

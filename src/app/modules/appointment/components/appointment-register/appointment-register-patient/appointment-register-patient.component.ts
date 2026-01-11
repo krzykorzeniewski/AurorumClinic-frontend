@@ -57,7 +57,12 @@ export class AppointmentRegisterPatientComponent {
       .registerPatientForAppointment(appointment)
       .subscribe({
         next: () => {
-          void this._router.navigate(['/profile/appointments']);
+          void this._router.navigate(['/profile/appointments'], {
+            state: {
+              message: 'Pomyślnie umówiono wizytę',
+              status: 'success',
+            },
+          });
         },
       });
   }

@@ -21,6 +21,8 @@ import {
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { FormsService } from '../../../core/services/forms.service';
 import { GetPatientResponse } from '../../../core/models/patient.model';
+import { forkJoin } from 'rxjs';
+import { GetUserProfileResponse } from '../../../core/models/user.model';
 import { PatientService } from '../../../core/services/patient.service';
 
 @Component({
@@ -44,10 +46,10 @@ import { PatientService } from '../../../core/services/patient.service';
 })
 export class AppointmentRegisterComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);
+  private _patientService = inject(PatientService);
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _userService = inject(UserService);
-  private _patientService = inject(PatientService);
   private _location = inject(Location);
   private _router = inject(Router);
   createAppointment = input.required<
@@ -57,7 +59,7 @@ export class AppointmentRegisterComponent implements OnInit {
   confirmRegister = output<
     CreateAppointmentPatient | CreateAppointmentPatientByEmployee
   >();
-  patient!: GetPatientResponse;
+  patient!: GetPatientResponse | GetUserProfileResponse;
   service!: Service;
   date!: string;
   additionalInformation =
@@ -81,27 +83,26 @@ export class AppointmentRegisterComponent implements OnInit {
         },
       });
     }
-    let services;
-    const storedServices = localStorage.getItem('services');
-    if (storedServices) {
-      services = JSON.parse(storedServices);
-    } else {
-      this._doctorService.getSpecializationsWithServices().subscribe({
-        next: (res) => {
-          services = res;
-          localStorage.setItem('services', JSON.stringify(res));
-        },
-      });
-    }
-    const serviceFromStorage = this._appointmentService.returnServiceById(
-      services,
-      appointmentData.serviceId.toString(),
-    );
-    if (serviceFromStorage) {
-      this.service = serviceFromStorage;
-    } else {
-      void this._router.navigate(['']);
-    }
+
+    forkJoin({
+      services: this._doctorService.getSpecializationsWithServices(),
+    }).subscribe({
+      next: ({ services }) => {
+        const serviceFromStorage = this._appointmentService.returnServiceById(
+          services,
+          appointmentData.serviceId.toString(),
+        );
+
+        if (serviceFromStorage) {
+          this.service = serviceFromStorage;
+        } else {
+          void this._router.navigate(['']);
+        }
+      },
+      error: () => {
+        void this._router.navigate(['']);
+      },
+    });
   }
 
   onAppointmentRegister() {

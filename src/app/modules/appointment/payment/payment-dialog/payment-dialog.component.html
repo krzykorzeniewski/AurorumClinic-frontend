@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Płatność zakończona</h2>
+
+<mat-dialog-content>
+  <p>
+    Za {{ counter }} sekund nastąpi przekierowanie na stronę główną.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    class="btn text-white px-4 mx-3 border-0"
+    style="background-color: var(--primary-purple); white-space: nowrap;"
+    (click)="redirectNow()">
+    Przekieruj teraz
+  </button>
+</mat-dialog-actions>

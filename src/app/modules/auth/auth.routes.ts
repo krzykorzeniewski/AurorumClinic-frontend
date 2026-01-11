@@ -25,16 +25,16 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'recover/:uid',
     loadComponent: () =>
-      import(
-        './components/password-recovery-form/password-recovery-form.component'
-      ).then((c) => c.PasswordRecoveryFormComponent),
+      import('./components/password-recovery-form/password-recovery-form.component').then(
+        (c) => c.PasswordRecoveryFormComponent,
+      ),
   },
   {
     path: 'account-activate/:uid',
     loadComponent: () =>
-      import(
-        './components/account-activation/account-activation.component'
-      ).then((c) => c.AccountActivationComponent),
+      import('./components/account-activation/account-activation.component').then(
+        (c) => c.AccountActivationComponent,
+      ),
   },
   {
     path: 'twoFactorAuthorization',

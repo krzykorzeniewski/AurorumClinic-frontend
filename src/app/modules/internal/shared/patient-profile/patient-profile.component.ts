@@ -1,20 +1,41 @@
 import {
+  AfterViewInit,
   Component,
   inject,
+  OnDestroy,
   OnInit,
   signal,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { DatePipe, Location, NgClass, NgForOf, NgIf } from '@angular/common';
-import { catchError, map, of, tap } from 'rxjs';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  map,
+  merge,
+  startWith,
+  Subject,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { Appointment } from '../../../core/models/appointment.model';
+import {
+  Appointment,
+  AppointmentStatus,
+} from '../../../core/models/appointment.model';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
 import { GetPatientResponse } from '../../../core/models/patient.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-patient-profile',
@@ -29,24 +50,39 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     DatePipe,
     DoctorCardComponent,
     RouterLink,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatPaginator,
+    MatOption,
   ],
   templateUrl: './patient-profile.component.html',
   styleUrl: './patient-profile.component.css',
 })
-export class PatientProfileComponent implements OnInit {
+export class PatientProfileComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   private _patientService = inject(PatientService);
   private _snackBar = inject(MatSnackBar);
   private _route = inject(ActivatedRoute);
   private _location = inject(Location);
   private _router = inject(Router);
-  private _page = 0;
-  private _size = 5;
   patient!: GetPatientResponse;
   hasPesel: WritableSignal<boolean> = signal(true);
-  visibleVisits: WritableSignal<boolean> = signal(false);
-  appointmentsDone: Appointment[] = [];
-  appointmentsFuture: Appointment[] = [];
-  hasMoreData = true;
+  appointments: Appointment[] = [];
+  appointmentType = new FormControl<AppointmentStatus>(
+    AppointmentStatus.CREATED,
+    { nonNullable: true },
+  );
+  sub = new Subscription();
+  totalData = 0;
+  appointmentTypes = [
+    { key: AppointmentStatus.CREATED, label: 'Nadchodzące' },
+    { key: AppointmentStatus.FINISHED, label: 'Poprzednie' },
+  ];
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+
+  private patientLoaded$ = new Subject<void>();
 
   constructor() {
     const navigation = this._router.getCurrentNavigation();
@@ -59,39 +95,76 @@ export class PatientProfileComponent implements OnInit {
             : 'xxx-alert-error',
       });
     }
+    this._location.replaceState(this._router.url);
   }
 
   ngOnInit(): void {
-    this._route.paramMap
-      .pipe(
-        tap((params) => {
-          const token = params.get('id');
-          if (!token) {
-            this._location.back();
-            throw new Error('Brak uid użytkownika');
-          }
-        }),
-        map((params) => Number(params.get('id'))),
-      )
-      .subscribe((id) => {
-        this._patientService
-          .getPatient(id)
-          .pipe(
-            tap((patient) => (this.patient = patient)),
-            catchError(() => of(null)),
-          )
-          .subscribe((patient) => {
-            if (!patient) {
+    this.sub.add(
+      this._route.paramMap
+        .pipe(
+          tap((params) => {
+            const token = params.get('id');
+            if (!token) {
               this._location.back();
+              throw new Error('Brak uid użytkownika');
             }
-            this.fetchAppointments();
-          });
-      });
+          }),
+          map((params) => Number(params.get('id'))),
+          switchMap((id) =>
+            this._patientService.getPatient(id).pipe(
+              catchError(() => {
+                this._location.back();
+                return EMPTY;
+              }),
+            ),
+          ),
+          tap((patient) => {
+            this.patient = patient;
+            this.patientLoaded$.next();
+          }),
+        )
+        .subscribe(),
+    );
   }
 
-  fetchMoreData(): void {
-    this._page++;
-    this.fetchAppointments();
+  ngAfterViewInit(): void {
+    this.sub.add(
+      this.patientLoaded$
+        .pipe(
+          take(1),
+          switchMap(() =>
+            merge(
+              this.paginator.page,
+              this.appointmentType.valueChanges.pipe(distinctUntilChanged()),
+            ).pipe(
+              startWith({}),
+              switchMap(() => {
+                return this._patientService.getPatientAppointments(
+                  this.patient.id,
+                  this.paginator.pageIndex,
+                  this.paginator.pageSize,
+                  this.appointmentType.value,
+                );
+              }),
+              map((response) => {
+                this.totalData = response.page.totalElements;
+                return response.appointments;
+              }),
+            ),
+          ),
+        )
+        .subscribe((appointments) => {
+          this.appointments = appointments;
+        }),
+    );
+
+    this.sub.add(
+      this.appointmentType.valueChanges.subscribe(() => {
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
+        }
+      }),
+    );
   }
 
   updateData(patientId: number) {
@@ -107,26 +180,7 @@ export class PatientProfileComponent implements OnInit {
     );
   }
 
-  private fetchAppointments(): void {
-    this._patientService
-      .getPatientAppointments(this.patient.id, this._page, this._size)
-      .pipe(
-        map((res) => ({
-          done: res.appointments.filter((app) => app.status === 'FINISHED'),
-          future: res.appointments.filter((app) => app.status === 'CREATED'),
-          page: res.page,
-        })),
-      )
-      .subscribe({
-        next: (res) => {
-          this.appointmentsDone = [...this.appointmentsDone, ...res.done];
-          this.appointmentsFuture = [...this.appointmentsFuture, ...res.future];
-          this.hasMoreData = res.page.number + 1 < res.page.totalPages;
-        },
-      });
-  }
-
-  toggleVisits() {
-    this.visibleVisits.set(!this.visibleVisits());
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

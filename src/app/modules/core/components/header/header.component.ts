@@ -14,10 +14,11 @@ import {
   NgSwitch,
   NgSwitchCase,
 } from '@angular/common';
-import { User, UserRole } from '../../models/auth.model';
+import { User, UserRoleMap } from '../../models/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-header',
@@ -39,6 +40,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private _sub!: Subscription;
   private _router = inject(Router);
   private _element = inject(ElementRef);
+  private _chatService = inject(ChatService);
   private _routeSub?: Subscription;
   user: User | null | undefined = undefined;
   isLargeScreen = false;
@@ -90,6 +92,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   logout() {
     this._authService.logout().subscribe({
       next: () => {
+        this._chatService.disconnect();
         void this._router.navigate(['']);
       },
     });
@@ -100,5 +103,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this._routeSub) this._routeSub.unsubscribe();
   }
 
-  protected readonly UserRole = UserRole;
+  protected readonly UserRole = UserRoleMap;
 }

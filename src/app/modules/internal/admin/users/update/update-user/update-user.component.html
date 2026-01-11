@@ -1,0 +1,117 @@
+<div class="container d-flex align-items-center pt-5">
+  <div class="col-10 col-sm-12 col-md-6 col-lg-4 mx-auto">
+    <h2 class="text-center mb-4">Zmiana danych
+      <span *ngIf="role === UserRole.ADMIN">admina</span>
+      <span *ngIf="role === UserRole.EMPLOYEE">pracownika</span>
+    </h2>
+    <form [formGroup]="userForm" *ngIf="user && userForm" (ngSubmit)="onUserUpdate()">
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię</mat-label>
+          <input
+            id="firstname-doctor-aurorum"
+            matInput
+            [value]="controls.firstName"
+            [formControl]="controls.firstName" />
+          @if (controls.firstName.invalid) {
+            <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nazwisko</mat-label>
+          <input
+            id="surname-doctor-aurorum"
+            matInput
+            [value]="controls.surname"
+            [formControl]="controls.surname" />
+          @if (controls.surname.invalid) {
+            <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input
+            id="email-doctor-aurorum"
+            matInput
+            [value]="controls.email"
+            [formControl]="controls.email" />
+          @if (controls.email.invalid) {
+            <mat-error>{{ getErrorMessage(controls.email) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="w-100 d-flex justify-content-end">
+        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">
+          Nie posiadam PESEL
+        </mat-checkbox>
+      </div>
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Pesel</mat-label>
+          <input
+            id="pesel-doctor-aurorum"
+            matInput
+            [value]="controls.pesel"
+            [formControl]="controls.pesel" />
+          @if (hasPesel() && controls.pesel.invalid) {
+            <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data urodzenia</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" [value]="controls.birthdate" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (controls.birthdate.invalid) {
+            <mat-error>{{ getErrorMessage(controls.birthdate) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Telefon</mat-label>
+          <input
+            id="phone-doctor-aurorum"
+            matInput
+            [value]="controls.phoneNumber"
+            [formControl]="controls.phoneNumber" />
+          @if (controls.phoneNumber.invalid) {
+            <mat-error>{{ getErrorMessage(controls.phoneNumber) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-4 w-100 text-center">
+        <mat-checkbox [formControl]="controls.twoFactorAuth">
+          Weryfikacja dwuetapowa
+        </mat-checkbox>
+      </div>
+      <app-alert class="mt-3 w-75" *ngIf="errorMessage()" [text]="errorMessage()"></app-alert>
+      <div class="row w-100">
+        <div class="col-sm text-center">
+          <button
+            mat-flat-button
+            type="button"
+            class="btn border"
+            style="background-color: white; color: black"
+            (click)="goBack()"
+          >Powrót</button>
+        </div>
+        <div class="col-sm text-center">
+          <button
+            mat-flat-button
+            type="submit"
+            class="btn text-white"
+            style="background-color: var(--primary-purple)"
+            [disabled]="userForm.invalid || noChangesDetected"
+          >Zmień dane</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

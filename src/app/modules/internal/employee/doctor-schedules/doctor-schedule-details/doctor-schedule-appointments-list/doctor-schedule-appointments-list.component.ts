@@ -87,6 +87,6 @@ export class DoctorScheduleAppointmentsListComponent implements OnInit {
   }
 
   onCancel() {
-    this._dialogRef.close({ success: false });
+    this._dialogRef.close({ success: false, cancel: true });
   }
 }

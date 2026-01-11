@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { EmployeeService } from '../../../core/services/employee.service';
-import { UserRole } from '../../../core/models/auth.model';
+import { UserRoleMap } from '../../../core/models/auth.model';
 import { toLocalISOString } from '../../../shared/methods/dateTransform';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   finishedAppointments!: number;
   futureAppointments!: number;
   todayDate!: Date;
-  role!: UserRole | undefined;
+  role!: UserRoleMap | undefined;
 
   ngOnInit(): void {
     this._authService.user$
@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const endDate = new Date();
     endDate.setHours(21, 0, 0, 0);
 
-    if (this.role === UserRole.DOCTOR) {
+    if (this.role === UserRoleMap.DOCTOR) {
       this._doctorService
         .getPanelStatistics(
           toLocalISOString(startDate),
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .getPanelStatistics(
           toLocalISOString(startDate),
           toLocalISOString(endDate),
-          this.role === UserRole.ADMIN,
+          this.role === UserRoleMap.ADMIN,
         )
         .subscribe({
           next: (values) => {
@@ -65,11 +65,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  mapRoleToPolish(userRole: UserRole | undefined) {
+  mapRoleToPolish(userRole: UserRoleMap | undefined) {
     switch (userRole) {
-      case UserRole.DOCTOR:
+      case UserRoleMap.DOCTOR:
         return 'DOKTOR';
-      case UserRole.ADMIN:
+      case UserRoleMap.ADMIN:
         return 'ADMIN';
       default:
         return 'PRACOWNIK';

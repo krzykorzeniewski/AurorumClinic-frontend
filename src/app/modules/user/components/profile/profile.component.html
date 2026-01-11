@@ -104,7 +104,18 @@
               <button *ngIf="!userResponse.twoFactorAuth" mat-raised-button style="background-color: #ffc107" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
             </mat-expansion-panel>
 
-          <form id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title> Hasło </mat-panel-title>
+              <mat-panel-description>
+                Zmień swoje hasło
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Kliknij poniżej, aby zmienić swoje hasło</p>
+            <button mat-raised-button style="background-color: #ffc107" (click)="onPasswordChange()">Zmień hasło</button>
+          </mat-expansion-panel>
+
+          <form *ngIf="isPatient$ | async" id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title> Dodatkowe </mat-panel-title>
@@ -122,7 +133,13 @@
                   </mat-select>
                 </mat-form-field>
                 <div class="d-flex justify-content-between mt-4">
-                  <button form="additionalInfo" mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" type="submit" [disabled]="userResponse.communicationPreferences === additionalInfoControls.communicationPreferences.value && userResponse.newsletter === additionalInfoControls.newsletter.value || additionalInformationProfileForm.invalid">
+                  <button
+                    form="additionalInfo"
+                    mat-flat-button
+                    class="btn text-white border-0"
+                    style="background-color: var(--primary-purple)"
+                    type="submit"
+                    [disabled]="isAdditionalInfoDisabled">
                     Zaktualizuj
                   </button>
                 </div>
@@ -130,7 +147,7 @@
             </mat-expansion-panel>
           </form>
 
-            <mat-expansion-panel>
+            <mat-expansion-panel *ngIf="isPatient$ | async">
               <mat-expansion-panel-header>
                 <mat-panel-title> Usunięcie konta </mat-panel-title>
               </mat-expansion-panel-header>

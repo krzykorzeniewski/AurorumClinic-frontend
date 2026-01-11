@@ -20,7 +20,7 @@ import { MatIcon } from '@angular/material/icon';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserRole } from '../../../core/models/auth.model';
+import { UserRoleMap } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-doctor-appointment-card',
@@ -58,7 +58,7 @@ export class DoctorAppointmentCardComponent implements OnInit {
     const dateTime = date + 'T' + time;
 
     if (this.mode() === 'register') {
-      if (this._authService.userRole === UserRole.PATIENT) {
+      if (this._authService.userRole === UserRoleMap.PATIENT) {
         const data: CreateAppointmentPatient = {
           startedAt: dateTime,
           doctorId: doctorAppointmentRegister.id,

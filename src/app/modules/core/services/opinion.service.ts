@@ -1,6 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, Observable, throwError } from 'rxjs';
 import {
@@ -54,13 +58,8 @@ export class OpinionService {
         },
       )
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie dodawania odpowiedzi na opinie. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -78,13 +77,8 @@ export class OpinionService {
         },
       )
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie dodawania opinii. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -95,13 +89,8 @@ export class OpinionService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie edytowania opinii. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -116,13 +105,8 @@ export class OpinionService {
         },
       )
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie edytowania opinii. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -133,14 +117,41 @@ export class OpinionService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie usuwania opinii. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
+  }
+
+  deletePatientOpinionByAdmin(opinionId: number): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/opinions/${opinionId}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
+        }),
+      );
+  }
+
+  private mapError(err: HttpErrorResponse) {
+    let errorMsg: string;
+
+    if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+      errorMsg = 'Wystąpił błąd. Spróbuj ponownie.';
+    } else if (err.error?.status === 'fail' && err.error?.data) {
+      const errorData = err.error.data;
+
+      if (errorData.opinionContent === 'Content rejected by moderation') {
+        errorMsg =
+          'Ta wiadomość została odrzucona przez niewłaściwą treść. Spróbuj ponownie.';
+      } else {
+        errorMsg = 'Wystąpił błąd. Spróbuj ponownie.';
+      }
+    } else {
+      errorMsg = 'Wystąpił błąd. Spróbuj ponownie.';
+    }
+    return errorMsg;
   }
 }

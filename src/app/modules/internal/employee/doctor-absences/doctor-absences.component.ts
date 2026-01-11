@@ -10,7 +10,7 @@ import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DoctorCardComponent } from '../../../shared/components/doctor-card/doctor-card.component';
 import { MatButton } from '@angular/material/button';
-import { NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf, NgIf } from '@angular/common';
 import { CreateDoctorAbsenceDialogComponent } from './create-doctor-absence-dialog/create-doctor-absence-dialog.component';
 
 @Component({
@@ -29,6 +29,7 @@ import { CreateDoctorAbsenceDialogComponent } from './create-doctor-absence-dial
 })
 export class DoctorAbsencesComponent {
   private _absenceService = inject(AbsenceService);
+  private _location = inject(Location);
   private _doctorService = inject(DoctorService);
   private _snackBar = inject(MatSnackBar);
   private _dialog = inject(MatDialog);
@@ -51,6 +52,7 @@ export class DoctorAbsencesComponent {
             ? 'xxx-alert-info'
             : 'xxx-alert-error',
       });
+      this._location.replaceState(this._router.url);
     }
 
     const state = navigation?.extras.state as {

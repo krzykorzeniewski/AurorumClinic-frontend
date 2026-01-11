@@ -1,0 +1,92 @@
+<div class="container d-flex align-items-center pt-5">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <h2 class="text-center mb-4">Tworzenie nowego pracownika</h2>
+    <form class="d-flex flex-column align-items-center " [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Imię</mat-label>
+          <input
+            id="firstname-employee-aurorum"
+            matInput
+            placeholder="Jan"
+            [formControl]="controls.firstName" />
+          @if (controls.firstName.invalid) {
+            <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nazwisko</mat-label>
+          <input
+            id="surname-employee-aurorum"
+            matInput
+            placeholder="Kowalski"
+            [formControl]="controls.surname" />
+          @if (controls.surname.invalid) {
+            <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>E-mail</mat-label>
+          <input
+            id="email-employee-aurorum"
+            matInput
+            placeholder="jan.kowalski@example.com"
+            [formControl]="controls.email" />
+          @if (controls.email.invalid) {
+            <mat-error>{{ getErrorMessage(controls.email) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="w-75 d-flex justify-content-end">
+        <mat-checkbox [checked]="!hasPesel()" (change)="peselCheckbox()" class="text-decoration-none text-dark">
+          Brak numeru PESEL
+        </mat-checkbox>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Pesel</mat-label>
+          <input
+            id="pesel-employee-aurorum"
+            matInput
+            autocomplete="off"
+            [formControl]="controls.pesel" />
+          @if (hasPesel() && controls.pesel.invalid) {
+            <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-3 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Telefon</mat-label>
+          <input
+            id="phone-employee-aurorum"
+            matInput
+            [formControl]="controls.phone" />
+          @if (controls.phone.invalid) {
+            <mat-error>{{ getErrorMessage(controls.phone) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="mb-1 w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data urodzenia</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="controls.birthdate" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (controls.birthdate.invalid) {
+            <mat-error>{{ getErrorMessage(controls.birthdate) }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <app-alert class="mt-3 w-75" *ngIf="errorMessage()" [text]="errorMessage()"></app-alert>
+      <div class="mt-3 mb-3">
+        <button mat-flat-button type="submit" [disabled]="registerForm.invalid"
+                class="btn text-white border-0" style="background-color: var(--primary-purple)">Zarejestruj pracownika</button>
+      </div>
+    </form>
+  </div>
+</div>

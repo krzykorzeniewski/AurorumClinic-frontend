@@ -13,7 +13,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { OpinionCardComponent } from '../../shared/opinion-card/opinion-card.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { map } from 'rxjs';
-import { UserRole } from '../../../core/models/auth.model';
+import { UserRoleMap } from '../../../core/models/auth.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -43,7 +43,7 @@ export class ProfileComponent {
   private _location = inject(Location);
   private _router = inject(Router);
   isDoctor$ = this._authService.user$.pipe(
-    map((user) => user?.role === UserRole.DOCTOR),
+    map((user) => user?.role === UserRoleMap.DOCTOR),
   );
   doctor = signal<GetFullDoctorApiResponse | null>(null);
   opinions = signal<Opinion[]>([]);
@@ -96,6 +96,7 @@ export class ProfileComponent {
         void this._router.navigate(['']);
       },
     });
+    this._location.replaceState(this._router.url);
   }
 
   editProfile() {

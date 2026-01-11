@@ -102,8 +102,17 @@ export class PatientService {
       );
   }
 
-  getPatientAppointments(patientId: number, page: number, size: number) {
-    const params = new HttpParams().set('page', page).set('size', size);
+  getPatientAppointments(
+    patientId: number,
+    page: number,
+    size: number,
+    status: AppointmentStatus,
+  ) {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', 'startedAt,asc')
+      .set('status', status);
     return this._http
       .get<ApiResponse<PageableResponse<GetAppointmentInfo>>>(
         `${this._apiUrl}/${patientId}/appointments`,
@@ -143,6 +152,7 @@ export class PatientService {
                     value.payment.status,
                   ),
                   value.hasOpinion,
+                  value.hasChat,
                 ),
             ),
             page: res.data.page,

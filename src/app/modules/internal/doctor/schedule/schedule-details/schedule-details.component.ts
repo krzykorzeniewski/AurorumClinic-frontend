@@ -100,7 +100,6 @@ export class ScheduleDetailsComponent {
     this._doctorService.getSpecializationsWithServices().subscribe({
       next: (res) => {
         this.specializations = res;
-        localStorage.setItem('services', JSON.stringify(res));
       },
     });
   }
@@ -222,7 +221,7 @@ export class ScheduleDetailsComponent {
             });
             this.refreshSchedule(schedule.id);
           }
-        } else {
+        } else if (!result?.cancel) {
           if (isDeleting) {
             this.errorMessage.set(
               'Wystąpił błąd podczas usuwania grafiku. Spróbuj ponownie później',

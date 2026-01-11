@@ -11,3 +11,24 @@ export class Service {
     public price: number,
   ) {}
 }
+
+export interface FullService {
+  id: number;
+  name: string;
+  price: BigNumber;
+  duration: number;
+  description: string;
+}
+
+export interface CreateService {
+  name: string;
+  price: BigNumber;
+  duration: number;
+  description: string;
+  specializationIds: number[];
+}
+
+export interface UpdateService {
+  name: string;
+  description: string;
+}

@@ -16,7 +16,7 @@
   </mat-form-field>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions class="w-75 d-flex justify-content-between mt-4">
   <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
   <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onDelete()" [disabled]="confirmForm.invalid">
     Trwale usuń konto

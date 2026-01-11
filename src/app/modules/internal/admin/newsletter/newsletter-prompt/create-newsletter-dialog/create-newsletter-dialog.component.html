@@ -1,0 +1,104 @@
+<h2 mat-dialog-title class="mb-4 text-center fw-semibold">
+  Wynik generowania wpisu
+</h2>
+
+<mat-dialog-content>
+
+  <div class="text-center mb-4">
+    <strong class="d-block mb-1">
+      Uzupełnij datę oraz godzinę wysyłki wpisu
+    </strong>
+    <p class="text-muted mb-0">
+      Możesz również zmodyfikować temat lub treść wiadomości
+    </p>
+  </div>
+
+  <div class="row g-3">
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Temat</mat-label>
+        <input matInput readonly [formControl]="controls.subject" />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Treść</mat-label>
+        <textarea
+          matInput
+          rows="4"
+          [formControl]="controls.text"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="4"
+          cdkAutosizeMaxRows="7"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Data wysyłki</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [formControl]="controls.date"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker></mat-datepicker>
+        @if (controls.date.invalid) {
+          <mat-error>{{ getErrorMessage(controls.date) }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Godzina wysyłki</mat-label>
+        <input
+          matInput
+          [formControl]="controls.time"
+          [matTimepicker]="time"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="time" />
+        <mat-timepicker #time />
+        @if (controls.time.invalid) {
+          <mat-error>{{ getErrorMessage(controls.time) }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+  </div>
+
+</mat-dialog-content>
+
+<div class="container mt-3">
+  <app-alert
+    *ngIf="infoMessage()"
+    [text]="infoMessage()"
+    [variant]="variant()">
+  </app-alert>
+</div>
+
+<mat-dialog-actions
+  class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+
+  <button
+    mat-flat-button
+    class="btn px-4 py-2"
+    style="background-color: #dee2e6; color: #212529"
+    (click)="onSubmit(false)"
+    >
+    Odrzuć
+  </button>
+
+  <button
+    mat-flat-button
+    class="btn px-4 py-2 text-white shadow-sm"
+    style="background-color: var(--primary-purple)"
+    (click)="onSubmit(true)"
+    [disabled]="createForm.invalid">
+    Utwórz
+  </button>
+
+</mat-dialog-actions>

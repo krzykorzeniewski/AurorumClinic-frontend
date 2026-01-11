@@ -1,0 +1,52 @@
+<div class="container d-flex align-items-center pt-5">
+  <div class="card p-3 col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+    <div>
+      <h2 class="text-center mb-3">
+        Utwórz wpis
+      </h2>
+      <p class="text-center mb-5">
+        Możesz wygenerować domyślny wpis klikając wygeneruj lub wpisując swoją sugestię co do wpisu
+      </p>
+      <form class="d-flex flex-column align-items-center " (ngSubmit)="onSubmit()">
+        <div class="mb-2 w-75">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Prompt</mat-label>
+            <textarea
+              id="email-aurorum-recovery"
+              matInput
+              rows="4"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="6"
+              [formControl]="promptForm"
+            ></textarea>
+            @if (promptForm.invalid) {
+              <mat-error>{{ getErrorMessage(promptForm) }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <app-alert class="mt-3 w-75" *ngIf="message()" [text]="message()"></app-alert>
+        <div class="row w-100" [class]="message() ? 'mb-3' : 'mt-3 mb-3'">
+          <div class="col-sm text-center">
+            <button
+              mat-flat-button
+              type="button"
+              class="btn border"
+              style="background-color: white; color: black"
+              routerLink="/internal/newsletter"
+            >Anuluj</button>
+          </div>
+          <div class="col-sm text-center">
+            <button
+              mat-flat-button
+              type="submit"
+              [disabled]="promptForm.invalid"
+              class="btn text-white"
+              style="background-color: var(--primary-purple)"
+            >Wygeneruj</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

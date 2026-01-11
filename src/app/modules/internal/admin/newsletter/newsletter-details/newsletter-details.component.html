@@ -1,0 +1,71 @@
+<div class="container-fluid d-flex align-items-center pt-4">
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
+    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm">
+      Szczegóły wpisu
+    </h2>
+    <div *ngIf="newsletter() as news" class="d-flex flex-column align-items-center">
+      <div *ngIf="news.subject" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Tytuł</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.subject"/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.text" class="mb-1 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Treść</mat-label>
+          <textarea
+            rows="4"
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="4"
+            cdkAutosizeMaxRows="8"
+            matInput
+            [readonly]="canModify()"
+            [value]="news.text"
+          ></textarea>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.createdAt" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data utworzenia</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.createdAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.approved" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Zatwierdzony</mat-label>
+          <input [readonly]="canModify()" matInput [value]="(news.approved)?'Tak':'Nie'"/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.approved && news.reviewedAt" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data zatwierdzenia</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.reviewedAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.sentAt" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Wysłano</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.sentAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.scheduledAt" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Data wysyłki</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.scheduledAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="news.reviewer" class="mb-2 w-100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Zatwierdzający</mat-label>
+          <input [readonly]="canModify()" matInput [value]="news.reviewer.name + ' ' + news.reviewer.surname"/>
+        </mat-form-field>
+      </div>
+
+      <div class="row w-100">
+        <div class="col-sm text-center">
+          <button mat-flat-button type="button" class="btn btn-purple w-50" routerLink="/internal/newsletter">Powrót</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

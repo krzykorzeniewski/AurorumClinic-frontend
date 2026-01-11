@@ -7,7 +7,10 @@ import {
   MatLabel,
 } from '@angular/material/input';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserLoginDataRequest } from '../../../core/models/auth.model';
+import {
+  UserLoginDataRequest,
+  UserRoleMap,
+} from '../../../core/models/auth.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
@@ -23,6 +26,7 @@ import {
   AlertVariant,
 } from '../../../shared/components/alert/alert.component';
 import { NgIf } from '@angular/common';
+import { ChatService } from '../../../core/services/chat.service';
 
 @Component({
   selector: 'app-login',
@@ -51,6 +55,7 @@ import { NgIf } from '@angular/common';
 export class LoginComponent {
   private _authService = inject(AuthService);
   private _formService = inject(FormsService);
+  private _chatService = inject(ChatService);
   private _router = inject(Router);
   readonly loginForm = this._formService.getLoginForm();
   hidePassword = signal(true);
@@ -79,6 +84,13 @@ export class LoginComponent {
             },
           });
         } else {
+          const isDoctorOrPatient =
+            user.role === UserRoleMap.DOCTOR ||
+            user.role === UserRoleMap.PATIENT;
+
+          if (isDoctorOrPatient) {
+            this._chatService.connect();
+          }
           this._authService.redirectAfterLogin();
         }
       },

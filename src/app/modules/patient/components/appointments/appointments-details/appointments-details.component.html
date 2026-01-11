@@ -72,6 +72,9 @@
         <div class="col-sm text-center">
           <button mat-flat-button type="button" class="btn btn-purple w-50" routerLink="/profile/appointments">Powrót</button>
         </div>
+        <div class="col-sm text-center">
+          <button *ngIf="app.status === AppointmentStatus.FINISHED && !app.hasChat" mat-flat-button type="button" class="btn btn-warning-custom w-50" (click)="chatWithDoctor()">Chat</button>
+        </div>
         <div *ngIf="!app.hasOpinion && app.status === AppointmentStatus.FINISHED" class="col-sm text-center">
           <button mat-flat-button type="button" class="btn btn-green w-50" (click)="createOpinion()">Oceń</button>
         </div>

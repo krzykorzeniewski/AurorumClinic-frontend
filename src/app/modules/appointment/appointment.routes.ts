@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserRole } from '../core/models/auth.model';
+import { UserRoleMap } from '../core/models/auth.model';
 import { roleMatchGuard } from '../core/guards/role-match.guard';
 import { roleGuard } from '../core/guards/role.guard';
 
@@ -7,7 +7,7 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'search',
     canActivate: [roleGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
     loadComponent: () =>
       import('../appointment/components/appointment-search/appointment-search.component').then(
         (c) => c.AppointmentSearchComponent,
@@ -16,7 +16,7 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'register',
     canMatch: [roleMatchGuard],
-    data: { roles: [UserRole.PATIENT] },
+    data: { roles: [UserRoleMap.PATIENT] },
     loadComponent: () =>
       import('../appointment/components/appointment-register/appointment-register-patient/appointment-register-patient.component').then(
         (c) => c.AppointmentRegisterPatientComponent,
@@ -25,7 +25,7 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'register',
     canMatch: [roleMatchGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
     loadComponent: () =>
       import('../appointment/components/appointment-register/appointment-register-employee/appointment-register-employee.component').then(
         (c) => c.AppointmentRegisterEmployeeComponent,
@@ -34,7 +34,7 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'reschedule',
     canMatch: [roleMatchGuard],
-    data: { roles: [UserRole.EMPLOYEE] },
+    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
     loadComponent: () =>
       import('../appointment/components/appointment-reschedule/appointment-reschedule-employee/appointment-reschedule-employee.component').then(
         (c) => c.AppointmentRescheduleEmployeeComponent,
@@ -43,10 +43,21 @@ export const APPOINTMENT_ROUTES: Routes = [
   {
     path: 'reschedule',
     canMatch: [roleMatchGuard],
-    data: { roles: [UserRole.PATIENT] },
+    data: { roles: [UserRoleMap.PATIENT] },
     loadComponent: () =>
       import('../appointment/components/appointment-reschedule/appointment-reschedule-patient/appointment-reschedule-patient.component').then(
         (c) => c.AppointmentReschedulePatientComponent,
+      ),
+  },
+  {
+    path: 'payment',
+    canMatch: [roleGuard],
+    data: {
+      roles: [UserRoleMap.EMPLOYEE, UserRoleMap.PATIENT, UserRoleMap.ADMIN],
+    },
+    loadComponent: () =>
+      import('../appointment/payment/payment.component').then(
+        (c) => c.PaymentComponent,
       ),
   },
 ];

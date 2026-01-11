@@ -2,7 +2,7 @@
   <h2 class="pb-4 text-center">Grafik specjalistów</h2>
   <div class="card p-3 w-100 h-100 shadow-sm rounded-4">
 
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center flex-nowrap">
 
       <button mat-icon-button
               class="btn p-2 me-2"
@@ -12,7 +12,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
 
-      <div class="d-block text-center p-3 shadow rounded-3 bg-white w-100 overflow-auto">
+      <div class="d-block text-center p-3 shadow rounded-3 bg-white flex-grow-1 overflow-hidden">
         <div
           *ngFor="let day of weekDays"
           class="d-flex flex-row border rounded-3 p-2 mb-2"
@@ -31,8 +31,8 @@
             <button
               *ngFor="let schedule of getTimeFromDay(day.full)"
               type="button"
-              class="badge d-flex flex-column justify-content-center text-white mx-auto w-75 border-0"
-              style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer; min-width: 130px;"
+              class="badge d-flex flex-column justify-content-center text-white p-3 mx-auto w-75 border-0 overflow-visible"
+              style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer; min-width: 150px;"
               (click)="goToDetails(schedule.id)"
             >
               {{ schedule.startedAt }} - {{ schedule.finishedAt }} <br> <br>

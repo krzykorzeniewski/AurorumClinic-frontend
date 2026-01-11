@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
-import { UserRole } from '../models/auth.model';
+import { UserRoleMap } from '../models/auth.model';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { filter, map } from 'rxjs';
@@ -7,21 +7,21 @@ import { filter, map } from 'rxjs';
 export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const allowedRoles = route.data['roles'] as UserRole[];
+  const allowedRoles = route.data['roles'] as UserRoleMap[];
 
   return authService.user$.pipe(
     filter((user) => user !== undefined),
     map((user) => {
-      const currentRole = user?.role ?? UserRole.ANONYMOUS;
+      const currentRole = user?.role ?? UserRoleMap.ANONYMOUS;
 
       if (allowedRoles.includes(currentRole)) {
         return true;
       }
 
-      if (currentRole === UserRole.ANONYMOUS) {
+      if (currentRole === UserRoleMap.ANONYMOUS) {
         void router.navigate(['/auth/login']);
       } else if (
-        [UserRole.EMPLOYEE, UserRole.DOCTOR, UserRole.ADMIN].includes(
+        [UserRoleMap.EMPLOYEE, UserRoleMap.DOCTOR, UserRoleMap.ADMIN].includes(
           currentRole,
         )
       ) {

@@ -12,14 +12,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsService } from '../../../core/services/forms.service';
 import { MatIcon } from '@angular/material/icon';
-import { UserRegisterRequest } from '../../../core/models/auth.model';
+import { PatientRegisterRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-register-patient',
   standalone: true,
   imports: [
     MatButton,
@@ -37,13 +37,12 @@ import { NgIf } from '@angular/common';
     NgIf,
   ],
   templateUrl: './register-patient.component.html',
-  styleUrl: './register-patient.component.css',
 })
 export class RegisterPatientComponent {
   private _authService = inject(AuthService);
   private _formService = inject(FormsService);
   private _router = inject(Router);
-  readonly registerForm = this._formService.getRegisterForm();
+  readonly registerForm = this._formService.getPatientRegisterForm();
   hasPesel: WritableSignal<boolean> = signal(true);
   hidePassword = signal(true);
   errorMessage = signal('');
@@ -51,7 +50,7 @@ export class RegisterPatientComponent {
   onRegister(): void {
     const formValue = this.registerForm.value;
 
-    const userData: UserRegisterRequest = {
+    const userData: PatientRegisterRequest = {
       name: formValue.firstName!,
       surname: formValue.surname!,
       pesel: formValue.pesel || null,

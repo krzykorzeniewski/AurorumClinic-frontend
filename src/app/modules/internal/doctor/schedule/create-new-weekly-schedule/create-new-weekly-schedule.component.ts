@@ -44,7 +44,7 @@ import {
   DayDto,
 } from '../../../../core/models/schedule.model';
 import { toLocalISOString } from '../../../../shared/methods/dateTransform';
-import { User, UserRole } from '../../../../core/models/auth.model';
+import { User, UserRoleMap } from '../../../../core/models/auth.model';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
@@ -108,7 +108,7 @@ export class CreateNewWeeklyScheduleComponent {
         filter((user): user is User => !!user),
         take(1),
         switchMap((user) => {
-          if (user.role !== UserRole.DOCTOR) {
+          if (user.role !== UserRoleMap.DOCTOR) {
             this._router.navigate(['/internal/my-schedules']);
             return EMPTY;
           }
