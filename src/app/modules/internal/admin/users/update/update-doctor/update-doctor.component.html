@@ -1,6 +1,6 @@
-<div class="container d-flex align-items-center pt-5">
+<div class="container d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">Zmiana danych specjalisty</h2>
   <div class="col-10 col-sm-12 col-md-6 col-lg-4 mx-auto">
-    <h2 class="text-center mb-4">Zmiana danych pacjenta</h2>
     <form [formGroup]="doctorForm" *ngIf="doctor && doctorForm" (ngSubmit)="onDoctorUpdate()">
       <div class="mb-3 w-100">
         <mat-form-field appearance="outline" class="w-100">
@@ -120,7 +120,7 @@
           <button
             mat-flat-button
             type="button"
-            class="btn border"
+            class="btn border w-75"
             style="background-color: white; color: black"
             (click)="goBack()"
           >Powrót</button>
@@ -129,7 +129,7 @@
           <button
             mat-flat-button
             type="submit"
-            class="btn text-white"
+            class="btn text-white w-75"
             style="background-color: var(--primary-purple)"
             [disabled]="doctorForm.invalid || noChangesDetected"
           >Zmień dane</button>

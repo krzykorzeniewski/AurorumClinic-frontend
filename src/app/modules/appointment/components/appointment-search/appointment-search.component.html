@@ -1,5 +1,5 @@
 <div *ngIf="patient" class="container pt-3">
-  <h2 class="pb-4 text-center">Wyszukaj specjalistę dla <b>{{patient.name}} {{patient.surname}} </b></h2>
+  <h2 class="pb-4 text-center">Wyszukaj specjalistę dla pacjenta: {{patient.name}} {{patient.surname}} </h2>
 
   <app-doctor-appointment-search
     (confirmSearch)="onSearch($event)"

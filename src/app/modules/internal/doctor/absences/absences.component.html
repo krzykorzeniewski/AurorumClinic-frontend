@@ -1,7 +1,6 @@
-<div class="container d-flex flex-column align-items-center pt-4 mx-auto">
-  <div class="card col-12 col-sm-10 col-md-12 col-lg-10 p-4 mx-auto shadow-lg border-0 rounded-4">
-
-  <h4 class="text-center fw-light mb-4">Moje nieobecności</h4>
+<div class="container d-flex flex-column align-items-center pt-3 mx-auto">
+  <h2 class="text-center mb-4">Moje nieobecności</h2>
+  <div class="card col-12 col-sm-10 col-md-12 col-lg-10 p-4 mx-auto border rounded-2">
 
   <h5 *ngIf="absences.length === 0" class="text-center fw-light mb-4">
     Brak nieobecności
@@ -9,9 +8,9 @@
 
   <div *ngIf="absences.length !== 0" class="col-12 col-sm-10 col-md-10 col-lg-10 mx-auto w-100">
     <mat-selection-list [multiple]="false" (selectionChange)="onSelectionChange($event.options)">
-      <mat-list-option *ngFor="let absence of absences" [value]="absence.id" class="btn-warning-custom">
-        <div class="d-flex flex-column">
-          <span class="fw-bold">{{ absence.name }}</span>
+      <mat-list-option *ngFor="let absence of absences" [value]="absence.id" class="btn-warning-custom border rounded-2">
+        <div class="d-flex flex-column p-2">
+          <span>{{ absence.name }}</span>
           <span class="text-muted small">
             {{ formatDate(absence.startedAt) }} - {{ formatDate(absence.finishedAt) }}
           </span>
@@ -31,15 +30,15 @@
   </div>
   <div class="row w-100 gap-2">
     <div class="col-sm text-center">
-      <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="goBack()">Powrót</button>
+      <button mat-flat-button type="button" class="btn border w-100" (click)="goBack()">Powrót</button>
     </div>
     <div class="col-sm text-center">
       <button mat-flat-button type="button" class="btn btn-danger-custom w-100" (click)="deleteAbsence()"
-              [disabled]="!selectedAbsenceId">Usuń wybraną nieobecność
+              [disabled]="!selectedAbsenceId">Usuń nieobecność
       </button>
     </div>
     <div class="col-sm text-center">
-      <button mat-flat-button type="button" class="btn btn-green w-100" (click)="createAbsence()">Utwórz nową
+      <button mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple)" (click)="createAbsence()">Utwórz nową
         nieobecność
       </button>
     </div>

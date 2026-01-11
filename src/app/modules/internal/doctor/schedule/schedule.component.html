@@ -1,6 +1,6 @@
 <div class="container pt-3">
   <h2 class="pb-4 text-center">Mój grafik</h2>
-  <div class="card p-3 w-100 h-100 shadow-sm rounded-4">
+  <div class="card p-3 w-100 h-100 rounded-2">
 
       <div class="d-flex align-items-center">
 
@@ -12,26 +12,26 @@
           <mat-icon>arrow_back</mat-icon>
         </button>
 
-        <div class="d-block text-center p-3 shadow rounded-3 bg-white w-100 overflow-auto">
+        <div class="d-block text-center p-3 bg-white w-100 overflow-auto">
           <div
             *ngFor="let day of weekDays"
-            class="d-flex flex-row border rounded-3 p-2 mb-2"
+            class="d-flex flex-row border rounded-4 p-2 mb-2"
             style="min-width: 150px;"
             [class.opacity-50]="isPastDay(day.date)"
             [class.bg-light]="isPastDay(day.date)"
           >
             <div class="d-flex flex-column justify-content-center mx-4 pt-2 pb-2">
-              <div class="fw-bold text-uppercase text-muted small">
+              <div class="fw-medium text-uppercase text-muted small">
                 {{ day.short }}
               </div>
-              <div class="fw-bold">{{ day.day }}</div>
+              <div class="fw-medium">{{ day.day }}</div>
             </div>
 
             <div *ngIf="!isPastDay(day.date) && getTimeFromDay(day.full)?.length; else noSlots" class="d-flex flex-row gap-3 overflow-auto">
               <button
                 *ngFor="let schedule of getTimeFromDay(day.full)"
                 type="button"
-                class="badge d-flex flex-column justify-content-center text-white mx-auto w-75 border-0"
+                class="badge d-flex flex-column justify-content-center fw-semibold text-white mx-auto w-75 border-0"
                 style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer; min-width: 130px;"
                 (click)="goToDetails(schedule.id)"
               >
@@ -55,13 +55,13 @@
 
       </div>
 
-    <div class="row w-100 gap-2 pt-4">
-      <div class="col-sm text-center">
-        <button mat-flat-button type="button" class="btn btn-green w-50" (click)="createDailySchedule()">Utwórz grafik jednodniowy</button>
-      </div>
-      <div class="col-sm text-center">
-        <button mat-flat-button type="button" class="btn btn-green w-50" (click)="createWeeklySchedule()" >Utwórz grafik tygodniowy</button>
-      </div>
+  </div>
+  <div class="d-flex mt-4 justify-content-end gap-3">
+    <div class="text-center">
+      <button mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple);" (click)="createDailySchedule()">Utwórz grafik jednodniowy</button>
+    </div>
+    <div class="text-center">
+      <button mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple);" (click)="createWeeklySchedule()" >Utwórz grafik tygodniowy</button>
     </div>
   </div>
 </div>

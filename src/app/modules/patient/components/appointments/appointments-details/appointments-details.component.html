@@ -1,12 +1,12 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm">
-      Szczegóły wizyty
-    </h2>
+<div class="container-fluid d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">
+    Szczegóły wizyty
+  </h2>
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto border-1 rounded-2">
     <div *ngIf="appointment() as app" class="d-flex flex-column align-items-center">
 
       <div *ngIf="app.payment.status === PaymentStatus.CREATED"
-           class="mb-3 w-100 text-center py-2 rounded-3 alert-unpaid">
+           class="mb-3 w-100 text-center py-2 rounded-2 alert-unpaid">
         Ta wizyta nie została opłacona! Proszę uregulować płatność.
       </div>
 
@@ -49,20 +49,20 @@
 
       <div *ngIf="app.status === AppointmentStatus.CREATED" class="mb-4 w-100">
         <mat-accordion>
-          <mat-expansion-panel class="border-4 rounded-4 shadow-sm overflow-hidden text-black" style="background-color: #d3d2d2">
+          <mat-expansion-panel class="border rounded-2 text-black shadow-none">
             <mat-expansion-panel-header>
               <mat-panel-title> Zarządzaj wizytą </mat-panel-title>
               <mat-panel-description> Przełóż, opłać lub odwołaj wizytę </mat-panel-description>
             </mat-expansion-panel-header>
-            <div class="row w-100 mb-2">
+            <div class="row mb-2">
               <div class="col-sm text-center mb-3">
-                <button mat-flat-button type="button" class="btn-danger-custom w-100" (click)="onCancelAppointment()">Odwołaj</button>
+                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onCancelAppointment()">Odwołaj</button>
               </div>
               <div class="col-sm text-center mb-3">
-                <button *ngIf="app.payment.status === PaymentStatus.CREATED" mat-flat-button type="button" class="btn-warning-custom w-100" (click)="onPayment()">Opłać</button>
+                <button *ngIf="app.payment.status === PaymentStatus.CREATED" mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple); width: 91px" (click)="onPayment()">Opłać</button>
               </div>
               <div class="col-sm text-center mb-3">
-                <button mat-flat-button type="button" class="btn-green w-100" (click)="onRescheduleAppointment()">Przełóż</button>
+                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onRescheduleAppointment()">Przełóż</button>
               </div>
             </div>
           </mat-expansion-panel>
@@ -70,13 +70,13 @@
       </div>
       <div class="row w-100">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-50" routerLink="/profile/appointments">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-50" style="background-color: white; color: black" routerLink="/profile/appointments">Powrót</button>
         </div>
         <div class="col-sm text-center">
           <button *ngIf="app.status === AppointmentStatus.FINISHED && !app.hasChat" mat-flat-button type="button" class="btn btn-warning-custom w-50" (click)="chatWithDoctor()">Chat</button>
         </div>
         <div *ngIf="!app.hasOpinion && app.status === AppointmentStatus.FINISHED" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-green w-50" (click)="createOpinion()">Oceń</button>
+          <button mat-flat-button type="button" class="btn text-white w-50" style="background-color: var(--primary-purple)" (click)="createOpinion()">Oceń</button>
         </div>
       </div>
     </div>

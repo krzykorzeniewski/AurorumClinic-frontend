@@ -16,13 +16,13 @@
   </mat-form-field>
 </div>
 
-<div class="row w-100 mt-4">
-  <div class="col-sm text-center mb-2">
-    <button mat-flat-button type="button" class="btn btn-outline-custom w-50 mb-2"
+<div class="d-flex justify-content-between w-100 mt-4">
+  <div>
+    <button mat-flat-button type="button" class="btn border" style="background-color: white; color: black"
             (click)="onCancel()">Powrót</button>
   </div>
-  <div class="col-sm text-center mb-2">
-    <button mat-flat-button type="button" class="btn btn-purple w-50 mb-2"
+  <div>
+    <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)"
             [disabled]="selectedDateTime() === null"
             (click)="onConfirmReschedule()">Przełóż</button>
   </div>

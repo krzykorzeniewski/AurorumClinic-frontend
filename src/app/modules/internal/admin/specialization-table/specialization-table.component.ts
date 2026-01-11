@@ -30,6 +30,7 @@ import { map, merge, startWith, Subject, Subscription, switchMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditSpecializationDialogComponent } from './edit-specialization-dialog/edit-specialization-dialog.component';
 import { CreateSpecializationDialogComponent } from './create-specialization-dialog/create-specialization-dialog.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-specialization-table',
@@ -48,6 +49,7 @@ import { CreateSpecializationDialogComponent } from './create-specialization-dia
     ReactiveFormsModule,
     MatHeaderCellDef,
     MatPaginator,
+    MatButton
   ],
   templateUrl: './specialization-table.component.html',
   styleUrl: './specialization-table.component.css',

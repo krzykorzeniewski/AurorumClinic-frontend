@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { map, merge, startWith, Subscription, switchMap } from 'rxjs';
 import { NewsletterService } from '../../../../core/services/newsletter.service';
 import { NewsletterMessageResponse } from '../../../../core/models/newsletter.model';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-newsletter-table',
@@ -49,6 +50,7 @@ import { NewsletterMessageResponse } from '../../../../core/models/newsletter.mo
     ReactiveFormsModule,
     MatNoDataRow,
     MatHeaderCellDef,
+    MatButton
   ],
   templateUrl: './newsletter-table.component.html',
   styleUrl: './newsletter-table.component.css',

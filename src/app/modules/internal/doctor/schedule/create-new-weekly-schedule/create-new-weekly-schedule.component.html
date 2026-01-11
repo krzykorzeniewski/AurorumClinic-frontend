@@ -1,22 +1,22 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
-      Dodawanie tygodniowego grafiku
-    </h2>
+<div class="container-fluid d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">
+    Dodawanie grafiku tygodniowego
+  </h2>
+  <div class="col-12 col-sm-12 col-md-12 col-lg-6 p-4 mx-auto border rounded-2 bg-white">
     <form [formGroup]="scheduleForm" class="d-flex flex-column align-items-center">
 
       <div class="mb-4 w-100">
-        <mat-accordion class="shadow-sm">
+        <mat-accordion>
 
           <ng-container *ngFor="let day of weekDays; let i = index">
             <mat-expansion-panel
-              class="mb-3 border rounded-3 overflow-hidden"
+              class="mb-3 border rounded-2 overflow-hidden shadow-none"
               [expanded]="step() === i"
               (opened)="setStep(i)"
               hideToggle
             >
               <mat-expansion-panel-header class="bg-light">
-                <mat-panel-title class="fw-semibold text-dark">{{ day.label }}</mat-panel-title>
+                <mat-panel-title>{{ day.label }}</mat-panel-title>
                 <mat-panel-description *ngIf="isDaySelected(day.key)" class="text-success fw-medium">
                   {{ getDayHourFrom(day.key) | date: 'HH:mm':'':'pl' }} -
                   {{ getDayHourTo(day.key) | date: 'HH:mm':'':'pl' }}
@@ -86,21 +86,22 @@
               <mat-action-row class="bg-light border-top p-3">
                 <div class="d-flex justify-content-between w-100 gap-2">
                   <button
-                    mat-button
+                    mat-flat-button
                     type="button"
                     *ngIf="i > 0"
                     (click)="prevStep()"
-                    class="btn btn-purple px-4"
+                    class="btn border px-4 m-0"
                   >
                     Powrót
                   </button>
-                  <div class="ms-auto d-flex gap-2">
+                  <div class="d-flex">
                     <button
-                      mat-button
+                      mat-flat-button
                       type="button"
                       *ngIf="i < weekDays.length - 1"
                       (click)="nextStep()"
-                      class="btn btn-green px-4"
+                      class="btn text-white px-4 m-0"
+                      style="background-color: var(--primary-purple); min-width: 100px"
                     >
                       Dalej
                     </button>
@@ -109,9 +110,10 @@
                       type="button"
                       *ngIf="i === weekDays.length - 1"
                       (click)="nextStep()"
-                      class="btn btn-green px-4"
+                      class="btn text-white px-4"
+                      style="max-width: 100px; background-color: var(--primary-purple); min-width: 100px"
                     >
-                      Zamknij
+                      Zakończ
                     </button>
                   </div>
                 </div>
@@ -148,10 +150,10 @@
 
       <div class="row w-100 gap-2">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="goBack()">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-75"  (click)="goBack()">Powrót</button>
         </div>
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-green w-100" (click)="createSchedule()"
+          <button mat-flat-button type="button" class="btn text-white w-75"  style="background-color: var(--primary-purple);" (click)="createSchedule()"
                   [disabled]="!isFormValid">Utwórz grafik
           </button>
         </div>

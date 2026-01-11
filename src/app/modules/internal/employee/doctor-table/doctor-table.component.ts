@@ -27,6 +27,13 @@ import { DoctorService } from '../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
+} from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-doctor-table',
@@ -46,6 +53,11 @@ import { Location } from '@angular/common';
     MatTable,
     MatHeaderCellDef,
     ReactiveFormsModule,
+    MatIcon,
+    MatExpansionPanelHeader,
+    MatExpansionPanel,
+    MatAccordion,
+    MatExpansionPanelTitle
   ],
   templateUrl: './doctor-table.component.html',
   styleUrl: './doctor-table.component.css',
@@ -59,9 +71,7 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
     'name',
     'surname',
     'rating',
-    'daily_schedule',
-    'weekly_schedule',
-    'absences',
+    'actions',
   ];
   dataSource!: MatTableDataSource<GetDoctorApiResponse>;
   totalCount = 0;

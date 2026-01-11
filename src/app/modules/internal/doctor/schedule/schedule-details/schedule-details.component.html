@@ -1,15 +1,15 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
-      Szczegóły grafiku
-    </h2>
+<div class="container-fluid d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">
+    Szczegóły grafiku
+  </h2>
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto border rounded-2">
     <form *ngIf="schedule() as app" [formGroup]="scheduleForm" class="d-flex flex-column align-items-center">
 
       <div class="mb-2 w-100">
         <div *ngIf="!editMode()" class="card p-2 mb-4 w-100">
-          <h5 class="text-center">Serwisy przypisane do grafiku</h5>
-          <ul class="list-group mb-1 overflow-y-auto" style="max-height: 150px; scroll-behavior: smooth">
-            <li *ngFor="let service of app.services" class="list-group-item">
+          <h5 class="text-center">Usługi przypisane do grafiku</h5>
+          <ul class="list-group mb-1 overflow-y-auto shadow-none border-0" style="max-height: 150px; scroll-behavior: smooth">
+            <li *ngFor="let service of app.services" class="list-group-item border-0 shadow-none">
               {{ service.name }}
             </li>
           </ul>
@@ -75,19 +75,19 @@
 
       <div class="row w-100 gap-2">
         <div *ngIf="!editMode()" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="goBack()">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-100" (click)="goBack()">Powrót</button>
         </div>
         <div *ngIf="!editMode()" class="col-sm text-center">
           <button mat-flat-button type="button" class="btn btn-danger-custom w-100" (click)="removeSchedule()">Usuń grafik</button>
         </div>
         <div *ngIf="!editMode()" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-warning-custom w-100" (click)="editSchedule()">Edytuj grafik</button>
+          <button mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple);" (click)="editSchedule()">Edytuj grafik</button>
         </div>
         <div *ngIf="editMode()" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="cancelEdit()">Anuluj</button>
+          <button mat-flat-button type="button" class="btn border w-75" (click)="cancelEdit()">Anuluj</button>
         </div>
         <div *ngIf="editMode()" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-green w-100" (click)="changeSchedule()" [disabled]="scheduleForm.invalid">Przełóż grafik</button>
+          <button mat-flat-button type="button" class="btn text-white w-75" style="background-color: var(--primary-purple);" (click)="changeSchedule()" [disabled]="scheduleForm.invalid">Przełóż grafik</button>
         </div>
       </div>
     </form>

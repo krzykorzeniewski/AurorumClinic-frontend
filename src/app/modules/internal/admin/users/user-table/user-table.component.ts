@@ -40,6 +40,14 @@ import { GetUserApiResponse } from '../../../../core/models/user.model';
 import { DatePipe, Location, NgIf } from '@angular/common';
 import { UserRole } from '../../../../core/models/auth.model';
 import { AuthService } from '../../../../core/services/auth.service';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
+} from '@angular/material/expansion';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-table',
@@ -67,6 +75,12 @@ import { AuthService } from '../../../../core/services/auth.service';
     MatOption,
     DatePipe,
     NgIf,
+    MatIcon,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatButton
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.css',
@@ -86,9 +100,7 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
     'email',
     'phoneNumber',
     'createdAt',
-    'update',
-    'passwordReset',
-    'doctorProfile',
+    'actions',
   ];
   dataSource!: MatTableDataSource<GetUserApiResponse>;
   totalCount = 0;
