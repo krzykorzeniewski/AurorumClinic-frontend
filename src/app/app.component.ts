@@ -5,7 +5,6 @@ import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from './modules/core/components/spinner/spinner.component';
 import { AuthService } from './modules/core/services/auth.service';
 import { ChatService } from './modules/core/services/chat.service';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -19,16 +18,13 @@ export class AppComponent implements OnInit {
   private _chatService = inject(ChatService);
 
   ngOnInit(): void {
-    this._authService
-      .tokenCsrf()
-      .pipe(switchMap(() => this._authService.refreshCookies()))
-      .subscribe({
-        next: (user) => {
-          if (user) {
-            this._chatService.disconnect();
-            this._chatService.connect();
-          }
-        },
-      });
+    this._authService.refreshCookies().subscribe({
+      next: (user) => {
+        if (user) {
+          this._chatService.disconnect();
+          this._chatService.connect();
+        }
+      },
+    });
   }
 }
