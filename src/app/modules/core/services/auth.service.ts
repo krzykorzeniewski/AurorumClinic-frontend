@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   DoctorRegisterRequest,
   EmployeeRegisterRequest,
@@ -13,6 +13,7 @@ import {
   UserPasswordResetRequest,
   UserRoleMap,
   VerifyEmailTokenRequest,
+  XcrfToken,
 } from '../models/auth.model';
 import {
   BehaviorSubject,
@@ -37,6 +38,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   #user = new BehaviorSubject<User | null | undefined>(undefined);
+  private _csrf = signal<string | null>(null);
   private _apiUrl = environment.apiUrl + '/auth';
   private _router = inject(Router);
   private _http = inject(HttpClient);
@@ -142,6 +144,12 @@ export class AuthService {
           return of(null);
         }),
       );
+  }
+
+  tokenCsrf() {
+    return this._http
+      .get<XcrfToken>(`${this._apiUrl}/csrf`)
+      .pipe(tap((res) => this._csrf.set(res.token)));
   }
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
@@ -344,6 +352,10 @@ export class AuthService {
           this.#user.next(null);
         }),
       );
+  }
+
+  get csrfToken() {
+    return this._csrf();
   }
 
   get user$(): Observable<User | null | undefined> {
