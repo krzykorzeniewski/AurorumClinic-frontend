@@ -144,6 +144,10 @@ export class AuthService {
       );
   }
 
+  tokenCsrf() {
+    return this._http.get(`${this._apiUrl}/csrf`, { responseType: 'text' });
+  }
+
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
     return this._http
       .post<void>(`${this._apiUrl}/verify-email-token`, request)
