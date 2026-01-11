@@ -222,6 +222,7 @@ export class UserService {
                     value.payment.status,
                   ),
                   value.hasOpinion,
+                  value.hasChat,
                 ),
             ),
             page: res.data.page,

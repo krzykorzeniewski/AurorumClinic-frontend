@@ -69,5 +69,14 @@ export const APP_ROUTES: Routes = [
     loadChildren: () =>
       import('./modules/doctor/doctor.routes').then((m) => m.DOCTOR_ROUTES),
   },
+  {
+    path: 'chats',
+    canActivate: [roleGuard],
+    data: {
+      roles: [UserRoleMap.PATIENT, UserRoleMap.DOCTOR],
+    },
+    loadComponent: () =>
+      import('./modules/chat/chat.component').then((c) => c.ChatComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

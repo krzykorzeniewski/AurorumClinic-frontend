@@ -12,6 +12,7 @@ export interface GetAppointmentInfo {
   service: Service;
   payment: Payment;
   hasOpinion: boolean;
+  hasChat: boolean;
 }
 
 export class Appointment implements GetAppointmentInfo {
@@ -24,6 +25,7 @@ export class Appointment implements GetAppointmentInfo {
     public service: Service,
     public payment: Payment,
     public hasOpinion: boolean,
+    public hasChat: boolean,
   ) {}
 }
 

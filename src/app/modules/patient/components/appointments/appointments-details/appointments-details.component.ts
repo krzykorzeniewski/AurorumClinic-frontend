@@ -18,6 +18,7 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { AppointmentService } from '../../../../core/services/appointment.service';
+import { Chat } from '../../../../core/models/chat.model';
 
 @Component({
   selector: 'app-appointments-details',
@@ -118,6 +119,22 @@ export class AppointmentsDetailsComponent implements OnInit {
 
     void this._router.navigate(['/profile/appointments/opinion'], {
       state: { appointment: currentAppointment },
+    });
+  }
+
+  chatWithDoctor() {
+    const currentAppointment = this.appointment();
+    if (!currentAppointment) return;
+
+    const chat: Chat = {
+      id: currentAppointment.doctor.id,
+      name: currentAppointment.doctor.name,
+      surname: currentAppointment.doctor.surname,
+      profilePicture: currentAppointment.doctor.profilePicture,
+    };
+
+    void this._router.navigate(['/chats'], {
+      state: { chat: chat },
     });
   }
 
