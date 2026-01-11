@@ -39,7 +39,7 @@ export const appConfig: ApplicationConfig = {
         csrfInterceptor,
       ]),
       withXsrfConfiguration({
-        cookieName: 'X-XSRF-TOKEN',
+        cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
       }),
     ),
