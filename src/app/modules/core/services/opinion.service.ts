@@ -111,6 +111,18 @@ export class OpinionService {
       );
   }
 
+  deleteDoctorAnswer(opinionId: number): Observable<void> {
+    return this._http
+      .delete<void>(`${this._apiUrl}/doctors/me/opinions/${opinionId}/answer`, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
+        }),
+      );
+  }
+
   deletePatientOpinionByPatient(opinionId: number): Observable<void> {
     return this._http
       .delete<void>(`${this._apiUrl}/patients/me/opinions/${opinionId}`, {

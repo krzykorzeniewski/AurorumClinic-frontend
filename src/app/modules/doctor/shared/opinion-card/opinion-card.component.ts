@@ -47,6 +47,7 @@ export class OpinionCardComponent {
   doctorSurname = input<string>();
   doctorPicture = input<string>();
   opinionDeleted = output<number>();
+  answerDeleted = output<number>();
   isPatient$ = this._authService.user$.pipe(
     map(
       (user) =>
@@ -135,6 +136,28 @@ export class OpinionCardComponent {
           );
         },
       });
+  }
+
+  deleteDoctorAnswer() {
+    this._opinionService.deleteDoctorAnswer(this.opinionId()).subscribe({
+      next: () => {
+        this.answerDeleted.emit(this.opinionId());
+        this._snackBar.open('Pomyślnie usunięto odpowiedź', 'zamknij', {
+          duration: 5000,
+          panelClass: 'xxx-alert-info',
+        });
+      },
+      error: () => {
+        this._snackBar.open(
+          'Wystąpił błąd podczas usuwania odpowiedzi',
+          'zamknij',
+          {
+            duration: 5000,
+            panelClass: 'xxx-alert-error',
+          },
+        );
+      },
+    });
   }
 
   deletePatientOpinionByAdmin() {

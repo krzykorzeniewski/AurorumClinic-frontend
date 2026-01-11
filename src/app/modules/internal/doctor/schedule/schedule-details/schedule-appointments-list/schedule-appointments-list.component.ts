@@ -1,6 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
-import { GetScheduleAppointmentInfo } from '../../../../../core/models/appointment.model';
+import {
+  GetDailyAppointmentInfo,
+  GetScheduleAppointmentInfo,
+} from '../../../../../core/models/appointment.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ScheduleService } from '../../../../../core/services/schedule.service';
 import { PatientCardComponent } from '../../../../../shared/components/patient-card/patient-card.component';
@@ -8,7 +11,7 @@ import { MatButton } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { AppointmentService } from '../../../../../core/services/appointment.service';
 import { UpdateDoctorSchedule } from '../../../../../core/models/schedule.model';
-import { concatMap, of } from 'rxjs';
+import { concatMap, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-schedule-appointments-list',
@@ -33,12 +36,34 @@ export class ScheduleAppointmentsListComponent implements OnInit {
     isDeleting: boolean;
     data: UpdateDoctorSchedule | null;
   }>(MAT_DIALOG_DATA);
-  appointmentsList: GetScheduleAppointmentInfo[] = [];
+  appointmentsList: (GetScheduleAppointmentInfo | GetDailyAppointmentInfo)[] =
+    [];
 
   ngOnInit(): void {
-    this._scheduleService
-      .getScheduleAppointmentsBasedOnRole(this.data.scheduleId)
-      .subscribe({
+    if (this.data.isDeleting) {
+      this._scheduleService
+        .getScheduleAppointmentsBasedOnRole(this.data.scheduleId)
+        .subscribe({
+          next: (appointments) => {
+            this.appointmentsList = appointments;
+          },
+          error: () => {
+            this._dialogRef.close({ success: false });
+          },
+        });
+    } else {
+      if (
+        !this.data.appointmentsIds ||
+        this.data.appointmentsIds.length === 0
+      ) {
+        this._dialogRef.close({ success: false });
+      }
+
+      const requests = this.data.appointmentsIds.map((id) =>
+        this._appointmentService.getAppointmentById(id),
+      );
+
+      forkJoin(requests).subscribe({
         next: (appointments) => {
           this.appointmentsList = appointments;
         },
@@ -46,6 +71,7 @@ export class ScheduleAppointmentsListComponent implements OnInit {
           this._dialogRef.close({ success: false });
         },
       });
+    }
   }
 
   changeSchedule() {

@@ -21,7 +21,10 @@
             <span>Odpowiedz</span>
           </button>
           <button *ngIf="answer() !== null" mat-menu-item (click)="editOpinionDoctor()">
-            <span>Edytuj opinię</span>
+            <span>Edytuj odpowiedź</span>
+          </button>
+          <button *ngIf="answer() !== null" mat-menu-item (click)="deleteDoctorAnswer()">
+            <span>Usuń odpowiedź</span>
           </button>
         </mat-menu>
         <button *ngIf="isAdmin$ | async" mat-icon-button [matMenuTriggerFor]="menuAdmin" aria-label="opinion menu admin">

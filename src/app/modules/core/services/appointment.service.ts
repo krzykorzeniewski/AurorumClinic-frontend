@@ -205,6 +205,24 @@ export class AppointmentService {
       );
   }
 
+  exportAppointmentPatient() {
+    return this._http
+      .get<Blob>(`${this._apiUrl}/appointments/me/export`, {
+        withCredentials: true,
+        responseType: 'blob' as 'json',
+      })
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Wystąpił błąd w trakcie exportowania wizyt. Spróbuj ponownie później.',
+              ),
+          );
+        }),
+      );
+  }
+
   deletePatientAppointmentByEmployee(appointmentId: number): Observable<void> {
     return this._http
       .delete<void>(`${this._apiUrl}/appointments/${appointmentId}`, {

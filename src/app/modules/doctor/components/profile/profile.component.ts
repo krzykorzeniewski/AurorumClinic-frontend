@@ -140,6 +140,21 @@ export class ProfileComponent {
     );
   }
 
+  onOpinionAnswerDeleted(opinionId: number) {
+    this.opinions.update((opinions) =>
+      opinions.map((op) => {
+        if (op.id === opinionId) {
+          return {
+            ...op,
+            answer: null,
+            answeredAt: null,
+          };
+        }
+        return op;
+      }),
+    );
+  }
+
   private loadOpinions(doctorId: number) {
     this._opinionService
       .getDoctorOpinions(

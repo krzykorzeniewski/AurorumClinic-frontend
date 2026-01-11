@@ -27,6 +27,8 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
+import { AppointmentService } from '../../../core/services/appointment.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-appointments',
@@ -41,10 +43,12 @@ import { MatPaginator } from '@angular/material/paginator';
     MatSelect,
     ReactiveFormsModule,
     MatPaginator,
+    MatButton,
   ],
   templateUrl: './appointments.component.html',
 })
 export class AppointmentsComponent implements AfterViewInit, OnDestroy {
+  private _appointmentService = inject(AppointmentService);
   private _userService = inject(UserService);
   private _location = inject(Location);
   private _snackBar = inject(MatSnackBar);
@@ -111,7 +115,38 @@ export class AppointmentsComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  exportAppointment() {
+    this._appointmentService.exportAppointmentPatient().subscribe({
+      next: (blob: Blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'moje-wizyty-aurorum.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        void this._router.navigate(['/profile/appointments'], {
+          state: {
+            message: 'Pomyślnie exportowano wizyty',
+            status: 'success',
+          },
+        });
+      },
+      error: (err) => {
+        void this._router.navigate(['/profile/appointments'], {
+          state: {
+            message: err.message,
+          },
+        });
+      },
+    });
+  }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
+
+  protected readonly AppointmentStatus = AppointmentStatus;
 }

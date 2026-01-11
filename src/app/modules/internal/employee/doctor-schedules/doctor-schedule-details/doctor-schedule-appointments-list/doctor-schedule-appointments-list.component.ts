@@ -7,8 +7,11 @@ import { AppointmentService } from '../../../../../core/services/appointment.ser
 import { ScheduleService } from '../../../../../core/services/schedule.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UpdateDoctorSchedule } from '../../../../../core/models/schedule.model';
-import { GetScheduleAppointmentInfo } from '../../../../../core/models/appointment.model';
-import { concatMap, of } from 'rxjs';
+import {
+  GetDailyAppointmentInfo,
+  GetScheduleAppointmentInfo,
+} from '../../../../../core/models/appointment.model';
+import { concatMap, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-schedule-appointments-list',
@@ -35,12 +38,34 @@ export class DoctorScheduleAppointmentsListComponent implements OnInit {
     isDeleting: boolean;
     data: UpdateDoctorSchedule | null;
   }>(MAT_DIALOG_DATA);
-  appointmentsList: GetScheduleAppointmentInfo[] = [];
+  appointmentsList: (GetScheduleAppointmentInfo | GetDailyAppointmentInfo)[] =
+    [];
 
   ngOnInit(): void {
-    this._scheduleService
-      .getScheduleAppointmentsBasedOnRole(this.data.scheduleId)
-      .subscribe({
+    if (this.data.isDeleting) {
+      this._scheduleService
+        .getScheduleAppointmentsBasedOnRole(this.data.scheduleId)
+        .subscribe({
+          next: (appointments) => {
+            this.appointmentsList = appointments;
+          },
+          error: () => {
+            this._dialogRef.close({ success: false });
+          },
+        });
+    } else {
+      if (
+        !this.data.appointmentsIds ||
+        this.data.appointmentsIds.length === 0
+      ) {
+        this._dialogRef.close({ success: false });
+      }
+
+      const requests = this.data.appointmentsIds.map((id) =>
+        this._appointmentService.getAppointmentById(id),
+      );
+
+      forkJoin(requests).subscribe({
         next: (appointments) => {
           this.appointmentsList = appointments;
         },
@@ -48,6 +73,7 @@ export class DoctorScheduleAppointmentsListComponent implements OnInit {
           this._dialogRef.close({ success: false });
         },
       });
+    }
   }
 
   changeSchedule() {
