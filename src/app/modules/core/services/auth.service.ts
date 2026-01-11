@@ -13,6 +13,7 @@ import {
   UserPasswordResetRequest,
   UserRoleMap,
   VerifyEmailTokenRequest,
+  XcrfToken,
 } from '../models/auth.model';
 import {
   BehaviorSubject,
@@ -142,6 +143,10 @@ export class AuthService {
           return of(null);
         }),
       );
+  }
+
+  tokenCsrf() {
+    return this._http.get<XcrfToken>(`${this._apiUrl}/csrf`);
   }
 
   verifyEmail(request: VerifyEmailTokenRequest): Observable<void> {
