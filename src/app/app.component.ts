@@ -4,6 +4,7 @@ import { FooterComponent } from './modules/core/components/footer/footer.compone
 import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from './modules/core/components/spinner/spinner.component';
 import { AuthService } from './modules/core/services/auth.service';
+import { ChatService } from './modules/core/services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +14,16 @@ import { AuthService } from './modules/core/services/auth.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  private index = 0;
   private _authService = inject(AuthService);
+  private _chatService = inject(ChatService);
 
   ngOnInit(): void {
-    this._authService.tokenCsrf().subscribe({
-      next: () => {
-        this.index = this.index + 1;
+    this._authService.refreshCookies().subscribe({
+      next: (user) => {
+        if (user) {
+          this._chatService.disconnect();
+          this._chatService.connect();
+        }
       },
     });
   }
