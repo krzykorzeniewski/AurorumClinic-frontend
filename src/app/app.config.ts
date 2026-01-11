@@ -24,6 +24,7 @@ import { spinnerInterceptor } from './modules/core/interceptors/spinner.intercep
 import { autologinInterceptor } from './modules/core/interceptors/autologin.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { csrfInterceptor } from './modules/core/interceptors/csrf.interceptor';
 
 registerLocaleData(localePl, 'pl');
 
@@ -32,7 +33,11 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(BrowserAnimationsModule),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
     provideHttpClient(
-      withInterceptors([spinnerInterceptor, autologinInterceptor]),
+      withInterceptors([
+        spinnerInterceptor,
+        autologinInterceptor,
+        csrfInterceptor,
+      ]),
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
