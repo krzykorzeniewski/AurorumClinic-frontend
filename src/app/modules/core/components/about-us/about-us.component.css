@@ -1,0 +1,65 @@
+.text-purple {
+  color: var(--primary-purple, #6f42c1);
+}
+
+.description-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.divider-light {
+  opacity: 0.1;
+}
+
+
+.card-header-icon {
+  color: var(--primary-purple, #6f42c1);
+  transform: scale(1.2);
+}
+
+.info-list {
+  font-size: 1.1rem;
+}
+
+.contact-link {
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-link:hover {
+  color: var(--primary-purple, #6f42c1);
+  text-decoration: underline;
+}
+
+.feature-card {
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.icon-wrapper {
+  color: var(--primary-purple, #6f42c1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: rgba(111, 66, 193, 0.05);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.icon-wrapper mat-icon {
+  transform: scale(1.5);
+}
+
+@media (max-width: 768px) {
+  .info-card {
+    padding: 1.5rem !important;
+  }
+
+  .description-text {
+    font-size: 1rem;
+  }
+}

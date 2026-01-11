@@ -1,0 +1,39 @@
+.aurorum-footer {
+  color: #212529;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+}
+
+.footer-logo-dark {
+  height: 40px;
+  width: auto;
+  filter: brightness(0) saturate(100%);
+}
+
+.footer-tiny-text {
+  font-size: 0.8rem;
+}
+
+.footer-copyright {
+  font-size: 0.7rem;
+}
+
+.border-light-grey {
+  border-color: #f0f0f0 !important;
+}
+
+.brand-icon {
+  color: var(--primary-purple, #6610f2);
+}
+
+.footer-links-inline a {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-links-inline a:hover {
+  color: var(--primary-purple, #6610f2);
+  text-decoration: underline;
+}
