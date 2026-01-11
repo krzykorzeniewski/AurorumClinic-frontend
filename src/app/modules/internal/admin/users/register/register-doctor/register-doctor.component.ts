@@ -25,6 +25,7 @@ import { MatSelect } from '@angular/material/select';
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { Specialization } from '../../../../../core/models/specialization.model';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
   selector: 'app-register-doctor',
@@ -45,6 +46,7 @@ import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
     ReactiveFormsModule,
     MatOption,
     MatSelect,
+    CdkTextareaAutosize,
   ],
   templateUrl: './register-doctor.component.html',
 })
@@ -99,7 +101,7 @@ export class RegisterDoctorComponent {
       description: formValue.description!,
       education: formValue.education!,
       experience: formValue.experience!,
-      pwzNumber: formValue.pwzNumber!,
+      pwzNumber: formValue.pwzNumber ?? null,
       specializationIds: formValue.specializationIds!,
     };
 

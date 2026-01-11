@@ -64,7 +64,7 @@ export interface DoctorRegisterRequest {
   description: string;
   education: string;
   experience: string;
-  pwzNumber: string;
+  pwzNumber: string | null;
   specializationIds: number[];
 }
 

@@ -156,20 +156,20 @@ export class FormsService {
           nonNullable: true,
         }),
         description: new FormControl('', {
-          validators: [Validators.maxLength(100), Validators.required],
+          validators: [Validators.maxLength(5000), Validators.required],
           nonNullable: true,
         }),
         education: new FormControl('', {
-          validators: [Validators.maxLength(100), Validators.required],
+          validators: [Validators.maxLength(1000), Validators.required],
           nonNullable: true,
         }),
         experience: new FormControl('', {
-          validators: [Validators.maxLength(100), Validators.required],
+          validators: [Validators.maxLength(1000), Validators.required],
           nonNullable: true,
         }),
-        pwzNumber: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
-          nonNullable: true,
+        pwzNumber: new FormControl(null, {
+          validators: [Validators.maxLength(50)],
+          nonNullable: false,
         }),
         birthdate: new FormControl<Date | null>(null, {
           validators: [pastTimeDateValidator(), Validators.required],
@@ -369,9 +369,9 @@ export class FormsService {
             nonNullable: true,
           },
         ),
-        pwzNumber: new FormControl('', {
+        pwzNumber: new FormControl(null, {
           validators: [Validators.maxLength(50)],
-          nonNullable: true,
+          nonNullable: false,
         }),
         twoFactorAuth: new FormControl<boolean>(
           userData ? userData.twoFactorAuth : false,

@@ -74,10 +74,14 @@
       <div class="mb-3 w-75">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Opis</mat-label>
-          <input
+          <textarea
             id="description-doctor-aurorum"
             matInput
-            [formControl]="controls.description" />
+            rows="4"
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="6"
+            cdkAutosizeMaxRows="10"
+            [formControl]="controls.description"></textarea>
           @if (controls.description.invalid) {
             <mat-error>{{ getErrorMessage(controls.description) }}</mat-error>
           }
