@@ -23,7 +23,7 @@ import {
   MatTimepickerInput,
   MatTimepickerToggle,
 } from '@angular/material/timepicker';
-import { environment } from '../../../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { toLocalISOString } from '../../../../shared/methods/dateTransform';
 import { MatDialog } from '@angular/material/dialog';

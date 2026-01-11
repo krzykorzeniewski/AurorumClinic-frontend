@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import { catchError, map, throwError } from 'rxjs';
 import { toLocalISOString } from '../../shared/methods/dateTransform';

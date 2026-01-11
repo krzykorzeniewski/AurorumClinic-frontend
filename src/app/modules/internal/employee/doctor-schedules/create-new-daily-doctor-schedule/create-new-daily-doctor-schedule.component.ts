@@ -27,7 +27,7 @@ import { ScheduleService } from '../../../../core/services/schedule.service';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { FormsService } from '../../../../core/services/forms.service';
 import { Router } from '@angular/router';
-import { environment } from '../../../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 import {
   GetFullDoctorApiResponse,
   SpecializationWithServices,

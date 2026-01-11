@@ -6,7 +6,7 @@ import { FormsService } from '../../../../core/services/forms.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, Location, NgForOf, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { environment } from '../../../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 import {
   EmployeeGetSchedules,
   UpdateDoctorSchedule,
