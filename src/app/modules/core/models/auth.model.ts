@@ -84,3 +84,9 @@ export enum UserRole {
   EMPLOYEE = 'EMPLOYEE',
   ADMIN = 'ADMIN',
 }
+
+export interface XcrfToken {
+  parameterName: string;
+  token: string;
+  headerName: string;
+}

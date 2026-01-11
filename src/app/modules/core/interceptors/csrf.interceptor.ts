@@ -1,12 +1,10 @@
-import {
-  HttpInterceptorFn,
-  HttpXsrfTokenExtractor,
-} from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
-  const inj = inject(HttpXsrfTokenExtractor);
-  const token = inj.getToken();
+  const authService = inject(AuthService);
+  const token = authService.csrfToken;
 
   if (token && req.method !== 'GET' && req.method !== 'HEAD') {
     const clonedReq = req.clone({
