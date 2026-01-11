@@ -10,11 +10,7 @@ import {
 } from '@angular/router';
 
 import { APP_ROUTES } from './app.routes';
-import {
-  provideHttpClient,
-  withInterceptors,
-  withXsrfConfiguration,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DATE_LOCALE,
@@ -38,10 +34,6 @@ export const appConfig: ApplicationConfig = {
         autologinInterceptor,
         csrfInterceptor,
       ]),
-      withXsrfConfiguration({
-        cookieName: 'XSRF-TOKEN',
-        headerName: 'X-XSRF-TOKEN',
-      }),
     ),
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
