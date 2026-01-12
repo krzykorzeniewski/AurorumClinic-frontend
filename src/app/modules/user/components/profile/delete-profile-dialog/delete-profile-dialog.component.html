@@ -1,9 +1,10 @@
-<h2 mat-dialog-title>Cześć {{ data.userData.name }} {{ data.userData.surname }}</h2>
+<h2 mat-dialog-title>{{ data.userData.name }} {{ data.userData.surname }}</h2>
 
 <mat-dialog-content>
   <p>Czy chcesz na pewno usunąć swoje konto?</p>
+  <p>Po wykonaniu tej operacji wszystkie dane dotyczące wizyt, płatności oraz wiadomości zostaną trwale usunięte.</p>
   <p>
-    Proszę wpisać poniżej:
+    Aby zatwierdzić operacje proszę wpisać poniżej:
     <br>
     <b>{{DELETE_ACCOUNT_CONFIRM_MESSAGE}}</b>
   </p>
@@ -16,9 +17,9 @@
   </mat-form-field>
 </mat-dialog-content>
 
-<mat-dialog-actions class="w-75 d-flex justify-content-between mt-4">
-  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
-  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onDelete()" [disabled]="confirmForm.invalid">
-    Trwale usuń konto
+<mat-dialog-actions class="w-100 d-flex justify-content-between mt-4">
+  <button mat-flat-button class="btn border w-25" type="button" (click)="onNoClick()">Anuluj</button>
+  <button mat-flat-button class="btn btn-danger-custom w-25" (click)="onDelete()" [disabled]="confirmForm.invalid">
+    Usuń konto
   </button>
 </mat-dialog-actions>

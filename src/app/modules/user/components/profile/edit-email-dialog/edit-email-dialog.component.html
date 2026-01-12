@@ -1,4 +1,5 @@
-<h2 mat-dialog-title>Uwaga!<br> Utracisz dostęp do twojego starego maila {{ data.oldEmail }}</h2>
+<h2 mat-dialog-title>
+  Uwaga!<br> Utracisz dostęp do aktualnego adresu email {{ data.oldEmail }}</h2>
 
 <mat-dialog-content>
   <p>
@@ -16,9 +17,9 @@
 <div class="container">
   <app-alert *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
 </div>
-<mat-dialog-actions  class="w-75 d-flex justify-content-between mt-4" [class]="infoMessage() ? '' : 'mt-5'">
-  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
-  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
+<mat-dialog-actions  class="w-100 d-flex justify-content-between mt-4" [class]="infoMessage() ? '' : 'mt-5'">
+  <button mat-flat-button class="btn w-25 border" type="button" (click)="onNoClick()">Anuluj</button>
+  <button mat-flat-button class="btn text-white " style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="confirmForm.invalid">
     Zmień adres email
   </button>
 </mat-dialog-actions>

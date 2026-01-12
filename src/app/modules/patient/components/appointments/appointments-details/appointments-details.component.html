@@ -70,13 +70,13 @@
       </div>
       <div class="row w-100">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn border w-50" style="background-color: white; color: black" routerLink="/profile/appointments">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-75" style="background-color: white; color: black" routerLink="/profile/appointments">Powrót</button>
         </div>
         <div class="col-sm text-center">
-          <button *ngIf="app.status === AppointmentStatus.FINISHED && !app.hasChat" mat-flat-button type="button" class="btn btn-warning-custom w-50" (click)="chatWithDoctor()">Chat</button>
+          <button *ngIf="app.status === AppointmentStatus.FINISHED && !app.hasChat" mat-flat-button type="button" class="btn text-white w-75" style="background-color: var(--primary-purple);" (click)="chatWithDoctor()">Chat</button>
         </div>
         <div *ngIf="!app.hasOpinion && app.status === AppointmentStatus.FINISHED" class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn text-white w-50" style="background-color: var(--primary-purple)" (click)="createOpinion()">Oceń</button>
+          <button mat-flat-button type="button" class="btn text-white w-75" style="background-color: var(--primary-purple)" (click)="createOpinion()">Oceń</button>
         </div>
       </div>
     </div>

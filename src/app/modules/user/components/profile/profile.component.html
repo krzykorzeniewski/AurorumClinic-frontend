@@ -98,10 +98,10 @@
                   <span *ngIf="!userResponse.twoFactorAuth" class="badge bg-warning">NIEAKTYWNE</span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <p *ngIf="userResponse.twoFactorAuth">Kliknij poniżej, aby usunąć weryfikację dwuetapową<br> UWAGA! To działanie jest niezalecane. Chroni to konto przed nieautoryzowanym dostępem!</p>
-              <p *ngIf="!userResponse.twoFactorAuth">Kliknij poniżej, aby założyć weryfikację dwuetapową<br>Dzięki weryfikacji dwuetapowej twoje konto ma dodatkową warstwę bezpieczeństwa przed nieautoryzowanym dostępem</p>
-              <button *ngIf="userResponse.twoFactorAuth" mat-raised-button style="background-color: #ac2626" (click)="onTwoFactorDelete()">Usuń weryfikację dwuetapową</button>
-              <button *ngIf="!userResponse.twoFactorAuth" mat-raised-button style="background-color: #ffc107" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
+              <p *ngIf="userResponse.twoFactorAuth">Kliknij poniżej, aby usunąć weryfikację dwuetapową.<br> UWAGA! To działanie jest niezalecane. Chroni to konto przed nieautoryzowanym dostępem!</p>
+              <p *ngIf="!userResponse.twoFactorAuth">Kliknij poniżej, aby założyć weryfikację dwuetapową.<br>Dzięki weryfikacji dwuetapowej twoje konto posiada dodatkową warstwę bezpieczeństwa przed nieautoryzowanym dostępem.</p>
+              <button *ngIf="userResponse.twoFactorAuth" mat-flat-button class="btn-danger-custom text-white" (click)="onTwoFactorDelete()">Usuń weryfikację dwuetapową</button>
+              <button *ngIf="!userResponse.twoFactorAuth" mat-flat-button class="text-white" style="background-color: var(--primary-purple);" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
             </mat-expansion-panel>
 
           <mat-expansion-panel class="mb-2 shadow-none border rounded-2">
@@ -111,8 +111,8 @@
                 Zmień swoje hasło
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>Kliknij poniżej, aby zmienić swoje hasło</p>
-            <button mat-raised-button style="background-color: #ffc107" (click)="onPasswordChange()">Zmień hasło</button>
+            <p>Kliknij poniżej, aby zmienić swoje hasło.</p>
+            <button mat-flat-button class="btn text-white" style="background-color: var(--primary-purple);" (click)="onPasswordChange()">Zmień hasło</button>
           </mat-expansion-panel>
 
           <form *ngIf="isPatient$ | async" id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">
@@ -150,8 +150,9 @@
             <mat-expansion-panel *ngIf="isPatient$ | async" class="mb-2 shadow-none border rounded-2">
               <mat-expansion-panel-header>
                 <mat-panel-title> Usunięcie konta </mat-panel-title>
+                <mat-panel-description> Usuń swoje dane </mat-panel-description>
               </mat-expansion-panel-header>
-              <button mat-raised-button style="background-color: #ac2626" (click)="openDeleteDialog()">USUŃ KONTO</button>
+              <button mat-flat-button class="btn btn-danger-custom" (click)="openDeleteDialog()">Usuń konto</button>
             </mat-expansion-panel>
       </mat-accordion>
     </mat-card-content>

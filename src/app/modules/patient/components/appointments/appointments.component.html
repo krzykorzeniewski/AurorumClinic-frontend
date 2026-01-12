@@ -35,10 +35,10 @@
         *ngIf="appointmentType.getRawValue() === AppointmentStatus.CREATED"
         mat-flat-button
         type="button"
-        class="btn border text-white p-3 m-3"
+        class="btn border text-white w-50 p-3 m-3"
         style="background-color: var(--primary-purple)"
         (click)="exportAppointment()"
-      >Exportuj
+      >Eksportuj do .ics
       </button>
       <mat-paginator class="w-100" [length]="totalData" [pageSize]=5 aria-label="Wybierz stronę"></mat-paginator>
     </div>

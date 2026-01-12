@@ -2,10 +2,7 @@
 
 <mat-dialog-content>
   <p>
-   Czy na pewno chcesz usunąć weryfikację dwuetapową?
-    Może to obniżyć poziom bezpieczeństwa Twojego konta!
-    Prosimy, abyś przemyślał tę operację.
-    W każdej chwili możesz ponownie włączyć weryfikację dwuetapową
+    W każdej chwili możesz ponownie włączyć weryfikację dwuetapową.
     <br>
   </p>
 
@@ -15,7 +12,7 @@
 </div>
 <mat-dialog-actions class="w-100 d-flex justify-content-between mt-4" [class]="infoMessage() ? '' : 'mt-5'">
   <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
-  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()">
-    Usuń weryfikację dwuetapową
+  <button mat-flat-button class="btn btn-danger-custom" (click)="onSubmit()">
+    Usuń
   </button>
 </mat-dialog-actions>
