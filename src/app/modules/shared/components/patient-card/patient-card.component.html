@@ -1,10 +1,10 @@
-<div *ngIf="mode() === 'collision'" class="card border-0 w-100 p-2 mb-2 bg-transparent">
+<div *ngIf="mode() === 'collision'" class="card border w-100 p-2 mb-2">
 
   <div class="d-flex flex-column text-start"> <div class="mb-2">
-    <h6 class="fw-bold mb-0 text-dark">
+    <h6 class="fw-semibold mb-0 text-dark">
       {{ name() }} {{ surname() }}
     </h6>
-    <small class="text-primary fw-semibold">
+    <small class="text-black text-muted">
       {{ visitName() }} <span *ngIf="doctor() as doctor">- {{ doctor.name }} {{ doctor.surname }}</span>
     </small>
     <p> {{ date() | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' }}</p>
@@ -24,13 +24,13 @@
     </div>
   </div>
 </div>
-<button *ngIf="mode() === 'profileDoctor'" class="card border-0 w-100 p-2 mb-2" (click)="goToProfile()">
+<button *ngIf="mode() === 'profileDoctor'" class="card border w-100 p-2 mb-2" (click)="goToProfile()">
 
   <div class="d-flex flex-column text-start"> <div class="mb-2">
-    <h6 class="fw-bold mb-0 text-dark">
+    <h6 class="fw-semibold mb-0 text-dark">
       {{ name() }} {{ surname() }}
     </h6>
-    <small class="text-primary fw-semibold">
+    <small class="text-black text-muted">
       {{ visitName() }} <span *ngIf="doctor() as doctor">- {{ doctor.name }} {{ doctor.surname }}</span>
     </small>
     <p> {{ date() | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' }}</p>

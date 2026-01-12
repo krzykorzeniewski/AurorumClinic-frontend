@@ -16,15 +16,6 @@
 .btn-danger-custom {
   background: #ac2626 !important;
   color: var(--secondary-white) !important;
-  border: none;
-  border-radius: 0.75rem;
-  transition: 0.3s;
-}
-
-.btn-danger-custom:hover {
-  background: #d63939;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .btn-warning-custom {

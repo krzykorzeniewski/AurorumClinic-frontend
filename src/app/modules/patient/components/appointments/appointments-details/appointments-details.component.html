@@ -56,13 +56,13 @@
             </mat-expansion-panel-header>
             <div class="row mb-2">
               <div class="col-sm text-center mb-3">
-                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onCancelAppointment()">Odwołaj</button>
+                <button mat-flat-button type="button" class="btn btn-danger-custom w-100" (click)="onCancelAppointment()">Odwołaj</button>
               </div>
               <div class="col-sm text-center mb-3">
-                <button *ngIf="app.payment.status === PaymentStatus.CREATED" mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple); width: 91px" (click)="onPayment()">Opłać</button>
+                <button *ngIf="app.payment.status === PaymentStatus.CREATED" mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple); width: 91px" (click)="onPayment()">Opłać</button>
               </div>
               <div class="col-sm text-center mb-3">
-                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onRescheduleAppointment()">Przełóż</button>
+                <button mat-flat-button type="button" class="btn text-white w-100" style="background-color: var(--primary-purple)" (click)="onRescheduleAppointment()">Przełóż</button>
               </div>
             </div>
           </mat-expansion-panel>

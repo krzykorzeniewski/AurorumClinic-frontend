@@ -5,8 +5,8 @@
     <div class="col-12 col-md-5 col-lg-4 pt-5">
       <h5 class="mb-3 text-center">Wybór dnia</h5>
 
-      <div class="card">
-        <div class="card-body p-2">
+      <div class="custom-calendar-wrapper">
+        <div class="card p-3 w-100 rounded-2 border">
           <mat-calendar
             [selected]="selectedDate()"
             (selectedChange)="onDateChange($event)">

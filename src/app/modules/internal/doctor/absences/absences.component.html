@@ -8,7 +8,7 @@
 
   <div *ngIf="absences.length !== 0" class="col-12 col-sm-10 col-md-10 col-lg-10 mx-auto w-100">
     <mat-selection-list [multiple]="false" (selectionChange)="onSelectionChange($event.options)">
-      <mat-list-option *ngFor="let absence of absences" [value]="absence.id" class="btn-warning-custom border rounded-2">
+      <mat-list-option *ngFor="let absence of absences" [value]="absence.id" class="btn-warning-custom border rounded-2 p-2">
         <div class="d-flex flex-column p-2">
           <span>{{ absence.name }}</span>
           <span class="text-muted small">

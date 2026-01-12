@@ -42,7 +42,7 @@
           <div class="fw-medium text-uppercase text-muted small">
             {{ day.short }}
           </div>
-          <div class="fw-medium">{{ day.day }}</div>
+          <div class="fw-medium"> {{ day.day }}.{{ day.date.getFullYear() }}</div>
 
           <div *ngIf="!isPastDay(day.date) && getTimeFromDay(day.full)?.length; else noSlots">
             <button
