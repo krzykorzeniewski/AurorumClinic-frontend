@@ -37,6 +37,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-doctor-table',
+  standalone: true,
   imports: [
     FormsModule,
     MatCell,
