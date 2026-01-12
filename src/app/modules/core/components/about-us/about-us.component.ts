@@ -3,6 +3,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-about-us',
+  standalone: true,
   imports: [
     MatIcon
   ],
