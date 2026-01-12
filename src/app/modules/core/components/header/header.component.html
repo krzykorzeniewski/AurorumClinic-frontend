@@ -17,9 +17,10 @@
           </a>
           <div [ngSwitch]="userRole">
             <ul *ngSwitchCase="UserRole.PATIENT" class="dropdown-menu dropdown-menu-end" [ngClass]="{'dropdown-menu-end': isLargeScreen}" aria-labelledby="accountDropdownUser">
-              <li><a class="dropdown-item" routerLink="/profile">Ustawienia</a></li>
               <li><a class="dropdown-item" routerLink="/profile/appointments">Wizyty</a></li>
-              <li><a class="dropdown-item" routerLink="">Wiadomości</a></li>
+               <li><a class="dropdown-item" routerLink="/chats">Wiadomości</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="/profile">Ustawienia</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
             </ul>
@@ -37,8 +38,9 @@
               <li><a class="dropdown-item" routerLink="/internal/appointments">Panel wizyt</a></li>
               <li><a class="dropdown-item" routerLink="/internal/my-schedules">Grafik</a></li>
               <li><a class="dropdown-item" routerLink="/internal/my-absences">Nieobecności</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/doctor/profile']" [state]="{ doctorId: user.id}">Profil lekarza</a></li>
+              <li><a class="dropdown-item" routerLink="/chats">Wiadomości</a></li>
               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" [routerLink]="['/doctor/profile']" [state]="{ doctorId: user.id}">Profil lekarza</a></li>
               <li><a class="dropdown-item" routerLink="/profile">Ustawienia</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" routerLink="" (click)="logout()" >Wyloguj</a></li>
