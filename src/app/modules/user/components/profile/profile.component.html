@@ -1,9 +1,9 @@
-<div class="container-fluid d-flex justify-content-center pt-5">
-  <mat-card class="profile-card" appearance="outlined">
-    <mat-card-title class="text-center pt-3"><h4>Mój profil</h4></mat-card-title>
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center pt-3">
+  <h2 class="text-center mb-4">Mój profil</h2>
+  <mat-card class="profile-card rounded-2" appearance="outlined">
     <mat-card-content *ngIf="additionalInformationProfileForm && userResponse" class="px-3 px-md-5">
         <mat-accordion>
-            <mat-expansion-panel class="disabled" hideToggle>
+            <mat-expansion-panel class="disabled mb-2 shadow-none border rounded-2" hideToggle>
               <mat-expansion-panel-header>
                 <mat-panel-title> Imię i nazwisko </mat-panel-title>
                 <mat-panel-description> {{userResponse.name}}  {{userResponse.surname}} </mat-panel-description>
@@ -11,12 +11,12 @@
             </mat-expansion-panel>
 
           <form id="email" [formGroup]="emailProfileForm" (ngSubmit)="onUpdateEmail()">
-            <mat-expansion-panel>
+            <mat-expansion-panel class="mb-2 shadow-none border rounded-2">
               <mat-expansion-panel-header>
                 <mat-panel-title> Email </mat-panel-title>
                 <mat-panel-description class="justify-content-between align-content-center">
                   {{userResponse.email}}
-                  <mat-icon *ngIf="userResponse.emailVerified">
+                  <mat-icon *ngIf="userResponse.emailVerified" style="color: green;">
                     verified
                   </mat-icon>
                 </mat-panel-description>
@@ -39,7 +39,7 @@
             </mat-expansion-panel>
           </form>
 
-            <mat-expansion-panel class="disabled" hideToggle>
+            <mat-expansion-panel class="disabled mb-2 shadow-none border rounded-2" hideToggle>
               <mat-expansion-panel-header>
                 <mat-panel-title> PESEL </mat-panel-title>
                 <mat-panel-description>
@@ -49,7 +49,7 @@
               </mat-expansion-panel-header>
             </mat-expansion-panel>
 
-            <mat-expansion-panel class="disabled" hideToggle>
+            <mat-expansion-panel class="disabled mb-2 shadow-none border rounded-2" hideToggle>
               <mat-expansion-panel-header>
                 <mat-panel-title> Data urodzenia </mat-panel-title>
                 <mat-panel-description> {{userResponse.birthDate | date:'dd.MM.yyyy':'':'pl'}} </mat-panel-description>
@@ -58,12 +58,12 @@
 
           <form id="phone-number" [formGroup]="phoneProfileForm" (ngSubmit)="onUpdatePhone()">
           <form id="phone-number-verify" [formGroup]="phoneProfileForm" (ngSubmit)="onVerifyPhone()">
-            <mat-expansion-panel>
+            <mat-expansion-panel class="mb-2 shadow-none border rounded-2">
               <mat-expansion-panel-header>
                 <mat-panel-title> Numer telefonu </mat-panel-title>
                 <mat-panel-description class="justify-content-between align-content-center">
                   {{userResponse.phoneNumber}}
-                  <mat-icon *ngIf="userResponse.phoneNumberVerified">
+                  <mat-icon *ngIf="userResponse.phoneNumberVerified" style="color: green;">
                     verified
                   </mat-icon>
                 </mat-panel-description>
@@ -90,7 +90,7 @@
             </form>
           </form>
 
-            <mat-expansion-panel>
+            <mat-expansion-panel class="mb-2 shadow-none border rounded-">
               <mat-expansion-panel-header>
                 <mat-panel-title> Weryfikacja dwuetapowa </mat-panel-title>
                 <mat-panel-description>
@@ -98,25 +98,25 @@
                   <span *ngIf="!userResponse.twoFactorAuth" class="badge bg-warning">NIEAKTYWNE</span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <p *ngIf="userResponse.twoFactorAuth">Kliknij poniżej, aby usunąć weryfikację dwuetapową<br> UWAGA! To działanie jest niezalecane. Chroni to konto przed nieautoryzowanym dostępem!</p>
-              <p *ngIf="!userResponse.twoFactorAuth">Kliknij poniżej, aby założyć weryfikację dwuetapową<br>Dzięki weryfikacji dwuetapowej twoje konto ma dodatkową warstwę bezpieczeństwa przed nieautoryzowanym dostępem</p>
-              <button *ngIf="userResponse.twoFactorAuth" mat-raised-button style="background-color: #ac2626" (click)="onTwoFactorDelete()">Usuń weryfikację dwuetapową</button>
-              <button *ngIf="!userResponse.twoFactorAuth" mat-raised-button style="background-color: #ffc107" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
+              <p *ngIf="userResponse.twoFactorAuth">Kliknij poniżej, aby usunąć weryfikację dwuetapową.<br> UWAGA! To działanie jest niezalecane. Chroni to konto przed nieautoryzowanym dostępem!</p>
+              <p *ngIf="!userResponse.twoFactorAuth">Kliknij poniżej, aby założyć weryfikację dwuetapową.<br>Dzięki weryfikacji dwuetapowej twoje konto posiada dodatkową warstwę bezpieczeństwa przed nieautoryzowanym dostępem.</p>
+              <button *ngIf="userResponse.twoFactorAuth" mat-flat-button class="btn-danger-custom text-white" (click)="onTwoFactorDelete()">Usuń weryfikację dwuetapową</button>
+              <button *ngIf="!userResponse.twoFactorAuth" mat-flat-button class="text-white" style="background-color: var(--primary-purple);" (click)="onTwoFactorSetup()">Załóż weryfikację dwuetapową</button>
             </mat-expansion-panel>
 
-          <mat-expansion-panel>
+          <mat-expansion-panel class="mb-2 shadow-none border rounded-2">
             <mat-expansion-panel-header>
               <mat-panel-title> Hasło </mat-panel-title>
               <mat-panel-description>
                 Zmień swoje hasło
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>Kliknij poniżej, aby zmienić swoje hasło</p>
-            <button mat-raised-button style="background-color: #ffc107" (click)="onPasswordChange()">Zmień hasło</button>
+            <p>Kliknij poniżej, aby zmienić swoje hasło.</p>
+            <button mat-flat-button class="btn text-white" style="background-color: var(--primary-purple);" (click)="onPasswordChange()">Zmień hasło</button>
           </mat-expansion-panel>
 
           <form *ngIf="isPatient$ | async" id="additionalInfo" [formGroup]="additionalInformationProfileForm" (ngSubmit)="onUpdateAdditional()">
-            <mat-expansion-panel>
+            <mat-expansion-panel class="mb-2 shadow-none border rounded-2">
               <mat-expansion-panel-header>
                 <mat-panel-title> Dodatkowe </mat-panel-title>
                 <mat-panel-description> Newsletter i preferencje komunikacyjne </mat-panel-description>
@@ -147,11 +147,12 @@
             </mat-expansion-panel>
           </form>
 
-            <mat-expansion-panel *ngIf="isPatient$ | async">
+            <mat-expansion-panel *ngIf="isPatient$ | async" class="mb-2 shadow-none border rounded-2">
               <mat-expansion-panel-header>
                 <mat-panel-title> Usunięcie konta </mat-panel-title>
+                <mat-panel-description> Usuń swoje dane </mat-panel-description>
               </mat-expansion-panel-header>
-              <button mat-raised-button style="background-color: #ac2626" (click)="openDeleteDialog()">USUŃ KONTO</button>
+              <button mat-flat-button class="btn btn-danger-custom" (click)="openDeleteDialog()">Usuń konto</button>
             </mat-expansion-panel>
       </mat-accordion>
     </mat-card-content>

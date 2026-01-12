@@ -1,4 +1,4 @@
-<div class="card p-3 mb-4 w-100 h-100 shadow-sm rounded-4">
+<div class="card p-3 mb-4 w-100 h-100 rounded-2">
   <div class="row g-0">
 
     <button class="col-md-4 d-flex align-items-center mb-3 mb-md-0 p-0 border-0 bg-transparent text-start" (click)="goToProfile()">
@@ -30,27 +30,27 @@
       </button>
 
       <div
-        class="d-flex justify-content-around text-center p-3 shadow rounded-3 bg-white overflow-auto"
+        class="d-flex justify-content-around text-center p-3 bg-white overflow-auto"
       >
         <div
           *ngFor="let day of weekDays"
-          class="border rounded-3 p-2 me-2 flex-shrink-0"
+          class="border rounded-4 p-2 me-2 flex-shrink-0"
           style="min-width: 120px;"
           [class.opacity-50]="isPastDay(day.date)"
           [class.bg-light]="isPastDay(day.date)"
         >
-          <div class="fw-bold text-uppercase text-muted small">
+          <div class="fw-medium text-uppercase text-muted small">
             {{ day.short }}
           </div>
-          <div class="fw-bold">{{ day.day }}</div>
+          <div class="fw-medium"> {{ day.day }}.{{ day.date.getFullYear() }}</div>
 
           <div *ngIf="!isPastDay(day.date) && getTimeFromDay(day.full)?.length; else noSlots">
             <button
               *ngFor="let time of getTimeFromDay(day.full)"
               type="button"
-              class="badge d-flex flex-column justify-content-center text-white mt-1 mx-auto w-75 border-0"
+              class="badge d-flex flex-column justify-content-center fw-semibold mt-1 mx-auto w-75 "
               [class.bg-success]="mode() === 'reschedule' && selectedDateTime() === (day.full + 'T' + time)"
-              style="font-size: 0.8rem; background: var(--primary-purple); cursor: pointer;"
+              style="font-size: 0.8rem; border: solid 1px var(--primary-purple); color: var(--primary-purple); background: white; cursor: pointer;"
               (click)="patientAppointmentRegisterOrReschedule(day.full, time)"
             >
               {{ time }}

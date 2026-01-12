@@ -15,6 +15,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { map } from 'rxjs';
 import { UserRoleMap } from '../../../core/models/auth.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-doctor-profile',
@@ -31,6 +32,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatPaginator,
     OpinionCardComponent,
     AsyncPipe,
+    MatButton
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',

@@ -15,7 +15,7 @@
     />
   </div>
   <div class="d-flex pt-2 pb-2 justify-content-end" *ngIf="isDoctor$ | async">
-    <button class="btn btn-purple" (click)="editProfile()">
+    <button mat-flat-button class="btn text-white" style="background-color: var(--primary-purple);" (click)="editProfile()">
       Edytuj profil
     </button>
   </div>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-4">
-          <button class="btn btn-purple d-flex align-items-center gap-2" (click)="goBack()">
+          <button mat-flat-button class="btn border d-flex align-items-center gap-2" (click)="goBack()">
             Powrót
           </button>
 

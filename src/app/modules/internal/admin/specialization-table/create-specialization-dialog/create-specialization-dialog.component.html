@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>
+<h2 mat-dialog-title class="text-center">
     Tworzenie nowej specjalizacji
 </h2>
 
 <mat-dialog-content>
   <p>
-    <b>Proszę wpisać nazwę nowej specjalizacji</b>
+    Proszę wpisać nazwę nowej specjalizacji
     <br>
   </p>
 
@@ -19,9 +19,21 @@
 <div class="container">
   <app-alert *ngIf="infoMessage()" [text]="infoMessage()" [variant]="variant()"></app-alert>
 </div>
-<mat-dialog-actions [class]="infoMessage() ? '' : 'mt-2'" align="end">
-  <button mat-stroked-button type="button" (click)="onNoClick()">Anuluj</button>
-  <button mat-flat-button class="btn text-white border-0" style="background-color: var(--primary-purple)" (click)="onSubmit()" [disabled]="createForm.invalid">
+<mat-dialog-actions
+  class="d-flex justify-content-between w-100"
+  [class.mt-2]="!infoMessage()">
+
+  <button mat-stroked-button type="button" (click)="onNoClick()">
+    Anuluj
+  </button>
+
+  <button
+    mat-flat-button
+    class="btn text-white border-0"
+    style="background-color: var(--primary-purple)"
+    (click)="onSubmit()"
+    [disabled]="createForm.invalid">
     Stwórz
   </button>
+
 </mat-dialog-actions>

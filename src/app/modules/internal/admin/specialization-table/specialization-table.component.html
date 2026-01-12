@@ -1,36 +1,50 @@
-<div class="container-sm mt-4">
+<div class="container pt-3 w-75">
 
-  <div class="search-container mb-3">
-    <h2 class="text-center mb-4">Lista specjalizacji</h2>
-    <div class="d-flex col justify-content-end">
-      <button type="button" class="btn btn-purple" (click)="onSpecializationCreate()">Stwórz nową specjalizację</button>
-    </div>
+  <h2 class="text-center mb-4">Lista specjalizacji</h2>
+
+  <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <h4 class="mb-0 ms-1">Dostępne specjalizacje</h4>
+    <button mat-flat-button class="btn text-white" style="background-color: var(--primary-purple)" (click)="onSpecializationCreate()">
+      Stwórz nową specjalizację
+    </button>
   </div>
 
-  <div class="mat-elevation-z8 border">
-    <table mat-table [dataSource]="dataSource" matSort class="table table-striped align-middle">
+  <div class="table-container border rounded-2 max">
+    <table mat-table [dataSource]="dataSource" matSort class="table">
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Nazwa </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
         <td mat-cell *matCellDef="let row">{{row.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button
-            type="button"
-            class="btn btn-warning-custom"
-            (click)="onSpecializationEdit(row)">
-            Edytuj
-          </button>
+          <div class="d-flex justify-content-end">
+            <button
+              mat-flat-button
+              type="button"
+              class="btn text-white w-auto"
+              style="background-color: var(--primary-purple)"
+              (click)="onSpecializationEdit(row)">
+              Edytuj
+            </button>
+          </div>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell text-center text-muted py-3" colspan="2">
+          Brak dostępnych specjalizacji
+        </td>
+      </tr>
+
     </table>
+
     <mat-paginator [length]="totalCount" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Wybierz stronę"></mat-paginator>
   </div>
+
 </div>

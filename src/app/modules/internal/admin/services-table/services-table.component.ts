@@ -29,6 +29,7 @@ import { EditServiceDialogComponent } from './edit-service-dialog/edit-service-d
 import { FullService } from '../../../core/models/service.model';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ServicesService } from '../../../core/services/services.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-services-table',
@@ -47,6 +48,7 @@ import { ServicesService } from '../../../core/services/services.service';
     MatTable,
     MatHeaderCellDef,
     MatSortHeader,
+    MatButton
   ],
   templateUrl: './services-table.component.html',
   styleUrl: './services-table.component.css',

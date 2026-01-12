@@ -1,78 +1,57 @@
 .search-container {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
-}
-
-.search-container h2 {
-  color: var(--primary-purple);
-  font-weight: bold;
+  padding: 0;
   margin-bottom: 1rem;
 }
 
-.mat-elevation-z8 {
-  box-shadow: none !important;
-  border-radius: 1rem;
+.search-input-field {
+  width: 350px;
+  max-width: 100%;
+}
+
+.table-container {
+  background: white;
   overflow: hidden;
 }
 
-table.mat-mdc-table {
+table {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #fff;
   border-collapse: collapse;
   margin: 0;
 }
 
 th.mat-mdc-header-cell {
-  background-color: var(--primary-purple);
-  color: white;
-  font-weight: 600;
-  padding-left: 1.5rem;
-  border: none;
+  background-color: white;
+  color: black;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 16px;
 }
 
 td.mat-mdc-cell {
-  padding-left: 1.5rem;
-  border-top: 1px solid #eee;
+  background-color: white;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px;
+  vertical-align: middle;
 }
 
-tr.mat-mdc-row:hover {
-  background-color: #faf5fb;
+.table-accordion {
+  width: 190px;
+  display: block;
 }
 
-.btn-green {
-  background-color: #149519;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.9rem;
-  border-radius: 0.4rem;
+.table-accordion .mat-expansion-panel {
+  background-color: transparent !important;
+  border: 1px solid #e0e0e0;
+  box-shadow: none !important;
 }
 
-.btn-green:hover {
-  background-color: #246726;
-}
-
-.btn-info {
-  background-color: #17a2b8;
-  color: white;
-  border: none;
-}
-
-.btn-info:hover {
-  background-color: #138496;
+.table-accordion .mat-expansion-panel-header {
+  background-color: #fff;
+  font-weight: 500;
+  padding: 0 12px;
+  height: 44px;
 }
 
 mat-paginator {
-  background-color: white;
-}
-
-::ng-deep .mat-mdc-paginator-range-actions button {
-  color: var(--secondary-white) !important;
-}
-
-::ng-deep .mat-sort-header-arrow {
-  color: var(--secondary-white) !important;
+  border-top: 1px solid #e0e0e0;
 }

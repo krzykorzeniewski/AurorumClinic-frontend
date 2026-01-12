@@ -32,9 +32,17 @@ import {
   switchMap,
 } from 'rxjs';
 import { PatientService } from '../../../core/services/patient.service';
-import { MatInput } from '@angular/material/input';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { GetPatientResponse } from '../../../core/models/patient.model';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
+} from '@angular/material/expansion';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-patient-table',
@@ -56,6 +64,14 @@ import { GetPatientResponse } from '../../../core/models/patient.model';
     MatRow,
     MatNoDataRow,
     RouterLink,
+    MatFormField,
+    MatLabel,
+    MatIcon,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatButton
   ],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.css',
@@ -69,8 +85,7 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy {
     'email',
     'phoneNumber',
     'pesel',
-    'profileButton',
-    'createAppointmentButton',
+    'actions',
   ];
   dataSource!: MatTableDataSource<GetPatientResponse>;
   totalCount = 0;

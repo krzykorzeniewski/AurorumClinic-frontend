@@ -1,5 +1,5 @@
 <div class="dialog-container">
-  <h2 mat-dialog-title class="text-center fw-bold mb-4">Utwórz nową nieobecność</h2>
+  <h2 mat-dialog-title class="text-center mb-4">Utwórz nową nieobecność</h2>
 
   <mat-dialog-content>
     <form [formGroup]="absenceForm" class="absence-form">
@@ -51,11 +51,11 @@
     </form>
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end" class="gap-2 p-3">
+  <mat-dialog-actions class="d-flex justify-content-between w-100 p-3">
     <button
       mat-flat-button
       type="button"
-      class="btn btn-purple"
+      class="btn border"
       (click)="cancel()"
       [disabled]="isSubmitting"
     >
@@ -64,7 +64,8 @@
     <button
       mat-flat-button
       type="button"
-      class="btn btn-green"
+      class="btn text-white"
+      style="background-color: var(--primary-purple);"
       (click)="createAbsence()"
       [disabled]="absenceForm.invalid || isSubmitting"
     >

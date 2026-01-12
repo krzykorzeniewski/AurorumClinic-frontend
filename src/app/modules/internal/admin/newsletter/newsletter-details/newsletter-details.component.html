@@ -1,18 +1,18 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm">
-      Szczegóły wpisu
-    </h2>
+<div class="container-fluid d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">
+    Szczegóły wpisu
+  </h2>
+  <div class="card col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto border rounded-2">
     <div *ngIf="newsletter() as news" class="d-flex flex-column align-items-center">
       <div *ngIf="news.subject" class="mb-2 w-100">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Tytuł</mat-label>
+          <mat-label>Tytuł wiadomości</mat-label>
           <input [readonly]="canModify()" matInput [value]="news.subject"/>
         </mat-form-field>
       </div>
       <div *ngIf="news.text" class="mb-1 w-100">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Treść</mat-label>
+          <mat-label>Treść wiadomości</mat-label>
           <textarea
             rows="4"
             cdkTextareaAutosize
@@ -44,13 +44,13 @@
       </div>
       <div *ngIf="news.sentAt" class="mb-2 w-100">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Wysłano</mat-label>
+          <mat-label>Data wysłania</mat-label>
           <input [readonly]="canModify()" matInput [value]="news.sentAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
         </mat-form-field>
       </div>
       <div *ngIf="news.scheduledAt" class="mb-2 w-100">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Data wysyłki</mat-label>
+          <mat-label>Zaplanowana data wysłania</mat-label>
           <input [readonly]="canModify()" matInput [value]="news.scheduledAt | date: 'HH:mm EEEE, d MMMM yyyy':'':'pl' "/>
         </mat-form-field>
       </div>
@@ -63,7 +63,7 @@
 
       <div class="row w-100">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-50" routerLink="/internal/newsletter">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-50" routerLink="/internal/newsletter">Powrót</button>
         </div>
       </div>
     </div>

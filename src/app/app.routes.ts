@@ -12,6 +12,22 @@ export const APP_ROUTES: Routes = [
       import('./modules/home/home.routes').then((m) => m.HOME_ROUTES),
   },
   {
+    path: 'about-us',
+    canActivate: [roleGuard],
+    data: {
+      roles: [
+        UserRoleMap.ANONYMOUS,
+        UserRoleMap.PATIENT,
+        UserRoleMap.EMPLOYEE,
+        UserRoleMap.DOCTOR,
+        UserRoleMap.ADMIN,
+      ],
+    },
+    loadComponent: () =>
+      import('./modules/core/components/about-us/about-us.component')
+        .then((m) => m.AboutUsComponent),
+  },
+  {
     path: 'internal',
     canActivate: [roleGuard],
     data: {

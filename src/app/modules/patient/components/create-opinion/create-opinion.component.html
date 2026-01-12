@@ -1,9 +1,8 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-12 col-md-10 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h3 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
-      Oceń swoją wizytę
-    </h3>
-
+<div class="container-fluid d-flex align-items-center pt-3 flex-column">
+  <h2 class="text-center mb-4">
+    Oceń swoją wizytę
+  </h2>
+  <div class="card col-12 col-sm-12 col-md-10 col-lg-6 p-4 mx-auto border rounded-2">
     <form [formGroup]="opinionForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center w-100">
 
       <div *ngIf="appointment() as app" class="mb-2 w-100">
@@ -18,9 +17,8 @@
         />
       </div>
 
-      <mat-card class="mb-4 w-100 shadow-sm rounded-4">
+      <mat-card class="mb-4 w-100 shadow-none">
         <mat-card-content class="pt-3">
-
           <div class="pb-4">
             <h5 class="text-center">Wybierz ocenę</h5>
             <div class="d-flex justify-content-center gap-2">
@@ -63,14 +61,15 @@
 
       <div class="row w-100 gap-2">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" routerLink="/profile/appointments">Anuluj
+          <button mat-flat-button type="button" class="btn border w-50" routerLink="/profile/appointments">Anuluj
           </button>
         </div>
         <div class="col-sm text-center">
           <button
             mat-flat-button
             type="submit"
-            class="btn btn-green w-100"
+            class="btn text-white w-50"
+            style="background-color: var(--primary-purple);"
             [disabled]="opinionForm.invalid"
           >
             Opublikuj

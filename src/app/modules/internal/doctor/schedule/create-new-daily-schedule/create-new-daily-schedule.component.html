@@ -1,13 +1,13 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h2 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
-      Dodawanie jednodniowego grafiku
-    </h2>
+<div class="container-fluid d-flex align-items-center flex-column pt-3">
+  <h2 class="text-center mb-4">
+    Dodawanie grafiku jednodniowego
+  </h2>
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-4 mx-auto border rounded-2 bg-white">
     <form [formGroup]="scheduleForm" class="d-flex flex-column align-items-center">
 
       <div class="mb-2 w-100">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Serwisy</mat-label>
+          <mat-label>Usługi</mat-label>
           <mat-select [formControl]="controls.services" multiple>
             @for (group of specializations; track group) {
               <mat-optgroup [label]="group.name">
@@ -67,10 +67,10 @@
 
       <div class="row w-100 gap-2">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" (click)="goBack()">Powrót</button>
+          <button mat-flat-button type="button" class="btn border w-75" (click)="goBack()">Powrót</button>
         </div>
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-green w-100" (click)="createSchedule()" [disabled]="scheduleForm.invalid">Utwórz grafik</button>
+          <button mat-flat-button type="button" class="btn text-white w-75" style="background-color: var(--primary-purple);" (click)="createSchedule()" [disabled]="scheduleForm.invalid">Utwórz grafik</button>
         </div>
       </div>
     </form>

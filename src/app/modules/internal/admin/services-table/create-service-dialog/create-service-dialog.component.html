@@ -1,11 +1,8 @@
 <h2 mat-dialog-title class="mb-3 text-center">
-  Tworzenie nowej serwisu
+  Tworzenie nowej usługi
 </h2>
 
 <mat-dialog-content>
-  <div class="mb-3 text-center">
-    <strong>Proszę wpisać dane nowego serwisu</strong>
-  </div>
 
   <div class="row g-3">
 
@@ -21,7 +18,7 @@
 
     <div class="col-md-6">
       <mat-form-field class="w-100" appearance="outline">
-        <mat-label>Długość</mat-label>
+        <mat-label>Długość (minuty)</mat-label>
         <input matInput type="number" [formControl]="createForm.controls.duration" />
         @if (controls.duration.invalid) {
           <mat-error>{{ getErrorMessage(createForm.controls.duration) }}</mat-error>
@@ -31,7 +28,7 @@
 
     <div class="col-md-6">
       <mat-form-field class="w-100" appearance="outline">
-        <mat-label>Cena</mat-label>
+        <mat-label>Cena (zł)</mat-label>
         <input matInput type="number" [formControl]="createForm.controls.price" />
         @if (controls.price.invalid) {
           <mat-error>{{ getErrorMessage(createForm.controls.price) }}</mat-error>
@@ -81,7 +78,7 @@
   </app-alert>
 </div>
 
-<mat-dialog-actions class="d-flex justify-content-end gap-2 mt-3">
+<mat-dialog-actions class="d-flex justify-content-sm-between gap-2 mt-3">
   <button mat-stroked-button type="button" (click)="onNoClick()">
     Anuluj
   </button>
@@ -92,6 +89,6 @@
     style="background-color: var(--primary-purple)"
     (click)="onSubmit()"
     [disabled]="createForm.invalid">
-    Stwórz
+    Utwórz
   </button>
 </mat-dialog-actions>

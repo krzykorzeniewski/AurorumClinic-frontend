@@ -1,11 +1,12 @@
-<div class="container-fluid py-4 min-vh-100">
-    <div class="row g-4">
+<div class="container-fluid py-3 min-vh-100">
+  <h2 class="text-center pb-4">Profil pacjenta</h2>
+  <div class="row g-4">
 
       <div *ngIf="patient" class="col-lg-4 col-xl-3">
-        <div class="card shadow-sm border-0 rounded-3 sticky-top" style="top: 20px; z-index: 100;">
+        <div class="card  border rounded-2 sticky-top" style="top: 20px; z-index: 100;">
           <div class="card-body text-center p-4">
 
-            <h4 class="card-title fw-bold mb-1">{{ patient.name }} {{ patient.surname }}</h4>
+            <h4 class="card-title mb-1">{{ patient.name }} {{ patient.surname }}</h4>
             <p class="text-muted small mb-4">{{ patient.email }}</p>
 
             <ul class="list-group list-group-flush text-start mb-4">
@@ -44,11 +45,11 @@
       </div>
 
       <div class="col-lg-8 col-xl-9">
-        <div class="card shadow-sm border-0 rounded-3">
+        <div class="card border rounded-2">
 
           <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex flex-wrap justify-content-between align-items-center">
             <div>
-              <h3 class="fw-bold mb-1">Historia wizyt</h3>
+              <h3 class="fw-semibold mb-1">Historia wizyt</h3>
               <p class="text-muted small mb-0">Przeglądaj wszystkie zaplanowane i zakończone wizyty</p>
             </div>
 

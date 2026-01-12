@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="mb-4 text-center fw-semibold">
+<h2 mat-dialog-title class="mb-4 text-center">
   Wynik generowania wpisu
 </h2>
 
@@ -6,7 +6,7 @@
 
   <div class="text-center mb-4">
     <strong class="d-block mb-1">
-      Uzupełnij datę oraz godzinę wysyłki wpisu
+      Uzupełnij datę oraz godzinę rozesłania wiadomości do pacjentów
     </strong>
     <p class="text-muted mb-0">
       Możesz również zmodyfikować temat lub treść wiadomości
@@ -17,7 +17,7 @@
 
     <div class="col-12">
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Temat</mat-label>
+        <mat-label>Tytuł</mat-label>
         <input matInput readonly [formControl]="controls.subject" />
       </mat-form-field>
     </div>
@@ -38,7 +38,7 @@
 
     <div class="col-md-6 col-12">
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Data wysyłki</mat-label>
+        <mat-label>Data wysłania</mat-label>
         <input
           matInput
           [matDatepicker]="picker"
@@ -54,7 +54,7 @@
 
     <div class="col-md-6 col-12">
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Godzina wysyłki</mat-label>
+        <mat-label>Godzina wysłania</mat-label>
         <input
           matInput
           [formControl]="controls.time"
@@ -85,20 +85,19 @@
 
   <button
     mat-flat-button
-    class="btn px-4 py-2"
-    style="background-color: #dee2e6; color: #212529"
+    class="btn btn-danger-custom w-25"
     (click)="onSubmit(false)"
     >
-    Odrzuć
+    Usuń wpis
   </button>
 
   <button
     mat-flat-button
-    class="btn px-4 py-2 text-white shadow-sm"
+    class="btn text-white w-25"
     style="background-color: var(--primary-purple)"
     (click)="onSubmit(true)"
     [disabled]="createForm.invalid">
-    Utwórz
+    Utwórz wpis
   </button>
 
 </mat-dialog-actions>

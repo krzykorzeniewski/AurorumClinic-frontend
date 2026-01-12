@@ -20,6 +20,7 @@ import { NewsletterService } from '../../../../core/services/newsletter.service'
 import { MatDialog } from '@angular/material/dialog';
 import { CreateNewsletterDialogComponent } from './create-newsletter-dialog/create-newsletter-dialog.component';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-newsletter-prompt',
@@ -36,6 +37,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     RouterLink,
     ReactiveFormsModule,
     CdkTextareaAutosize,
+    MatIcon
   ],
   templateUrl: './newsletter-prompt.component.html',
   styleUrl: './newsletter-prompt.component.css',
