@@ -8,7 +8,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { MatCard, MatCardContent } from '@angular/material/card';
 import {
   communicationPreferences,
   GetUserProfileResponse,
@@ -56,7 +56,6 @@ import { UserRoleMap } from '../../../core/models/auth.model';
     MatExpansionPanelTitle,
     MatExpansionPanelDescription,
     MatCardContent,
-    MatCardTitle,
     MatCard,
     NgIf,
     DatePipe,

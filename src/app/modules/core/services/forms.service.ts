@@ -156,7 +156,7 @@ export class FormsService {
           nonNullable: true,
         }),
         description: new FormControl('', {
-          validators: [Validators.maxLength(5000), Validators.required],
+          validators: [Validators.maxLength(4000), Validators.required],
           nonNullable: true,
         }),
         education: new FormControl('', {
@@ -592,21 +592,21 @@ export class FormsService {
       experience: new FormControl<string>(
         doctorData ? doctorData.experience : '',
         {
-          validators: [Validators.required, Validators.maxLength(100)],
+          validators: [Validators.required, Validators.maxLength(1000)],
           nonNullable: true,
         },
       ),
       education: new FormControl<string>(
         doctorData ? doctorData.education : '',
         {
-          validators: [Validators.required, Validators.maxLength(100)],
+          validators: [Validators.required, Validators.maxLength(1000)],
           nonNullable: true,
         },
       ),
       description: new FormControl<string>(
         doctorData ? doctorData.description : '',
         {
-          validators: [Validators.required, Validators.maxLength(500)],
+          validators: [Validators.required, Validators.maxLength(4000)],
           nonNullable: true,
         },
       ),
