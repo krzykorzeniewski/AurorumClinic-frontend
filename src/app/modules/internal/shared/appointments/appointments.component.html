@@ -19,22 +19,6 @@
       <h5 class="mb-3 text-center">Zaplanowane wizyty w wybranym dniu</h5>
 
       @if (appointments().length > 0) {
-        @if (isEmployeeOrAdmin$ | async) {
-          <div class="flex-grow-1">
-            <app-patient-card
-              *ngFor="let app of appointments()"
-              [id]="app.id"
-              [name]="app.patient.name"
-              [surname]="app.patient.surname"
-              [visitName]="app.service.name"
-              [date]="app.startedAt"
-              [phoneNumber]="app.patient.phoneNumber"
-              [email]="app.patient.email"
-              [doctor]="app.doctor"
-              [mode]="'collision'"
-            />
-          </div>
-        } @else {
           <div class="flex-grow-1">
             <app-patient-card
               *ngFor="let app of appointments()"
@@ -48,7 +32,6 @@
               [mode]="'profileDoctor'"
             />
           </div>
-        }
 
         <div class="mt-3">
           <mat-paginator

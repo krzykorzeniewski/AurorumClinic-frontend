@@ -1,14 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { PatientCardComponent } from '../../../shared/components/patient-card/patient-card.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatCalendar } from '@angular/material/datepicker';
 import { GetDailyAppointmentInfo } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
-import { map } from 'rxjs';
-import { UserRoleMap } from '../../../core/models/auth.model';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-appointments',
@@ -20,13 +17,11 @@ import { AuthService } from '../../../core/services/auth.service';
     MatCalendar,
     AlertComponent,
     NgIf,
-    AsyncPipe,
   ],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css',
 })
 export class AppointmentsComponent {
-  private _authService = inject(AuthService);
   private _appointmentService = inject(AppointmentService);
   selectedDate = signal<Date>(new Date());
   appointments = signal<GetDailyAppointmentInfo[]>([]);
@@ -34,12 +29,6 @@ export class AppointmentsComponent {
   pageSize = signal<number>(10);
   totalElements = signal<number>(0);
   infoMessage = signal<string>('');
-  isEmployeeOrAdmin$ = this._authService.user$.pipe(
-    map(
-      (user) =>
-        user?.role === UserRoleMap.EMPLOYEE || user?.role === UserRoleMap.ADMIN,
-    ),
-  );
 
   onDateChange(date: Date): void {
     this.selectedDate.set(date);
@@ -64,6 +53,7 @@ export class AppointmentsComponent {
         next: (res) => {
           this.appointments.set(res.doctors);
           this.totalElements.set(res.page.totalElements);
+          this.infoMessage.set('');
         },
         error: (err) => {
           this.infoMessage.set(err.message);
