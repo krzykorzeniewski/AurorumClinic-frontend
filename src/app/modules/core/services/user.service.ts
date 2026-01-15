@@ -109,9 +109,7 @@ export class UserService {
           map(
             (apiResponse): GetPatientResponse => ({
               ...apiResponse.data,
-              birthDate: new Date(
-                apiResponse.data.birthDate,
-              ).toLocaleDateString(),
+              birthDate: new Date(apiResponse.data.birthDate),
             }),
           ),
           catchError(() =>
@@ -134,9 +132,7 @@ export class UserService {
         map(
           (apiResponse): GetUserProfileResponse => ({
             ...apiResponse.data,
-            birthDate: new Date(
-              apiResponse.data.birthDate,
-            ).toLocaleDateString(),
+            birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
         catchError(() =>
@@ -249,9 +245,7 @@ export class UserService {
         map(
           (apiResponse): GetPatientResponse => ({
             ...apiResponse.data,
-            birthDate: new Date(
-              apiResponse.data.birthDate,
-            ).toLocaleDateString(),
+            birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
         catchError(() => {

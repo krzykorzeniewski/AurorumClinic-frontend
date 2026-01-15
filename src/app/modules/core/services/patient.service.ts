@@ -36,9 +36,7 @@ export class PatientService {
         map(
           (apiResponse): GetPatientResponse => ({
             ...apiResponse.data,
-            birthDate: new Date(
-              apiResponse.data.birthDate,
-            ).toLocaleDateString(),
+            birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
         catchError(() => {
@@ -182,9 +180,7 @@ export class PatientService {
         map(
           (apiResponse): GetPatientResponse => ({
             ...apiResponse.data,
-            birthDate: new Date(
-              apiResponse.data.birthDate,
-            ).toLocaleDateString(),
+            birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
         catchError(() => {

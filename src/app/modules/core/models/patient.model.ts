@@ -5,7 +5,7 @@ export interface GetPatientApiResponse {
   name: string;
   surname: string;
   pesel: string;
-  birthDate: string;
+  birthDate: Date;
   email: string;
   phoneNumber: string;
   twoFactorAuth: boolean;
