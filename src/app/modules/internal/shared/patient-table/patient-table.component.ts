@@ -33,16 +33,10 @@ import {
 } from 'rxjs';
 import { PatientService } from '../../../core/services/patient.service';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { GetPatientResponse } from '../../../core/models/patient.model';
 import { MatIcon } from '@angular/material/icon';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
-} from '@angular/material/expansion';
-import { MatButton } from '@angular/material/button';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-patient-table',
@@ -63,15 +57,11 @@ import { MatButton } from '@angular/material/button';
     MatHeaderRowDef,
     MatRow,
     MatNoDataRow,
-    RouterLink,
     MatFormField,
     MatLabel,
     MatIcon,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatButton
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.css',
@@ -162,6 +152,18 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  onPatientAction(action: string, row: any): void {
+    switch (action) {
+      case 'profile':
+        void this._router.navigate(['/internal/patients', row.id]);
+        break;
+
+      case 'appointment':
+        this.onCreateAppointment(row);
+        break;
     }
   }
 
