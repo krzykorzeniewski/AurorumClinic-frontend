@@ -77,51 +77,60 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
 
-          <mat-accordion class="table-accordion">
-            <mat-expansion-panel class="mat-elevation-z0 border rounded-2" hideToggle>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Dostępne akcje</mat-label>
 
-              <mat-expansion-panel-header>
-                <mat-panel-title class="d-flex align-items-center justify-content-between m-0">
-                  <span>Dostępne akcje</span>
-                  <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #666;">expand_more</mat-icon>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+            <mat-select (selectionChange)="onActionSelect($event.value, row)">
 
-              <div class="d-flex flex-column gap-2 py-2">
+              <mat-option
+                *ngIf="row.role === UserRole.DOCTOR"
+                value="doctorProfile">
+                Profil
+              </mat-option>
 
-                <button
-                  mat-flat-button
-                  type="button"
-                  class="btn text-white w-100"
-                  style="background-color: var(--primary-purple)"
-                  (click)="onUpdate(row.id, row.role)">
-                  Edytuj dane
-                </button>
+              <mat-option
+                *ngIf="row.role === UserRole.PATIENT"
+                value="patientProfile">
+                Profil
+              </mat-option>
 
-                <button
-                  *ngIf="row.role === UserRole.EMPLOYEE || row.role === UserRole.DOCTOR"
-                  mat-flat-button
-                  type="button"
-                  class="btn text-white w-100"
-                  style="background-color: var(--primary-purple)"
-                  (click)="onPasswordReset(row.id)">
-                  Resetuj hasło
-                </button>
+              <mat-option
+                *ngIf="row.role === UserRole.PATIENT"
+                value="patientCreateAppointment">
+                Umów wizytę
+              </mat-option>
 
-                <button
-                  *ngIf="row.role === UserRole.DOCTOR"
-                  mat-flat-button
-                  type="button"
-                  class="btn text-white w-100"
-                  style="background-color: var(--primary-purple)"
-                  (click)="onDoctorProfile(row.id)">
-                  Profil doktora
-                </button>
+              <mat-option
+                *ngIf="row.role === UserRole.DOCTOR"
+                value="dailySchedule">
+                Grafik dzienny
+              </mat-option>
 
-              </div>
+              <mat-option
+                *ngIf="row.role === UserRole.DOCTOR"
+                value="weeklySchedule">
+                Grafik tygodniowy
+              </mat-option>
 
-            </mat-expansion-panel>
-          </mat-accordion>
+              <mat-option
+                *ngIf="row.role === UserRole.DOCTOR"
+                value="absences">
+                Nieobecności
+              </mat-option>
+
+              <mat-option value="edit">
+                Edytuj dane
+              </mat-option>
+
+              <mat-option
+                *ngIf="row.role === UserRole.EMPLOYEE || row.role === UserRole.DOCTOR"
+                value="resetPassword">
+                Resetuj hasło
+              </mat-option>
+
+            </mat-select>
+          </mat-form-field>
+
         </td>
       </ng-container>
 

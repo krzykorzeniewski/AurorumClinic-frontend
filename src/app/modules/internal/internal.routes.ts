@@ -17,7 +17,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'patients',
     canActivate: [roleGuard],
-    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./shared/patient-table/patient-table.component').then(
         (c) => c.PatientTableComponent,
@@ -53,7 +53,7 @@ export const INTERNAL_ROUTES: Routes = [
   {
     path: 'doctors',
     canActivate: [roleGuard],
-    data: { roles: [UserRoleMap.EMPLOYEE, UserRoleMap.ADMIN] },
+    data: { roles: [UserRoleMap.EMPLOYEE] },
     loadComponent: () =>
       import('./employee/doctor-table/doctor-table.component').then(
         (c) => c.DoctorTableComponent,

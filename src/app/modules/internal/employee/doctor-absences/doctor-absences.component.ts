@@ -84,7 +84,7 @@ export class DoctorAbsencesComponent {
   }
 
   goBack() {
-    void this._router.navigate(['/internal/doctors']);
+    this._location.back();
   }
 
   deleteAbsence(): void {

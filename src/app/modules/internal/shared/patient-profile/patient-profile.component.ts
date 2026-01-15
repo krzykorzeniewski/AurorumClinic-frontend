@@ -8,7 +8,7 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { DatePipe, Location, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
@@ -49,7 +49,6 @@ import { MatOption, MatSelect } from '@angular/material/select';
     NgForOf,
     DatePipe,
     DoctorCardComponent,
-    RouterLink,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -178,6 +177,10 @@ export class PatientProfileComponent
         state: { appointment, patientId },
       },
     );
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   ngOnDestroy(): void {

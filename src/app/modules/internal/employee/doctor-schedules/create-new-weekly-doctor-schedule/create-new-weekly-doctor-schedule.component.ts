@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, Location, NgForOf, NgIf } from '@angular/common';
 import { DoctorCardComponent } from '../../../../shared/components/doctor-card/doctor-card.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -84,6 +84,7 @@ import { toLocalISOString } from '../../../../shared/methods/dateTransform';
 })
 export class CreateNewWeeklyDoctorScheduleComponent {
   private _scheduleService = inject(ScheduleService);
+  private _location = inject(Location);
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _router = inject(Router);
@@ -129,7 +130,7 @@ export class CreateNewWeeklyDoctorScheduleComponent {
   }
 
   goBack() {
-    void this._router.navigate(['/internal/doctors']);
+    this._location.back();
   }
 
   createSchedule() {

@@ -36,7 +36,7 @@
               <button mat-flat-button style="background-color: var(--primary-purple)" color="primary" class="w-100 py-2" (click)="updateData(patient.id)">
                 Edytuj dane
               </button>
-              <button mat-stroked-button class="w-100 py-2" routerLink="/internal/patients">
+              <button mat-stroked-button class="w-100 py-2" (click)="goBack()">
                 Powrót do listy
               </button>
             </div>

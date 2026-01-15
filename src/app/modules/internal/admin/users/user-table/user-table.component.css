@@ -40,29 +40,6 @@ td.mat-mdc-cell {
   vertical-align: middle;
 }
 
-.table-accordion {
-  width: 200px;
-  display: block;
-}
-
-.table-accordion .mat-expansion-panel {
-  background-color: transparent !important;
-  border: 1px solid #e0e0e0;
-  box-shadow: none !important;
-}
-
-.table-accordion .mat-expansion-panel-header {
-  background-color: #fff;
-  font-weight: 500;
-  padding: 0 12px;
-  height: 44px;
-}
-
-.table-accordion button {
-  line-height: 30px;
-  margin-bottom: 4px;
-}
-
 mat-paginator {
   border-top: 1px solid #e0e0e0;
 }

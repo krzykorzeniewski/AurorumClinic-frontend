@@ -27,13 +27,13 @@ import { DoctorService } from '../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
-} from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
+import {
+  MatFormField,
+  MatLabel,
+  MatOption,
+  MatSelect,
+} from '@angular/material/select';
 
 @Component({
   selector: 'app-doctor-table',
@@ -55,10 +55,10 @@ import { MatIcon } from '@angular/material/icon';
     MatHeaderCellDef,
     ReactiveFormsModule,
     MatIcon,
-    MatExpansionPanelHeader,
-    MatExpansionPanel,
-    MatAccordion,
-    MatExpansionPanelTitle
+    MatSelect,
+    MatLabel,
+    MatFormField,
+    MatOption,
   ],
   templateUrl: './doctor-table.component.html',
   styleUrl: './doctor-table.component.css',
@@ -68,12 +68,7 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
   private _snackBar = inject(MatSnackBar);
   private _location = inject(Location);
   private _router = inject(Router);
-  displayedColumns: string[] = [
-    'name',
-    'surname',
-    'rating',
-    'actions',
-  ];
+  displayedColumns: string[] = ['name', 'surname', 'rating', 'actions'];
   dataSource!: MatTableDataSource<GetDoctorApiResponse>;
   totalCount = 0;
   sub = new Subscription();
@@ -126,6 +121,22 @@ export class DoctorTableComponent implements AfterViewInit, OnDestroy {
           );
         }),
     );
+  }
+
+  onScheduleAction(action: string, userId: number): void {
+    switch (action) {
+      case 'daily':
+        this.onDailySchedule(userId);
+        break;
+
+      case 'weekly':
+        this.onWeeklySchedule(userId);
+        break;
+
+      case 'absence':
+        this.onAbsence(userId);
+        break;
+    }
   }
 
   onDailySchedule(doctorId: number) {

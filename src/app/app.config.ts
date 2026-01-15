@@ -25,6 +25,8 @@ import { autologinInterceptor } from './modules/core/interceptors/autologin.inte
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
 import { csrfInterceptor } from './modules/core/interceptors/csrf.interceptor';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { customPaginator } from './modules/shared/methods/customPaginator';
 
 registerLocaleData(localePl, 'pl');
 
@@ -46,5 +48,6 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     { provide: LOCALE_ID, useValue: 'pl' },
+    { provide: MatPaginatorIntl, useValue: customPaginator() },
   ],
 };

@@ -28,32 +28,27 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
 
-          <mat-accordion class="table-accordion">
-            <mat-expansion-panel class="mat-elevation-z0 border rounded-2" hideToggle>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Dostępne akcje</mat-label>
 
-              <mat-expansion-panel-header>
-                <mat-panel-title class="d-flex align-items-center justify-content-between m-0">
-                  <span>Dostępne akcje</span>
-                  <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #666;">expand_more</mat-icon>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+            <mat-select
+              [value]="null"
+              (selectionChange)="onScheduleAction($event.value, row.id)">
 
-              <div class="d-flex flex-column gap-2 py-2">
-                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onDailySchedule(row.id)">
-                  Grafik dzienny
-                </button>
+              <mat-option value="daily">
+                Grafik dzienny
+              </mat-option>
 
-                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onWeeklySchedule(row.id)">
-                  Grafik tygodniowy
-                </button>
+              <mat-option value="weekly">
+                Grafik tygodniowy
+              </mat-option>
 
-                <button mat-flat-button type="button" class="btn text-white" style="background-color: var(--primary-purple)" (click)="onAbsence(row.id)">
-                  Nieobecności
-                </button>
-              </div>
+              <mat-option value="absence">
+                Nieobecności
+              </mat-option>
 
-            </mat-expansion-panel>
-          </mat-accordion>
+            </mat-select>
+          </mat-form-field>
 
         </td>
       </ng-container>

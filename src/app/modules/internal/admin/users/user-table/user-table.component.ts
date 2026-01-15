@@ -41,13 +41,8 @@ import { DatePipe, Location, NgIf } from '@angular/common';
 import { UserRole } from '../../../../core/models/auth.model';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatIcon } from '@angular/material/icon';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
-} from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
+import { PatientService } from '../../../../core/services/patient.service';
 
 @Component({
   selector: 'app-user-table',
@@ -76,11 +71,7 @@ import { MatButton } from '@angular/material/button';
     DatePipe,
     NgIf,
     MatIcon,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatButton
+    MatButton,
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.css',
@@ -88,6 +79,7 @@ import { MatButton } from '@angular/material/button';
 export class UserTableComponent implements AfterViewInit, OnDestroy {
   protected readonly UserRole = UserRole;
   private _authService = inject(AuthService);
+  private _patientService = inject(PatientService);
   private _userService = inject(UserService);
   private _snackBar = inject(MatSnackBar);
   private _location = inject(Location);
@@ -175,6 +167,42 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  onActionSelect(action: string, row: any): void {
+    switch (action) {
+      case 'patientProfile':
+        void this._router.navigate(['/internal/patients/' + row.id]);
+        break;
+
+      case 'doctorProfile':
+        this.onDoctorProfile(row.id);
+        break;
+
+      case 'patientCreateAppointment':
+        this.onCreateAppointment(row.id);
+        break;
+
+      case 'dailySchedule':
+        this.onDailySchedule(row.id);
+        break;
+
+      case 'weeklySchedule':
+        this.onWeeklySchedule(row.id);
+        break;
+
+      case 'absences':
+        this.onAbsence(row.id);
+        break;
+
+      case 'edit':
+        this.onUpdate(row.id, row.role);
+        break;
+
+      case 'resetPassword':
+        this.onPasswordReset(row.id);
+        break;
+    }
+  }
+
   onPasswordReset(staffId: number) {
     this._authService.createNewPasswordStaff(staffId).subscribe({
       next: () => {
@@ -232,6 +260,42 @@ export class UserTableComponent implements AfterViewInit, OnDestroy {
 
   onDoctorProfile(doctorId: number) {
     void this._router.navigate(['/doctor/profile'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
+  onCreateAppointment(patientId: number) {
+    this._patientService.getPatient(patientId).subscribe({
+      next: (patient) => {
+        void this._router.navigate(['/appointment/search'], {
+          state: {
+            patient: patient,
+          },
+        });
+      },
+    });
+  }
+
+  onDailySchedule(doctorId: number) {
+    void this._router.navigate(['/internal/schedules/daily'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
+  onWeeklySchedule(doctorId: number) {
+    void this._router.navigate(['/internal/schedules/weekly'], {
+      state: {
+        doctorId: doctorId,
+      },
+    });
+  }
+
+  onAbsence(doctorId: number) {
+    void this._router.navigate(['/internal/absences'], {
       state: {
         doctorId: doctorId,
       },

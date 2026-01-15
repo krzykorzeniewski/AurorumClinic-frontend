@@ -22,7 +22,7 @@ import {
   MatTimepickerInput,
   MatTimepickerToggle,
 } from '@angular/material/timepicker';
-import { NgIf } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 import { ScheduleService } from '../../../../core/services/schedule.service';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { FormsService } from '../../../../core/services/forms.service';
@@ -65,6 +65,7 @@ import { toLocalISOString } from '../../../../shared/methods/dateTransform';
 })
 export class CreateNewDailyDoctorScheduleComponent {
   private _scheduleService = inject(ScheduleService);
+  private _location = inject(Location);
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
   private _router = inject(Router);
@@ -102,7 +103,7 @@ export class CreateNewDailyDoctorScheduleComponent {
   }
 
   goBack() {
-    void this._router.navigate(['/internal/doctors']);
+    this._location.back();
   }
 
   createSchedule() {
