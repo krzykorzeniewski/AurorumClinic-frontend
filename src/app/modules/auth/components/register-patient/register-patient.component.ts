@@ -62,7 +62,6 @@ export class RegisterPatientComponent {
 
     this._authService.registerPatient(userData).subscribe({
       next: () => {
-        localStorage.setItem('email', userData.email);
         void this._router.navigate(['/auth/login'], {
           state: {
             message:

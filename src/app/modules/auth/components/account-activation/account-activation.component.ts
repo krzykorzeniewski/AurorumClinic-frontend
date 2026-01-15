@@ -16,34 +16,28 @@ export class AccountActivationComponent implements OnInit {
   private _route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this._route.paramMap.subscribe({
-      next: (param) => {
-        const token = param.get('uid');
-        const email = localStorage.getItem('email');
+    const token = this._route.snapshot.paramMap.get('uid');
+    const email = this._route.snapshot.queryParamMap.get('email');
 
-        if (token && email) {
-          const tokenRequest: TokenVerifyRequest = { token, email };
-          this._authService.activateAccount(tokenRequest).subscribe({
-            next: () => {
-              this.redirectAndShowMessage(
-                'Konto aktywowane pomyślnie!',
-                'success',
-              );
-            },
-            error: () => {
-              this.redirectAndShowMessage(
-                'Twój link weryfikacyjny jest nieprawidłowy.',
-                'warning',
-              );
-            },
-          });
-          localStorage.removeItem('email');
-        } else {
-          this.redirectAndShowMessage(
-            'Twój link weryfikacyjny jest nieprawidłowy.',
-            'warning',
-          );
-        }
+    if (!token || !email) {
+      this.redirectAndShowMessage(
+        'Twój link weryfikacyjny jest nieprawidłowy.',
+        'warning',
+      );
+      return;
+    }
+
+    const tokenRequest: TokenVerifyRequest = { token, email };
+
+    this._authService.activateAccount(tokenRequest).subscribe({
+      next: () => {
+        this.redirectAndShowMessage('Konto aktywowane pomyślnie!', 'success');
+      },
+      error: () => {
+        this.redirectAndShowMessage(
+          'Twój link weryfikacyjny jest nieprawidłowy.',
+          'warning',
+        );
       },
     });
   }

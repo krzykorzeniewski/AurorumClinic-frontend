@@ -42,25 +42,21 @@ export class PasswordRecoveryFormComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   passwordResetForm = this._formService.getPasswordResetForm();
   private _token: string | null = null;
+  private _email: string | null = null;
   hidePassword = signal(true);
   errorMessage = signal('');
 
   ngOnInit(): void {
-    this._route.paramMap.subscribe({
-      next: (param) => {
-        this._token = param.get('uid');
-      },
-    });
+    this._token = this._route.snapshot.paramMap.get('uid');
+    this._email = this._route.snapshot.queryParamMap.get('email');
   }
 
   onPasswordReset(): void {
-    const email = localStorage.getItem('email');
-
-    if (this._token && email) {
+    if (this._token && this._email) {
       const userData: UserPasswordResetRequest = {
         password: this.passwordResetForm.value.password!,
         token: this._token,
-        email: email,
+        email: this._email,
       };
 
       this._authService.changePassword(userData).subscribe({
@@ -77,7 +73,6 @@ export class PasswordRecoveryFormComponent implements OnInit {
           );
         },
       });
-      localStorage.removeItem('email');
     } else {
       this.redirectAndShowMessage(
         'Wystąpił błąd w trakcie ustawiania nowego hasła. Proszę spróbować później.',
