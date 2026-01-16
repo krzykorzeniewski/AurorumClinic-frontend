@@ -1,8 +1,8 @@
-<div class="container-fluid d-flex align-items-center pt-4">
-  <div class="card col-12 col-sm-12 col-md-10 col-lg-6 p-4 mx-auto shadow-lg border-0 rounded-4">
-    <h3 class="text-center mb-4 fw-bold py-3 rounded-4 shadow-sm" style="background-color: #d3d2d2;">
-      Edytuj odpowiedź na opinię
-    </h3>
+<div class="container-fluid d-flex align-items-center pt-4 flex-column">
+  <h2 class="text-center mb-4">
+    Edytuj odpowiedź na opinię
+  </h2>
+  <div class="card col-12 col-sm-12 col-md-10 col-lg-6 p-4 mx-auto border rounded-2">
 
     <form [formGroup]="opinionForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center w-100">
 
@@ -21,7 +21,7 @@
       </div>
 
 
-      <mat-card class="mb-4 w-100 shadow-sm rounded-4">
+      <mat-card class="mb-4 w-100 border rounded-2">
         <mat-card-content class="pt-3">
 
           <mat-form-field appearance="outline" class="w-100">
@@ -46,15 +46,16 @@
 
       <div class="row w-100 gap-2">
         <div class="col-sm text-center">
-          <button mat-flat-button type="button" class="btn btn-purple w-100" routerLink="/doctor/profile">Anuluj
+          <button mat-flat-button type="button" class="btn border w-75" routerLink="/doctor/profile">Anuluj
           </button>
         </div>
         <div class="col-sm text-center">
           <button
             mat-flat-button
             type="submit"
-            class="btn btn-green w-100"
+            class="btn text-white w-75"
             [disabled]="opinionForm.invalid"
+            style="background-color: var(--primary-purple);"
           >
             Odpowiedz
           </button>
