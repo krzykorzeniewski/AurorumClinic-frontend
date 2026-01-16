@@ -20,17 +20,33 @@
 
       @if (appointments().length > 0) {
           <div class="flex-grow-1">
-            <app-patient-card
-              *ngFor="let app of appointments()"
-              [id]="app.id"
-              [name]="app.patient.name"
-              [surname]="app.patient.surname"
-              [visitName]="app.service.name"
-              [date]="app.startedAt"
-              [phoneNumber]="app.patient.phoneNumber"
-              [email]="app.patient.email"
-              [mode]="'profileDoctor'"
-            />
+            @if (isEmployeeOrAdmin$ | async) {
+                <app-patient-card
+                  *ngFor="let app of appointments()"
+                  [appointmentId]="app.id"
+                  [patientId]="app.patient.id"
+                  [name]="app.patient.name"
+                  [surname]="app.patient.surname"
+                  [visitName]="app.service.name"
+                  [date]="app.startedAt"
+                  [phoneNumber]="app.patient.phoneNumber"
+                  [email]="app.patient.email"
+                  [doctor]="app.doctor"
+                  [mode]="'employee'"
+                />
+            } @else {
+                <app-patient-card
+                  *ngFor="let app of appointments()"
+                  [appointmentId]="app.id"
+                  [name]="app.patient.name"
+                  [surname]="app.patient.surname"
+                  [visitName]="app.service.name"
+                  [date]="app.startedAt"
+                  [phoneNumber]="app.patient.phoneNumber"
+                  [email]="app.patient.email"
+                  [mode]="'profileDoctor'"
+                />
+            }
           </div>
 
         <div class="mt-3">

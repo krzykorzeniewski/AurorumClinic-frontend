@@ -11,7 +11,7 @@
       @for (appointment of appointmentsList; track appointment) {
         <mat-list-option>
           <app-patient-card
-            [id]="appointment.id"
+            [appointmentId]="appointment.id"
             [name]="appointment.patient.name"
             [surname]="appointment.patient.surname"
             [visitName]="appointment.service.name"

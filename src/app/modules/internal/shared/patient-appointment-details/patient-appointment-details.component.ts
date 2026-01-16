@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import {
   Appointment,
   AppointmentStatus,
+  GetDailyAppointmentInfo,
   PaymentStatus,
 } from '../../../core/models/appointment.model';
 import { DatePipe, Location, NgIf } from '@angular/common';
@@ -50,12 +51,12 @@ export class PatientAppointmentDetailsComponent {
   protected readonly AppointmentStatus = AppointmentStatus;
 
   patient = signal<GetPatientResponse | null>(null);
-  appointment = signal<Appointment | null>(null);
+  appointment = signal<Appointment | GetDailyAppointmentInfo | null>(null);
 
   constructor() {
     const navigation = this._router.getCurrentNavigation();
     const state = navigation?.extras.state as {
-      appointment: Appointment;
+      appointment: Appointment | GetDailyAppointmentInfo;
       patientId: number;
     };
 
@@ -128,9 +129,7 @@ export class PatientAppointmentDetailsComponent {
   }
 
   goBack() {
-    const patient = this.patient();
-    if (!patient) return;
-    void this._router.navigate(['internal/patients/' + patient.id]);
+    this._location.back();
   }
 
   mapPaymentToVisibleStatus(payment: PaymentStatus) {

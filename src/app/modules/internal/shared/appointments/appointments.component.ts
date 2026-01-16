@@ -1,11 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PatientCardComponent } from '../../../shared/components/patient-card/patient-card.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatCalendar } from '@angular/material/datepicker';
 import { GetDailyAppointmentInfo } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { map } from 'rxjs';
+import { UserRoleMap } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-appointments',
@@ -17,11 +20,13 @@ import { AlertComponent } from '../../../shared/components/alert/alert.component
     MatCalendar,
     AlertComponent,
     NgIf,
+    AsyncPipe,
   ],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css',
 })
 export class AppointmentsComponent implements OnInit {
+  private _authService = inject(AuthService);
   private _appointmentService = inject(AppointmentService);
   selectedDate = signal<Date>(new Date());
   appointments = signal<GetDailyAppointmentInfo[]>([]);
@@ -29,6 +34,12 @@ export class AppointmentsComponent implements OnInit {
   pageSize = signal<number>(10);
   totalElements = signal<number>(0);
   infoMessage = signal<string>('');
+  isEmployeeOrAdmin$ = this._authService.user$.pipe(
+    map(
+      (user) =>
+        user?.role === UserRoleMap.EMPLOYEE || user?.role === UserRoleMap.ADMIN,
+    ),
+  );
 
   ngOnInit(): void {
     const todayDate = new Date();
