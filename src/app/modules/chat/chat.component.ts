@@ -11,13 +11,14 @@ import {
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../core/services/chat.service';
 import { Chat } from '../core/models/chat.model';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [FormsModule, DatePipe, NgForOf, NgIf],
+  imports: [FormsModule, DatePipe, NgForOf, NgIf, NgStyle, MatIcon],
   templateUrl: './chat.component.html',
 })
 export class ChatComponent implements AfterViewChecked, OnDestroy {
@@ -29,6 +30,7 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
   selectedChat = this._chatService.activeChat;
   isLoadingMessages = this._chatService.isLoadingMessages;
   hasMoreMessages = this._chatService.hasMoreMessages;
+  isSmallScreen = false;
 
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
   private shouldScrollToBottom = true;
@@ -50,6 +52,8 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
         this.shouldScrollToBottom = true;
       }
     });
+    this.checkScreenSize();
+    window.addEventListener('resize', () => this.checkScreenSize());
   }
 
   selectChat(chat: Chat) {
@@ -97,6 +101,15 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
+  checkScreenSize() {
+    this.isSmallScreen = window.innerWidth < 768;
+  }
+
+  deselectChat() {
+    // Metoda do cofnięcia wyboru czatu na małych ekranach
+    this.selectedChat.set(null);
+  }
+
   private scrollToBottom(): void {
     if (this.messagesContainer?.nativeElement) {
       requestAnimationFrame(() => {
@@ -116,5 +129,6 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
 
   ngOnDestroy(): void {
     this._chatService.clearActiveChat();
+    window.removeEventListener('resize', () => this.checkScreenSize());
   }
 }

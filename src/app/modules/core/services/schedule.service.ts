@@ -33,7 +33,7 @@ export class ScheduleService {
     const role = this._authService.userRole;
 
     const url =
-      role === UserRoleMap.EMPLOYEE
+      role === UserRoleMap.EMPLOYEE || role === UserRoleMap.ADMIN
         ? `/${scheduleId}/appointments`
         : `/me/${scheduleId}/appointments`;
 
