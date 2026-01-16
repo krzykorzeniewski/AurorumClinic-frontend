@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from './modules/core/components/spinner/spinner.component';
 import { AuthService } from './modules/core/services/auth.service';
 import { ChatService } from './modules/core/services/chat.service';
+import { UserRoleMap } from './modules/core/models/auth.model';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this._authService.refreshCookies().subscribe({
       next: (user) => {
-        if (user) {
+        if (user && user.role === (UserRoleMap.DOCTOR || UserRoleMap.PATIENT)) {
           this._chatService.disconnect();
           this._chatService.connect();
         }

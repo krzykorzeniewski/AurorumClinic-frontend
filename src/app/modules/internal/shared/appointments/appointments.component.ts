@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { PatientCardComponent } from '../../../shared/components/patient-card/patient-card.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -21,7 +21,7 @@ import { AlertComponent } from '../../../shared/components/alert/alert.component
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css',
 })
-export class AppointmentsComponent {
+export class AppointmentsComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);
   selectedDate = signal<Date>(new Date());
   appointments = signal<GetDailyAppointmentInfo[]>([]);
@@ -29,6 +29,12 @@ export class AppointmentsComponent {
   pageSize = signal<number>(10);
   totalElements = signal<number>(0);
   infoMessage = signal<string>('');
+
+  ngOnInit(): void {
+    const todayDate = new Date();
+    this.selectedDate.set(todayDate);
+    this.loadAppointments();
+  }
 
   onDateChange(date: Date): void {
     this.selectedDate.set(date);
