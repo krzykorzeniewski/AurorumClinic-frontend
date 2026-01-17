@@ -422,6 +422,8 @@ export class UserService {
         errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
       } else if (errorData.phoneNumber === 'Phone number is already taken') {
         errorMsg = 'Ten numer jest juz zajęty.';
+      } else if (errorData.phoneNumber === 'already in use') {
+        errorMsg = 'Ten numer jest juz zajęty.';
       } else if (errorData.phoneNumber === 'Phone number is not verified') {
         errorMsg =
           'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
@@ -433,10 +435,10 @@ export class UserService {
       ) {
         errorMsg = 'Podany kod jest nieprawidłowy. Spróbuj ponownie.';
       } else {
-        errorMsg = 'Wystąpił błąd podczas logowania';
+        errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
       }
     } else {
-      errorMsg = 'Niepoprawny email lub hasło';
+      errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
     }
     return errorMsg;
   }

@@ -321,10 +321,10 @@ export class AuthService {
       ) {
         errorMsg = 'Podany kod jest nieprawidłowy. Spróbuj ponownie.';
       } else {
-        errorMsg = 'Wystąpił błąd podczas logowania';
+        errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
       }
     } else {
-      errorMsg = 'Niepoprawny email lub hasło';
+      errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
     }
     return errorMsg;
   }
