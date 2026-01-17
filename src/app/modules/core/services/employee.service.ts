@@ -13,7 +13,7 @@ export class EmployeeService {
   private _http = inject(HttpClient);
 
   getPanelStatistics(startedAt: string, finishedAt: string, fetchAll: boolean) {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('startedAt', startedAt)
       .set('finishedAt', finishedAt);
     if (fetchAll) {
@@ -21,7 +21,7 @@ export class EmployeeService {
     }
     return this._http
       .get<ApiResponse<DoctorStatisticsData>>(
-        `${environment.apiUrl + '/stats/appointments'}`,
+        `${this._apiUrl + '/stats/appointments'}`,
         {
           params: params,
           headers: {
