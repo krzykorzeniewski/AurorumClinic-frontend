@@ -64,8 +64,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (values) => {
-            this.finishedAppointments = values.totalFinished;
-            this.futureAppointments = values.totalScheduled;
+            this.finishedAppointments = values.totalFinished ?? 0;
+            this.futureAppointments = values.totalScheduled ?? 0;
           },
         });
     } else {
@@ -77,8 +77,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (values) => {
-            this.finishedAppointments = values.totalFinished;
-            this.futureAppointments = values.totalScheduled;
+            this.finishedAppointments = values.totalFinished ?? 0;
+            this.futureAppointments = values.totalScheduled ?? 0;
           },
         });
     }
