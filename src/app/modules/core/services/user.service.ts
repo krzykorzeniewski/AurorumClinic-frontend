@@ -427,6 +427,8 @@ export class UserService {
       } else if (errorData.phoneNumber === 'Phone number is not verified') {
         errorMsg =
           'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
+      } else if (errorData.email === 'already in use') {
+        errorMsg = 'Ten adres email jest już zajęty.';
       } else if (err.error.data.password) {
         errorMsg =
           'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
