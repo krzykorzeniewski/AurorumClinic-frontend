@@ -195,57 +195,62 @@ export class DoctorScheduleDetailsComponent {
   ) {
     const schedule = this.schedule();
     if (!schedule) return;
+    let appointmentsIds: number[] = [];
 
-    if (err.error?.status === 'fail' && err.error?.data) {
-      const appointmentsIds: number[] = Array.isArray(
-        err.error.data.appointments,
-      )
-        ? err.error.data.appointments
-        : JSON.parse(err.error.data.appointments);
+    if (err.error?.status === 'fail' && err.error?.data.appointments) {
+      try {
+        appointmentsIds = Array.isArray(err.error.data.appointments)
+          ? err.error.data.appointments
+          : JSON.parse(err.error.data.appointments);
 
-      const dialogRef = this._dialog.open(
-        DoctorScheduleAppointmentsListComponent,
-        {
-          data: {
-            scheduleId: schedule.id,
-            appointmentsIds: appointmentsIds,
-            isDeleting: isDeleting,
-            data: data,
+        const dialogRef = this._dialog.open(
+          DoctorScheduleAppointmentsListComponent,
+          {
+            data: {
+              scheduleId: schedule.id,
+              appointmentsIds: appointmentsIds,
+              isDeleting: isDeleting,
+              data: data,
+            },
+            disableClose: true,
           },
-          disableClose: true,
-        },
-      );
+        );
 
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result?.success) {
-          if (result.isDeleting) {
-            void this._router.navigate(['/internal/schedules'], {
-              state: {
-                message: 'Pomyślnie usunięto grafik',
-                status: 'success',
-              },
-            });
-          } else {
-            this._snackBar.open('Pomyślnie zmieniono grafik', 'Zamknij', {
-              duration: 5000,
-              panelClass: 'xxx-alert-info',
-            });
-            this.refreshSchedule(schedule.id);
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.success) {
+            if (result.isDeleting) {
+              void this._router.navigate(['/internal/schedules'], {
+                state: {
+                  message: 'Pomyślnie usunięto grafik',
+                  status: 'success',
+                },
+              });
+            } else {
+              this._snackBar.open('Pomyślnie zmieniono grafik', 'Zamknij', {
+                duration: 5000,
+                panelClass: 'xxx-alert-info',
+              });
+              this.refreshSchedule(schedule.id);
+            }
+          } else if (!result?.cancel) {
+            if (isDeleting) {
+              this.errorMessage.set(
+                'Wystąpił błąd podczas usuwania grafiku. Spróbuj ponownie później',
+              );
+            } else {
+              this.errorMessage.set(
+                'Wystąpił błąd podczas przekładania grafiku. Spróbuj ponownie później',
+              );
+            }
           }
-        } else if (!result?.cancel) {
-          if (isDeleting) {
-            this.errorMessage.set(
-              'Wystąpił błąd podczas usuwania grafiku. Spróbuj ponownie później',
-            );
-          } else {
-            this.errorMessage.set(
-              'Wystąpił błąd podczas przekładania grafiku. Spróbuj ponownie później',
-            );
-          }
-        }
-      });
+        });
+      } catch {
+        this.errorMessage.set(
+          'Wystąpił błąd serwera. Spróbuj ponownie później.',
+        );
+      }
     } else {
-      this.errorMessage.set('Wystąpił błąd serwera. Spróbuj ponownie później');
+      this.errorMessage.set(err.message);
     }
   }
 

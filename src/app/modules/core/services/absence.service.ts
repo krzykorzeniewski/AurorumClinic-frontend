@@ -1,6 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import {
   Absence,
@@ -64,13 +68,8 @@ export class AbsenceService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie tworzenia nieobecności. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -81,13 +80,8 @@ export class AbsenceService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie tworzenia nieobecności. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -98,13 +92,8 @@ export class AbsenceService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie usuwania nieobecności. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
   }
@@ -115,14 +104,38 @@ export class AbsenceService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie usuwania nieobecności. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.mapError(err)));
         }),
       );
+  }
+
+  private mapError(err: HttpErrorResponse) {
+    let errorMsg: string;
+
+    if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+      errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+    } else if (err.error?.status === 'fail' && err.error?.data) {
+      const errorData = err.error.data;
+
+      if (
+        errorData.absence === 'Absence overlaps with already existing absence'
+      ) {
+        errorMsg =
+          'Ta nieobecność koliduje w planie z aktualnie istniejącą nieobecnością.';
+      } else if (errorData.startedAt === 'Start date cannot be in the past') {
+        errorMsg = 'Godzina rozpoczęcia nie może być w przeszłości.';
+      } else if (
+        errorData.absence === 'Absence overlaps with already existing schedule'
+      ) {
+        errorMsg =
+          'Ta nieobecność koliduje w planie z aktualnie istniejącym grafikiem.';
+      } else {
+        errorMsg = 'Wystąpił błąd serwera. Spróbuj ponownie później.';
+      }
+    } else {
+      errorMsg = 'Wystąpił błąd serwera. Spróbuj ponownie później.';
+    }
+    return errorMsg;
   }
 }

@@ -10,7 +10,11 @@ import {
   UpdateTokenRequest,
   UpdateUser,
 } from '../models/user.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import {
   ApiResponse,
   PageableResponse,
@@ -85,13 +89,8 @@ export class UserService {
             page: res.data.page,
           };
         }),
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -135,14 +134,9 @@ export class UserService {
             birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
-        catchError(() =>
-          throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie uzyskiwania danych użytkownika.',
-              ),
-          ),
-        ),
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
+        }),
       );
   }
 
@@ -158,13 +152,8 @@ export class UserService {
         map((res) => {
           return res.data;
         }),
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie uzyskiwania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -224,10 +213,8 @@ export class UserService {
             page: res.data.page,
           };
         }),
-        catchError(() => {
-          return throwError(
-            () => new Error('Wystąpił błąd serwera. Spróbuj ponownie później.'),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -248,13 +235,8 @@ export class UserService {
             birthDate: new Date(apiResponse.data.birthDate),
           }),
         ),
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -265,13 +247,8 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -297,13 +274,8 @@ export class UserService {
         },
       )
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania profilu. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -314,13 +286,8 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -332,27 +299,7 @@ export class UserService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = '';
-
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg =
-              'Wystąpił błąd w trakcie aktualizowania adresu email. Spróbuj ponownie później.';
-          } else if (err.error?.status === 'fail' && err.error?.data) {
-            const errorData = err.error.data;
-
-            if (errorData.token === 'Invalid token') {
-              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
-            } else if (errorData.token === 'Token is expired') {
-              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
-            } else {
-              errorMsg =
-                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-            }
-          } else {
-            errorMsg =
-              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -367,13 +314,8 @@ export class UserService {
         },
       )
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -385,27 +327,7 @@ export class UserService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = '';
-
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg =
-              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
-          } else if (err.error?.status === 'fail' && err.error?.data) {
-            const errorData = err.error.data;
-
-            if (errorData.token === 'Invalid token') {
-              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
-            } else if (errorData.token === 'Token is expired') {
-              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
-            } else {
-              errorMsg =
-                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-            }
-          } else {
-            errorMsg =
-              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -421,32 +343,7 @@ export class UserService {
       )
       .pipe(
         catchError((err) => {
-          let errorMsg = '';
-
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg =
-              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
-          } else if (err.error?.status === 'fail' && err.error?.data) {
-            const errorData = err.error.data;
-
-            if (errorData.token === 'Invalid token') {
-              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
-            } else if (errorData.phoneNumber === 'Invalid credentials') {
-              errorMsg = 'Niepoprawny email lub hasło';
-            } else if (
-              errorData.phoneNumber === 'Phone number is not verified'
-            ) {
-              errorMsg =
-                'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
-            } else {
-              errorMsg =
-                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-            }
-          } else {
-            errorMsg =
-              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -457,13 +354,8 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie zakładania weryfikacji dwuetapowej. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -479,35 +371,7 @@ export class UserService {
       )
       .pipe(
         catchError((err) => {
-          let errorMsg = '';
-
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg =
-              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
-          } else if (err.error?.status === 'fail' && err.error?.data) {
-            const errorData = err.error.data;
-
-            if (errorData.token === 'Invalid token') {
-              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
-            } else if (errorData.phoneNumber === 'Invalid credentials') {
-              errorMsg = 'Niepoprawny email lub hasło';
-            } else if (
-              errorData.phoneNumber === 'Phone number is not verified'
-            ) {
-              errorMsg =
-                'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
-            } else if (errorData.userId === 'User has mfa disabled') {
-              errorMsg =
-                'Ten numer telefonu ma już wyłączoną weryfikację dwuetapową.';
-            } else {
-              errorMsg =
-                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-            }
-          } else {
-            errorMsg =
-              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -518,10 +382,8 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () => new Error('Wystąpił błąd. Proszę spróbować później'),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -532,14 +394,50 @@ export class UserService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie usuwania konta. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
+  }
+
+  private getErrorMessage(err: HttpErrorResponse) {
+    let errorMsg: string;
+
+    if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+      errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+    } else if (err.error?.status === 'fail' && err.status === 429) {
+      errorMsg =
+        'Hola hola, zwolnij trochę z wysyłaniem danych. Odsapnij i spróbuj ponownie za chwilę.';
+    } else if (err.error?.status === 'fail' && err.error?.data) {
+      const errorData = err.error.data;
+
+      if (errorData.email === 'Email is not verified') {
+        errorMsg =
+          'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.';
+      } else if (errorData.credentials === 'Invalid credentials') {
+        errorMsg = 'Niepoprawny email lub hasło';
+      } else if (errorData.token === 'Invalid token') {
+        errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
+      } else if (errorData.token === 'Token is expired') {
+        errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+      } else if (errorData.phoneNumber === 'Phone number is already taken') {
+        errorMsg = 'Ten numer jest juz zajęty.';
+      } else if (errorData.phoneNumber === 'Phone number is not verified') {
+        errorMsg =
+          'Proszę zweryfikować telefon przed założeniem weryfikacji dwuetapowej';
+      } else if (err.error.data.password) {
+        errorMsg =
+          'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
+      } else if (
+        ['Token is invalid', 'Invalid token'].includes(errorData.token)
+      ) {
+        errorMsg = 'Podany kod jest nieprawidłowy. Spróbuj ponownie.';
+      } else {
+        errorMsg = 'Wystąpił błąd podczas logowania';
+      }
+    } else {
+      errorMsg = 'Niepoprawny email lub hasło';
+    }
+    return errorMsg;
   }
 }

@@ -1,11 +1,13 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { UserRoleMap } from '../../../core/models/auth.model';
 import { toLocalISOString } from '../../../shared/methods/dateTransform';
 import { Subject, takeUntil } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +18,9 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private _authService = inject(AuthService);
+  private _snackBar = inject(MatSnackBar);
+  private _router = inject(Router);
+  private _location = inject(Location);
   private _doctorService = inject(DoctorService);
   private _employeeService = inject(EmployeeService);
   private destroy$ = new Subject<void>();
@@ -27,6 +32,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   futureAppointments!: number;
   todayDate!: Date;
   role!: UserRoleMap | undefined;
+
+  constructor() {
+    const navigation = this._router.getCurrentNavigation();
+    if (navigation?.extras.state && navigation.extras.state['message']) {
+      this._snackBar.open(navigation.extras.state['message'], 'zamknij', {
+        duration: 5000,
+        panelClass:
+          navigation.extras.state['status'] === 'success'
+            ? 'xxx-alert-info'
+            : 'xxx-alert-error',
+      });
+    }
+    this._location.replaceState(this._router.url);
+  }
 
   ngOnInit(): void {
     this._authService.user$

@@ -76,7 +76,9 @@ export class DoctorSchedulesComponent implements OnInit {
           '.' +
           (current.getMonth() + 1 < 10
             ? '0' + (current.getMonth() + 1)
-            : current.getMonth() + 1),
+            : current.getMonth() + 1) +
+          '.' +
+          current.getFullYear(),
         date: new Date(current),
       });
       current.setDate(current.getDate() + 1);

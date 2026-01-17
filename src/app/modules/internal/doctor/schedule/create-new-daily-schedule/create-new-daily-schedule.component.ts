@@ -27,6 +27,7 @@ import {
   SpecializationWithServices,
 } from '../../../../core/models/doctor.model';
 import {
+  DateFilterFn,
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
@@ -73,6 +74,11 @@ export class CreateNewDailyScheduleComponent {
   scheduleForm = this._formService.getScheduleDailyForm();
   doctor = signal<GetFullDoctorApiResponse | null>(null);
   specializations: SpecializationWithServices[] = [];
+  weekendFilter: DateFilterFn<Date | null> = (d): boolean => {
+    if (!d) return false;
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   errorMessage = signal('');
 

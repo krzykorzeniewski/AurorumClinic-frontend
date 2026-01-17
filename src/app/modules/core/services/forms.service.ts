@@ -19,6 +19,7 @@ import {
 } from '../models/doctor.model';
 import BigNumber from 'bignumber.js';
 import { passwordStrengthValidator } from '../../shared/validators/password-strength.validator';
+import { timeAbsenceValidator } from '../../shared/validators/absence-time.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -579,7 +580,7 @@ export class FormsService {
           nonNullable: true,
         }),
       },
-      { validators: timeValidator() },
+      { validators: timeAbsenceValidator() },
     );
   }
 

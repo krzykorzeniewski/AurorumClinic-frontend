@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
+  DateFilterFn,
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
@@ -53,6 +54,11 @@ export class CreateDoctorAbsenceDialogComponent {
   private _data = inject<{ doctorId: number }>(MAT_DIALOG_DATA);
   private _formService = inject(FormsService);
   private _absenceService = inject(AbsenceService);
+  weekendFilter: DateFilterFn<Date | null> = (d): boolean => {
+    if (!d) return false;
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   absenceForm = this._formService.getAbsenceCreateForm();
   errorMessage = '';

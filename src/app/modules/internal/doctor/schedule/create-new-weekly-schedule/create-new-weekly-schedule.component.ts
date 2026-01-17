@@ -3,6 +3,7 @@ import { AlertComponent } from '../../../../shared/components/alert/alert.compon
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
+  DateFilterFn,
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
@@ -99,6 +100,11 @@ export class CreateNewWeeklyScheduleComponent {
     { key: 'thu', label: 'Czwartek' },
     { key: 'fri', label: 'Piątek' },
   ] as const;
+  weekendFilter: DateFilterFn<Date | null> = (d): boolean => {
+    if (!d) return false;
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   errorMessage = signal('');
 

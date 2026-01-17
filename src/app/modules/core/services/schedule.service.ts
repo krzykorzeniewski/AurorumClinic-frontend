@@ -146,16 +146,21 @@ export class ScheduleService {
     scheduleId: number,
     data: UpdateDoctorSchedule,
   ) {
-    return this._http.put<ApiResponse<void>>(
-      `${this._apiUrl}/${scheduleId}`,
-      data,
-      {
+    return this._http
+      .put<ApiResponse<void>>(`${this._apiUrl}/${scheduleId}`, data, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
-      },
-    );
+      })
+      .pipe(
+        catchError((err) => {
+          if (err.error?.data?.appointments) {
+            return throwError(() => err);
+          }
+          return throwError(() => new Error(this.mapError(err)));
+        }),
+      );
   }
 
   deleteDoctorScheduleByEmployee(scheduleId: number) {
@@ -245,16 +250,21 @@ export class ScheduleService {
   }
 
   rescheduleSchedule(scheduleId: number, data: UpdateDoctorSchedule) {
-    return this._http.put<ApiResponse<void>>(
-      `${this._apiUrl}/me/${scheduleId}`,
-      data,
-      {
+    return this._http
+      .put<ApiResponse<void>>(`${this._apiUrl}/me/${scheduleId}`, data, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
-      },
-    );
+      })
+      .pipe(
+        catchError((err) => {
+          if (err.error?.data?.appointments) {
+            return throwError(() => err);
+          }
+          return throwError(() => new Error(this.mapError(err)));
+        }),
+      );
   }
 
   deleteSchedule(scheduleId: number) {
@@ -278,6 +288,12 @@ export class ScheduleService {
         errorData.schedule === 'Schedule overlaps with already existing one'
       ) {
         errorMsg = 'Ten grafik koliduje w planie z innym grafikiem.';
+      } else if (errorData.startedAt === 'Start date cannot be in the past') {
+        errorMsg = 'Godzina rozpoczęcia nie może być w przeszłości.';
+      } else if (
+        errorData.absence === 'Schedule overlaps with already existing absence'
+      ) {
+        errorMsg = 'Ten grafik koliduje w planie z nieobecnością.';
       } else {
         errorMsg = 'Wystąpił błąd serwera. Spróbuj ponownie później.';
       }

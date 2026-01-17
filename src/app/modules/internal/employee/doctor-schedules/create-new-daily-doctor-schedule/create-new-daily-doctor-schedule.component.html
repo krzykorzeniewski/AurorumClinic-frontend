@@ -33,7 +33,7 @@
       <div class="mb-2 w-100">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Data</mat-label>
-          <input matInput [matDatepicker]="picker" [formControl]="controls.date" />
+          <input matInput [matDatepickerFilter]="weekendFilter" [matDatepicker]="picker" [formControl]="controls.date" />
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           @if (controls.date.invalid) {

@@ -13,6 +13,7 @@ import {
 } from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
 import {
+  DateFilterFn,
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
@@ -100,6 +101,11 @@ export class CreateNewWeeklyDoctorScheduleComponent {
     { key: 'thu', label: 'Czwartek' },
     { key: 'fri', label: 'Piątek' },
   ] as const;
+  weekendFilter: DateFilterFn<Date | null> = (d): boolean => {
+    if (!d) return false;
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   errorMessage = signal('');
 
@@ -177,7 +183,7 @@ export class CreateNewWeeklyDoctorScheduleComponent {
       .createDoctorWeeklyScheduleByEmployee(payload)
       .subscribe({
         next: () => {
-          void this._router.navigate(['/internal/doctors'], {
+          void this._router.navigate(['/internal'], {
             state: {
               message: 'Pomyślnie utworzono grafik tygodniowy',
               status: 'success',

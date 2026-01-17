@@ -76,12 +76,18 @@ export class AuthService {
   loginTwoFactorToken(
     userEmail: UserLoginDataTwoFactorTokenRequest,
   ): Observable<void> {
-    return this._http.post<void>(`${this._apiUrl}/login-2fa-token`, userEmail, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return this._http
+      .post<void>(`${this._apiUrl}/login-2fa-token`, userEmail, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
+        }),
+      );
   }
 
   loginTwoFactor(userData: UserLoginDataTwoFactorRequest): Observable<User> {
@@ -149,15 +155,7 @@ export class AuthService {
       .post<void>(`${this._apiUrl}/verify-email-token`, request)
       .pipe(
         catchError((err) => {
-          let errorMsg =
-            'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.';
-
-          if (err.error?.status === 429) {
-            errorMsg =
-              'Hola hola, zwolnij trochę. Poczekaj chwilę, może email w końcu dotrze na twoją pocztę!';
-          }
-
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -168,13 +166,8 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -186,27 +179,7 @@ export class AuthService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = '';
-
-          if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
-            errorMsg =
-              'Wystąpił błąd w trakcie aktualizowania numeru telefonu. Spróbuj ponownie później.';
-          } else if (err.error?.status === 'fail' && err.error?.data) {
-            const errorData = err.error.data;
-
-            if (errorData.token === 'Invalid token') {
-              errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
-            } else if (errorData.token === 'Token is expired') {
-              errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
-            } else {
-              errorMsg =
-                'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-            }
-          } else {
-            errorMsg =
-              'Wystąpił błąd po stronie serwera. Spróbuj ponownie później.';
-          }
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -225,21 +198,7 @@ export class AuthService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
-
-          if (err.error?.status === 'fail') {
-            if (err.error.data.password) {
-              errorMsg =
-                'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
-            } else {
-              const failError = Object.values(err.error.data || {})[0];
-              errorMsg = typeof failError === 'string' ? failError : errorMsg;
-            }
-          } else if (err.error?.status === 'error') {
-            errorMsg = err.error.message || errorMsg;
-          }
-
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -254,16 +213,7 @@ export class AuthService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
-
-          if (err.error?.status === 'fail') {
-            const failError = Object.values(err.error.data || {})[0];
-            errorMsg = typeof failError === 'string' ? failError : errorMsg;
-          } else if (err.error?.status === 'error') {
-            errorMsg = err.error.message || errorMsg;
-          }
-
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -278,16 +228,7 @@ export class AuthService {
       })
       .pipe(
         catchError((err) => {
-          let errorMsg = 'Wystąpił błąd. Proszę spróbować później';
-
-          if (err.error?.status === 'fail') {
-            const failError = Object.values(err.error.data || {})[0];
-            errorMsg = typeof failError === 'string' ? failError : errorMsg;
-          } else if (err.error?.status === 'error') {
-            errorMsg = err.error.message || errorMsg;
-          }
-
-          return throwError(() => new Error(errorMsg));
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -296,10 +237,8 @@ export class AuthService {
     return this._http
       .post<void>(`${this._apiUrl}/reset-password-token`, email)
       .pipe(
-        catchError(() => {
-          return throwError(
-            () => new Error('Wystąpił błąd. Proszę spróbować później'),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -326,10 +265,8 @@ export class AuthService {
     return this._http
       .post<void>(`${this._apiUrl}/reset-password`, passwordData)
       .pipe(
-        catchError(() => {
-          return throwError(
-            () => new Error('Wystąpił błąd. Proszę spróbować później'),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getLoginErrorMessage(err)));
         }),
       );
   }
@@ -359,6 +296,9 @@ export class AuthService {
 
     if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
       errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+    } else if (err.error?.status === 'fail' && err.status === 429) {
+      errorMsg =
+        'Hola hola, zwolnij trochę z wysyłaniem danych. Odsapnij i spróbuj ponownie za chwilę.';
     } else if (err.error?.status === 'fail' && err.error?.data) {
       const errorData = err.error.data;
 
@@ -367,8 +307,15 @@ export class AuthService {
           'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.';
       } else if (errorData.credentials === 'Invalid credentials') {
         errorMsg = 'Niepoprawny email lub hasło';
+      } else if (errorData.token === 'Invalid token') {
+        errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
       } else if (errorData.token === 'Token is expired') {
         errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+      } else if (errorData.phoneNumber === 'Phone number is already taken') {
+        errorMsg = 'Ten numer jest juz zajęty.';
+      } else if (err.error.data.password) {
+        errorMsg =
+          'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
       } else if (
         ['Token is invalid', 'Invalid token'].includes(errorData.token)
       ) {

@@ -139,7 +139,7 @@
       <div class="d-flex flex-row gap-4 justify-content-center mb-4 w-100">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Data rozpoczęcia</mat-label>
-          <input matInput [matDatepicker]="pickerStart" [formControl]="controls.startedAt"/>
+          <input matInput [matDatepickerFilter]="weekendFilter" [matDatepicker]="pickerStart" [formControl]="controls.startedAt"/>
           <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
           <mat-datepicker #pickerStart></mat-datepicker>
           @if (controls.startedAt.invalid) {
@@ -148,7 +148,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Data zakończenia</mat-label>
-          <input matInput [matDatepicker]="pickerEnd" [formControl]="controls.finishedAt"/>
+          <input matInput [matDatepickerFilter]="weekendFilter" [matDatepicker]="pickerEnd" [formControl]="controls.finishedAt"/>
           <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
           <mat-datepicker #pickerEnd></mat-datepicker>
           @if (controls.finishedAt.invalid) {

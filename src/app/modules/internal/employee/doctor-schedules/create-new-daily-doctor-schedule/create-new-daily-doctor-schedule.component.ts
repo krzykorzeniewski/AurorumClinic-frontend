@@ -4,6 +4,7 @@ import { DoctorCardComponent } from '../../../../shared/components/doctor-card/d
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
+  DateFilterFn,
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
@@ -73,6 +74,11 @@ export class CreateNewDailyDoctorScheduleComponent {
   scheduleForm = this._formService.getScheduleDailyForm();
   doctor = signal<GetFullDoctorApiResponse | null>(null);
   specializations: SpecializationWithServices[] = [];
+  weekendFilter: DateFilterFn<Date | null> = (d): boolean => {
+    if (!d) return false;
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  };
 
   errorMessage = signal('');
 
