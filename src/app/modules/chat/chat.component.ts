@@ -24,6 +24,7 @@ import { MatIcon } from '@angular/material/icon';
 export class ChatComponent implements AfterViewChecked, OnDestroy {
   private _chatService = inject(ChatService);
   private _router = inject(Router);
+  private onResize = () => this.checkScreenSize();
   message = model<string>('');
   chats = this._chatService.chats;
   messages = this._chatService.messages;
@@ -53,7 +54,7 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
       }
     });
     this.checkScreenSize();
-    window.addEventListener('resize', () => this.checkScreenSize());
+    window.addEventListener('resize', () => this.onResize());
   }
 
   selectChat(chat: Chat) {
@@ -106,7 +107,6 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
   }
 
   deselectChat() {
-    // Metoda do cofnięcia wyboru czatu na małych ekranach
     this.selectedChat.set(null);
   }
 
@@ -129,6 +129,6 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
 
   ngOnDestroy(): void {
     this._chatService.clearActiveChat();
-    window.removeEventListener('resize', () => this.checkScreenSize());
+    window.removeEventListener('resize', () => this.onResize());
   }
 }

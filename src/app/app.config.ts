@@ -10,11 +10,7 @@ import {
 } from '@angular/router';
 
 import { APP_ROUTES } from './app.routes';
-import {
-  provideHttpClient,
-  withInterceptors,
-  withXsrfConfiguration,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DATE_LOCALE,
@@ -24,7 +20,6 @@ import { spinnerInterceptor } from './modules/core/interceptors/spinner.intercep
 import { autologinInterceptor } from './modules/core/interceptors/autologin.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
-import { csrfInterceptor } from './modules/core/interceptors/csrf.interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { customPaginator } from './modules/shared/methods/customPaginator';
 
@@ -35,15 +30,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(BrowserAnimationsModule),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
     provideHttpClient(
-      withInterceptors([
-        spinnerInterceptor,
-        autologinInterceptor,
-        csrfInterceptor,
-      ]),
-      withXsrfConfiguration({
-        cookieName: 'XSRF-TOKEN',
-        headerName: 'X-XSRF-TOKEN',
-      }),
+      withInterceptors([spinnerInterceptor, autologinInterceptor]),
     ),
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
