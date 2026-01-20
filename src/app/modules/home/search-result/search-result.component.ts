@@ -25,7 +25,7 @@ export class SearchResultComponent implements OnInit {
   ngOnInit(): void {
     this._route.queryParams.subscribe({
       next: (params) => {
-        const searchQuery = params['searchQuery'] || null;
+        const searchQuery = params['name'] || null;
         const serviceIdFromQuery = params['serviceId'] || null;
 
         if (serviceIdFromQuery) {
