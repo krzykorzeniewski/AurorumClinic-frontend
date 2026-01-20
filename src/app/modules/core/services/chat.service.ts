@@ -42,6 +42,7 @@ export class ChatService {
             this.handleIncomingMessage(JSON.parse(message.body));
           },
         );
+        this.getAllChats();
       },
       onWebSocketClose: () => {
         this.reconnect.update((v) => v + 1);
@@ -53,10 +54,10 @@ export class ChatService {
     });
 
     this.stompClient.activate();
-    this.getAllChats();
   }
 
   getAllChats() {
+    if (!this.stompClient?.active) return;
     this._http
       .get<ApiResponse<Chat[]>>(`${this._apiUrl}/chats/me`, {
         withCredentials: true,
@@ -154,7 +155,9 @@ export class ChatService {
     const currentChat = this.activeChat();
     const receiver = this.user();
 
-    if (currentChat && receiver) {
+    if (!receiver) return;
+
+    if (currentChat) {
       const newMessage: MessageReceive = {
         text: message.text,
         sentAt: message.sentAt,
@@ -168,8 +171,8 @@ export class ChatService {
         this.messages.update((msgs) => [...msgs, newMessage]);
       }
     } else {
-      if (message.authorId === receiver?.id) {
-        const senderId = message.receiverId;
+      if (message.receiverId === receiver.id) {
+        const senderId = message.authorId;
 
         this.unreadChats.update((unread) => {
           const newSet = new Set(unread);
@@ -222,9 +225,5 @@ export class ChatService {
         }),
       )
       .subscribe();
-  }
-
-  get userId(): number | null {
-    return this.user()?.id ?? null;
   }
 }

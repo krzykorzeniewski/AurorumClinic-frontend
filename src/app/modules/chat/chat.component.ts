@@ -54,6 +54,7 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
       }
     });
     this.checkScreenSize();
+    this._chatService.getAllChats();
     window.addEventListener('resize', () => this.onResize());
   }
 
