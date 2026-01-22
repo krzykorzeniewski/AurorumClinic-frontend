@@ -20,6 +20,7 @@ import {
 import BigNumber from 'bignumber.js';
 import { passwordStrengthValidator } from '../../shared/validators/password-strength.validator';
 import { timeAbsenceValidator } from '../../shared/validators/absence-time.validator';
+import { newsletterDateValidator } from '../../shared/validators/newsletter-past-time-date.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -689,32 +690,37 @@ export class FormsService {
   }
 
   getReviewPromptForm() {
-    return new FormGroup({
-      subject: new FormControl<string>('', {
-        validators: [
-          Validators.minLength(1),
-          Validators.required,
-          Validators.maxLength(100),
-        ],
-        nonNullable: true,
-      }),
-      text: new FormControl<string>('', {
-        validators: [
-          Validators.minLength(1),
-          Validators.required,
-          Validators.maxLength(1000),
-        ],
-        nonNullable: true,
-      }),
-      date: new FormControl<Date | null>(null, {
-        validators: [futureTimeDateValidator(), Validators.required],
-        nonNullable: true,
-      }),
-      time: new FormControl<Date | null>(null, {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
-    });
+    return new FormGroup(
+      {
+        subject: new FormControl<string>('', {
+          validators: [
+            Validators.minLength(1),
+            Validators.required,
+            Validators.maxLength(100),
+          ],
+          nonNullable: true,
+        }),
+        text: new FormControl<string>('', {
+          validators: [
+            Validators.minLength(1),
+            Validators.required,
+            Validators.maxLength(1000),
+          ],
+          nonNullable: true,
+        }),
+        date: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        time: new FormControl<Date | null>(null, {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      },
+      {
+        validators: [newsletterDateValidator()],
+      },
+    );
   }
 
   getErrorMessage(control: FormControl): string {
@@ -782,6 +788,9 @@ export class FormsService {
     }
     if (control.hasError('missingNumber')) {
       return 'Hasło musi zawierać przynajmniej jedną cyfrę.';
+    }
+    if (control.hasError('plannedDateInPast')) {
+      return 'Planowana data wysłania już minęła. Wybierz datę w przyszłości.';
     }
     if (control.hasError('minLength')) {
       const { requiredLength, actualLength } = control.getError('minLength');

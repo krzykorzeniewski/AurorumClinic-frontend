@@ -32,7 +32,7 @@ import { MatButton } from '@angular/material/button';
     MatPaginator,
     OpinionCardComponent,
     AsyncPipe,
-    MatButton
+    MatButton,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -155,6 +155,10 @@ export class ProfileComponent {
         return op;
       }),
     );
+  }
+
+  getProfileSpecializations() {
+    return this.doctor()?.specializations.map((s) => s.name) ?? '';
   }
 
   private loadOpinions(doctorId: number) {

@@ -4,7 +4,7 @@
       [id]="doctor.id"
       [name]="doctor.name"
       [surname]="doctor.surname"
-      [specialization]="doctor.specializations[0].name"
+      [specialization]="getProfileSpecializations()"
       [profilePicture]="doctor.profilePicture"
       [email]="doctor.email"
       [rating]="doctor.rating"

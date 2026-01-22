@@ -16,7 +16,7 @@ export class DoctorCardComponent {
   id = input<number>(0);
   name = input<string>('');
   surname = input<string>('');
-  specialization = input<string>('');
+  specialization = input<string | string[]>('');
   rating = input<number>(0);
   email = input<string>('');
   profilePicture = input<string>('');
@@ -38,5 +38,10 @@ export class DoctorCardComponent {
         doctorId: this.id(),
       },
     });
+  }
+
+  get specializationList(): string[] {
+    const value = this.specialization();
+    return Array.isArray(value) ? value : value ? [value] : [];
   }
 }

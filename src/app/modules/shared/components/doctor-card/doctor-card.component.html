@@ -77,12 +77,18 @@
           />
         </div>
 
-        <div class="col-12 col-md align-content-center text-center text-md-start">
+        <div class="col-12 col-md text-center text-md-start">
           <h5 class="mb-1">
             lek. {{ name() }} {{ surname() }}
           </h5>
 
-          <p class="mb-1 text-muted" style="font-size: 1rem;">{{ specialization() }}</p>
+          @if (specialization().length > 1) {
+            <div class="overflow-auto" style="max-height: 55px">
+              <p *ngFor="let spec of specializationList" class="mb-1 text-muted" style="font-size: 1rem;">{{ spec }}</p>
+            </div>
+          } @else {
+            <p class="mb-1 text-muted" style="font-size: 1rem;">{{ specialization() }}</p>
+          }
 
           <div class="mb-1">
             <span *ngFor="let _ of [1,2,3,4,5]; let i = index">

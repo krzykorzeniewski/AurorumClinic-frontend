@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this._authService.refreshCookies().subscribe({
       next: (user) => {
-        if ((user && UserRoleMap.DOCTOR) || UserRoleMap.PATIENT) {
+        if (user && (UserRoleMap.DOCTOR || UserRoleMap.PATIENT)) {
           this._chatService.disconnect();
           this._chatService.connect();
         }

@@ -290,6 +290,8 @@ export class ScheduleService {
         errorMsg = 'Ten grafik koliduje w planie z innym grafikiem.';
       } else if (errorData.startedAt === 'Start date cannot be in the past') {
         errorMsg = 'Godzina rozpoczęcia nie może być w przeszłości.';
+      } else if (errorData.startedAt === 'Start date must be before end date') {
+        errorMsg = 'Godzina rozpoczęcia musi być wcześniej niż zakończenia..';
       } else if (
         errorData.absence === 'Schedule overlaps with already existing absence'
       ) {
