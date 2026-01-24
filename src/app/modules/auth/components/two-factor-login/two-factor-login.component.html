@@ -35,11 +35,12 @@
           <button
             mat-flat-button
             type="button"
-            class="btn border w-100"
+            class="btn text-white w-100"
             (click)="onResend()"
             [disabled]="!canResend()"
+            style="background-color: var(--primary-purple)"
           >
-            Wyślij kod ponownie
+            Wyślij ponownie
             <span *ngIf="!canResend()"> ({{ timer() }}s)</span>
           </button>
         </div>

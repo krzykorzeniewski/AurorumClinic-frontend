@@ -312,11 +312,11 @@ export class AuthService {
       } else if (errorData.token === 'Token is expired') {
         errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
       } else if (errorData.phoneNumber === 'Phone number is already taken') {
-        errorMsg = 'Ten numer jest juz zajęty.';
+        errorMsg = 'Ten numer jest już zajęty.';
       } else if (errorData.email === 'already in use') {
-        errorMsg = 'Ten email jest juz zajęty.';
+        errorMsg = 'Ten email jest już zajęty.';
       } else if (errorData.phoneNumber === 'already in use') {
-        errorMsg = 'Ten numer jest juz zajęty.';
+        errorMsg = 'Ten numer jest już zajęty.';
       } else if (err.error.data.password) {
         errorMsg =
           'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';

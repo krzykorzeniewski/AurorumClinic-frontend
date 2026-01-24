@@ -36,11 +36,12 @@ export class ResendCooldownService {
 
     let timer = this.timers.get(key);
     if (!timer) {
-      timer = signal(0);
+      timer = signal(seconds);
       this.timers.set(key, timer);
+    } else {
+      timer.set(seconds);
     }
 
-    timer.set(seconds);
     this.startInterval(key, expireAt);
   }
 
@@ -50,8 +51,15 @@ export class ResendCooldownService {
       this.intervals.delete(key);
     }
 
-    this.timers.delete(key);
+    const timer = this.timers.get(key);
+    if (timer) {
+      timer.set(0);
+    }
     localStorage.removeItem(key);
+  }
+
+  getTimer(key: string): WritableSignal<number> | undefined {
+    return this.timers.get(key);
   }
 
   private startInterval(key: string, expireAt: number) {

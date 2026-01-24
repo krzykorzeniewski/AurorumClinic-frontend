@@ -98,19 +98,27 @@ export class LoginComponent {
           err.message ===
           'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.'
         ) {
-          this._authService.verifyEmail({ email: userData.email }).subscribe({
-            next: () => {
-              void this._router.navigate(['/auth/email-resend'], {
-                state: {
-                  email: userData.email,
-                },
-              });
-            },
-            error: (err) => {
-              this.variant.set('warning');
-              this.infoMessage.set(err.message);
-            },
-          });
+          if (localStorage.getItem('verified') === null) {
+            void this._router.navigate(['/auth/email-resend'], {
+              state: {
+                email: userData.email,
+              },
+            });
+          } else {
+            this._authService.verifyEmail({ email: userData.email }).subscribe({
+              next: () => {
+                void this._router.navigate(['/auth/email-resend'], {
+                  state: {
+                    email: userData.email,
+                  },
+                });
+              },
+              error: (err) => {
+                this.variant.set('warning');
+                this.infoMessage.set(err.message);
+              },
+            });
+          }
         } else {
           this.variant.set('warning');
           this.infoMessage.set(err.message);

@@ -109,15 +109,10 @@ export class TwoFactorLoginComponent implements OnInit {
     this._authService.loginTwoFactorToken(this._email).subscribe({
       next: () => {
         this._cooldownService.start('two_factor_resend', 120);
+        this.timer = this._cooldownService.getTimer('two_factor_resend')!;
       },
-      error: () => {
-        void this._router.navigate(['/auth/login'], {
-          state: {
-            message:
-              'Wystąpił błąd z weryfikacją dwuetapową. Spróbuj zalogować się ponownie.',
-            variant: 'warning',
-          },
-        });
+      error: (err) => {
+        this.message.set(err.message);
       },
     });
   }
