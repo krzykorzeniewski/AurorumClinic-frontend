@@ -48,7 +48,7 @@ export class EmailResendComponent {
 
     this.timer = this._cooldownService.init('email_verify_resend');
     if (this.timer() === 0) {
-      this._cooldownService.start('email_verify_resend', 5);
+      this._cooldownService.start('email_verify_resend', 120);
     }
   }
 
@@ -69,7 +69,7 @@ export class EmailResendComponent {
     this._authService.verifyEmail(userData).subscribe({
       next: () => {
         this.message.set('Wysłano ponownie email weryfikacyjny');
-        this._cooldownService.start('email_verify_resend', 5);
+        this._cooldownService.start('email_verify_resend', 120);
       },
       error: () => {
         void this._router.navigate(['/auth/login']);
