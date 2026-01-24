@@ -21,6 +21,7 @@ import {
 } from '@angular/material/input';
 import { CreateSpecialization } from '../../../../core/models/specialization.model';
 import { SpecializationService } from '../../../../core/services/specialization.service';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-specialization-dialog',
@@ -37,6 +38,7 @@ import { SpecializationService } from '../../../../core/services/specialization.
     MatDialogContent,
     MatDialogTitle,
     MatLabel,
+    InputRefDirective,
   ],
   templateUrl: './create-specialization-dialog.component.html',
 })

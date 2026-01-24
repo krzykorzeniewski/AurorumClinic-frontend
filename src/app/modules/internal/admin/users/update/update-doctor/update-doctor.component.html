@@ -52,6 +52,7 @@
           <input
             id="pesel-doctor-aurorum"
             matInput
+            appInputRef
             [value]="controls.pesel"
             [formControl]="controls.pesel" />
           @if (hasPesel() && controls.pesel.invalid) {

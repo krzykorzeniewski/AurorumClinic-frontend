@@ -38,7 +38,6 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     CdkTextareaAutosize,
   ],
   templateUrl: './newsletter-prompt.component.html',
-  styleUrl: './newsletter-prompt.component.css',
 })
 export class NewsletterPromptComponent {
   private _newsletterService = inject(NewsletterService);

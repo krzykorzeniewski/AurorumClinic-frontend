@@ -26,6 +26,7 @@ import { DoctorService } from '../../../../../core/services/doctor.service';
 import { Specialization } from '../../../../../core/models/specialization.model';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-register-doctor',
@@ -47,6 +48,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     MatOption,
     MatSelect,
     CdkTextareaAutosize,
+    InputRefDirective,
   ],
   templateUrl: './register-doctor.component.html',
 })

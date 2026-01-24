@@ -35,7 +35,6 @@ import { MatButton } from '@angular/material/button';
     MatButton,
   ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
   private _authService = inject(AuthService);

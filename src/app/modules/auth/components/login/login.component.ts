@@ -50,7 +50,6 @@ import { ChatService } from '../../../core/services/chat.service';
     NgIf,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   private _authService = inject(AuthService);
@@ -95,8 +94,27 @@ export class LoginComponent {
         }
       },
       error: (err) => {
-        this.variant.set('warning');
-        this.infoMessage.set(err.message);
+        if (
+          err.message ===
+          'Twoje konto nie jest jeszcze aktywne. Na twój adres email został wysłany link do weryfikacji konta.'
+        ) {
+          this._authService.verifyEmail({ email: userData.email }).subscribe({
+            next: () => {
+              void this._router.navigate(['/auth/email-resend'], {
+                state: {
+                  email: userData.email,
+                },
+              });
+            },
+            error: (err) => {
+              this.variant.set('warning');
+              this.infoMessage.set(err.message);
+            },
+          });
+        } else {
+          this.variant.set('warning');
+          this.infoMessage.set(err.message);
+        }
       },
     });
   }

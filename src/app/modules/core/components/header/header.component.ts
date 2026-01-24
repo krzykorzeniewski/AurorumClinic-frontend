@@ -33,7 +33,6 @@ import { ChatService } from '../../services/chat.service';
     NgSwitchCase,
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private _authService = inject(AuthService);

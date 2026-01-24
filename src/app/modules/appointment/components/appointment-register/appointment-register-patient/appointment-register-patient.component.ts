@@ -17,7 +17,6 @@ import { AppointmentRegisterComponent } from '../appointment-register.component'
     AppointmentRegisterComponent,
   ],
   templateUrl: './appointment-register-patient.component.html',
-  styleUrl: '../appointment-register.component.css',
 })
 export class AppointmentRegisterPatientComponent {
   private _appointmentService = inject(AppointmentService);

@@ -17,6 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { NgIf } from '@angular/common';
+import { InputRefDirective } from '../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-register-patient',
@@ -35,6 +36,7 @@ import { NgIf } from '@angular/common';
     MatIcon,
     AlertComponent,
     NgIf,
+    InputRefDirective,
   ],
   templateUrl: './register-patient.component.html',
 })
@@ -62,11 +64,10 @@ export class RegisterPatientComponent {
 
     this._authService.registerPatient(userData).subscribe({
       next: () => {
-        void this._router.navigate(['/auth/login'], {
+        localStorage.setItem('verified', 'false');
+        void this._router.navigate(['/auth/email-resend'], {
           state: {
-            message:
-              'Na adres email wysłano link do aktywacji konta. Kod jest ważny 15 minut.',
-            variant: 'info',
+            email: userData.email,
           },
         });
       },

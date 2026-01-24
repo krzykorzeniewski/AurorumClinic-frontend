@@ -36,7 +36,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     MatError,
   ],
   templateUrl: './appointment-reschedule.component.html',
-  styleUrl: './appointment-reschedule.component.css',
 })
 export class AppointmentRescheduleComponent {
   private _formService = inject(FormsService);

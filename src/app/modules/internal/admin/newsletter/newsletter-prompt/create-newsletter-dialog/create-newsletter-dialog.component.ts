@@ -39,6 +39,7 @@ import {
   MatTimepickerToggle,
 } from '@angular/material/timepicker';
 import { environment } from '../../../../../../../environments/environment';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-newsletter-dialog',
@@ -64,9 +65,9 @@ import { environment } from '../../../../../../../environments/environment';
     MatTimepickerInput,
     MatTimepickerToggle,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './create-newsletter-dialog.component.html',
-  styleUrl: './create-newsletter-dialog.component.css',
 })
 export class CreateNewsletterDialogComponent {
   private _newsletterService = inject(NewsletterService);

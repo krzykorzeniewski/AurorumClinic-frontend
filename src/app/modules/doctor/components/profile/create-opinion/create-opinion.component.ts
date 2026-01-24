@@ -19,6 +19,7 @@ import {
   Opinion,
 } from '../../../../core/models/opinion.model';
 import { OpinionCardComponent } from '../../../shared/opinion-card/opinion-card.component';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-opinion-doctor',
@@ -37,9 +38,9 @@ import { OpinionCardComponent } from '../../../shared/opinion-card/opinion-card.
     ReactiveFormsModule,
     RouterLink,
     OpinionCardComponent,
+    InputRefDirective,
   ],
   templateUrl: './create-opinion.component.html',
-  styleUrl: './create-opinion.component.css',
 })
 export class CreateOpinionComponent {
   private _opinionService = inject(OpinionService);

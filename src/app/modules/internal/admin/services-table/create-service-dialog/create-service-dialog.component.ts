@@ -27,6 +27,7 @@ import { MatSelect } from '@angular/material/select';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-service-dialog',
@@ -46,6 +47,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     MatOption,
     MatSelect,
     CdkTextareaAutosize,
+    InputRefDirective,
   ],
   templateUrl: './create-service-dialog.component.html',
 })

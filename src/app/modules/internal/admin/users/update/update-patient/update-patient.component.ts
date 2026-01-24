@@ -28,6 +28,7 @@ import {
   UpdatePatient,
 } from '../../../../../core/models/patient.model';
 import { PatientService } from '../../../../../core/services/patient.service';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-update-patient',
@@ -47,6 +48,7 @@ import { PatientService } from '../../../../../core/services/patient.service';
     MatSuffix,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './update-patient.component.html',
 })

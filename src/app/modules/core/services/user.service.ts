@@ -420,6 +420,8 @@ export class UserService {
         errorMsg = 'Podano błędny kod. Proszę spróbować ponownie.';
       } else if (errorData.token === 'Token is expired') {
         errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
+      } else if (errorData.file === 'Maximum upload size exceeded') {
+        errorMsg = 'Podane zdjęcie jest za duże. Spróbuj dodać inne zdjęcie.';
       } else if (errorData.phoneNumber === 'Phone number is already taken') {
         errorMsg = 'Ten numer jest juz zajęty.';
       } else if (errorData.phoneNumber === 'already in use') {

@@ -19,6 +19,7 @@ import {
   Opinion,
   UpdateAnswerOpinionDoctor,
 } from '../../../../core/models/opinion.model';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-edit-opinion-doctor',
@@ -37,9 +38,9 @@ import {
     OpinionCardComponent,
     ReactiveFormsModule,
     RouterLink,
+    InputRefDirective,
   ],
   templateUrl: './edit-opinion.component.html',
-  styleUrl: './edit-opinion.component.css',
 })
 export class EditOpinionComponent {
   private _opinionService = inject(OpinionService);

@@ -21,6 +21,7 @@ import BigNumber from 'bignumber.js';
 import { passwordStrengthValidator } from '../../shared/validators/password-strength.validator';
 import { timeAbsenceValidator } from '../../shared/validators/absence-time.validator';
 import { newsletterDateValidator } from '../../shared/validators/newsletter-past-time-date.validator';
+import { whitespaceValidator } from '../../shared/validators/whitespace.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -78,11 +79,20 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.minLength(1),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         email: new FormControl('', {
@@ -90,6 +100,7 @@ export class FormsService {
             Validators.email,
             Validators.maxLength(100),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: true,
         }),
@@ -130,11 +141,19 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         email: new FormControl('', {
@@ -150,6 +169,7 @@ export class FormsService {
             Validators.minLength(11),
             Validators.maxLength(11),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: false,
         }),
@@ -158,19 +178,31 @@ export class FormsService {
           nonNullable: true,
         }),
         description: new FormControl('', {
-          validators: [Validators.maxLength(4000), Validators.required],
+          validators: [
+            Validators.maxLength(4000),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         education: new FormControl('', {
-          validators: [Validators.maxLength(1000), Validators.required],
+          validators: [
+            Validators.maxLength(1000),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         experience: new FormControl('', {
-          validators: [Validators.maxLength(1000), Validators.required],
+          validators: [
+            Validators.maxLength(1000),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         pwzNumber: new FormControl(null, {
-          validators: [Validators.maxLength(50)],
+          validators: [Validators.maxLength(50), whitespaceValidator()],
           nonNullable: false,
         }),
         birthdate: new FormControl<Date | null>(null, {
@@ -189,11 +221,19 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl('', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         email: new FormControl('', {
@@ -209,6 +249,7 @@ export class FormsService {
             Validators.minLength(11),
             Validators.maxLength(11),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: false,
         }),
@@ -281,11 +322,19 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl<string>(userData ? userData.name : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl<string>(userData ? userData.surname : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         pesel: new FormControl<string>(userData ? userData.pesel : '', {
@@ -293,6 +342,7 @@ export class FormsService {
             Validators.minLength(11),
             Validators.maxLength(11),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: false,
         }),
@@ -334,11 +384,19 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl<string>(userData ? userData.name : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl<string>(userData ? userData.surname : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         pesel: new FormControl<string>(userData ? userData.pesel : '', {
@@ -346,6 +404,7 @@ export class FormsService {
             Validators.minLength(11),
             Validators.maxLength(11),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: false,
         }),
@@ -397,11 +456,19 @@ export class FormsService {
     return new FormGroup(
       {
         firstName: new FormControl<string>(userData ? userData.name : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         surname: new FormControl<string>(userData ? userData.surname : '', {
-          validators: [Validators.maxLength(50), Validators.required],
+          validators: [
+            Validators.maxLength(50),
+            Validators.required,
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         pesel: new FormControl<string>(userData ? userData.pesel : '', {
@@ -409,6 +476,7 @@ export class FormsService {
             Validators.minLength(11),
             Validators.maxLength(11),
             Validators.required,
+            whitespaceValidator(),
           ],
           nonNullable: false,
         }),
@@ -569,7 +637,11 @@ export class FormsService {
     return new FormGroup(
       {
         name: new FormControl<string>('', {
-          validators: [Validators.required, Validators.maxLength(100)],
+          validators: [
+            Validators.required,
+            Validators.maxLength(100),
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         }),
         startedAt: new FormControl<Date | null>(null, {
@@ -594,21 +666,33 @@ export class FormsService {
       experience: new FormControl<string>(
         doctorData ? doctorData.experience : '',
         {
-          validators: [Validators.required, Validators.maxLength(1000)],
+          validators: [
+            Validators.required,
+            Validators.maxLength(1000),
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         },
       ),
       education: new FormControl<string>(
         doctorData ? doctorData.education : '',
         {
-          validators: [Validators.required, Validators.maxLength(1000)],
+          validators: [
+            Validators.required,
+            Validators.maxLength(1000),
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         },
       ),
       description: new FormControl<string>(
         doctorData ? doctorData.description : '',
         {
-          validators: [Validators.required, Validators.maxLength(4000)],
+          validators: [
+            Validators.required,
+            Validators.maxLength(4000),
+            whitespaceValidator(),
+          ],
           nonNullable: true,
         },
       ),
@@ -622,7 +706,11 @@ export class FormsService {
         nonNullable: true,
       }),
       comment: new FormControl<string>('', {
-        validators: [Validators.required, Validators.maxLength(2000)],
+        validators: [
+          Validators.required,
+          Validators.maxLength(2000),
+          whitespaceValidator(),
+        ],
         nonNullable: true,
       }),
     });
@@ -631,7 +719,11 @@ export class FormsService {
   getOpinionDoctorForm() {
     return new FormGroup({
       answer: new FormControl<string>('', {
-        validators: [Validators.required, Validators.maxLength(2000)],
+        validators: [
+          Validators.required,
+          Validators.maxLength(2000),
+          whitespaceValidator(),
+        ],
         nonNullable: true,
       }),
     });
@@ -639,7 +731,11 @@ export class FormsService {
 
   getSpecializationForm() {
     return new FormControl<string>('', {
-      validators: [Validators.maxLength(150), Validators.required],
+      validators: [
+        Validators.maxLength(150),
+        Validators.required,
+        whitespaceValidator(),
+      ],
       nonNullable: true,
     });
   }
@@ -647,7 +743,11 @@ export class FormsService {
   getServiceForm() {
     return new FormGroup({
       name: new FormControl<string>('', {
-        validators: [Validators.maxLength(150), Validators.required],
+        validators: [
+          Validators.maxLength(150),
+          Validators.required,
+          whitespaceValidator(),
+        ],
         nonNullable: true,
       }),
       duration: new FormControl<number>(0, {
@@ -663,6 +763,7 @@ export class FormsService {
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(500),
+          whitespaceValidator(),
         ],
         nonNullable: true,
       }),
@@ -675,7 +776,11 @@ export class FormsService {
   getUpdateServiceForm() {
     return new FormGroup({
       name: new FormControl<string>('', {
-        validators: [Validators.maxLength(150), Validators.required],
+        validators: [
+          Validators.maxLength(150),
+          Validators.required,
+          whitespaceValidator(),
+        ],
         nonNullable: true,
       }),
       description: new FormControl<string>('', {
@@ -683,6 +788,7 @@ export class FormsService {
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(500),
+          whitespaceValidator(),
         ],
         nonNullable: true,
       }),
@@ -697,6 +803,7 @@ export class FormsService {
             Validators.minLength(1),
             Validators.required,
             Validators.maxLength(100),
+            whitespaceValidator(),
           ],
           nonNullable: true,
         }),
@@ -705,6 +812,7 @@ export class FormsService {
             Validators.minLength(1),
             Validators.required,
             Validators.maxLength(1000),
+            whitespaceValidator(),
           ],
           nonNullable: true,
         }),
@@ -726,6 +834,9 @@ export class FormsService {
   getErrorMessage(control: FormControl): string {
     if (control.hasError('required')) {
       return 'To pole jest wymagane.';
+    }
+    if (control.hasError('whitespace')) {
+      return 'To pole nie może być puste';
     }
     if (control.hasError('email')) {
       return 'Niepoprawny adres email.';

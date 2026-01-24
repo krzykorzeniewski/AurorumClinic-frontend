@@ -19,6 +19,7 @@ import { OpinionService } from '../../../core/services/opinion.service';
 import { CreateOpinionPatient } from '../../../core/models/opinion.model';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { InputRefDirective } from '../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-opinion-patient',
@@ -39,9 +40,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatIcon,
     NgForOf,
     AlertComponent,
+    InputRefDirective,
   ],
   templateUrl: './create-opinion.component.html',
-  styleUrl: './create-opinion.component.css',
 })
 export class CreateOpinionComponent {
   private _opinionService = inject(OpinionService);

@@ -21,22 +21,34 @@
         </mat-form-field>
       </div>
       <app-alert class="mt-3 w-75" *ngIf="message()" [text]="message()"></app-alert>
-      <div class="row w-100" [class]="message() ? 'mb-3' : 'mt-3 mb-3'">
-        <div class="col-sm text-center">
+      <div class="row w-100 gap-2" [class]="message() ? 'mb-3' : 'mt-3 mb-3'">
+        <div class="col-12 col-sm text-center px-1">
           <button
             mat-flat-button
             type="button"
-            class="btn border"
+            class="btn border w-100"
             style="background-color: white; color: black"
             routerLink="/auth/login"
           >Anuluj</button>
         </div>
-        <div class="col-sm text-center">
+        <div class="col-12 col-sm text-center px-1">
+          <button
+            mat-flat-button
+            type="button"
+            class="btn border w-100"
+            (click)="onResend()"
+            [disabled]="!canResend()"
+          >
+            Wyślij kod ponownie
+            <span *ngIf="!canResend()"> ({{ timer() }}s)</span>
+          </button>
+        </div>
+        <div class="col-12 col-sm text-center px-1">
           <button
             mat-flat-button
             type="submit"
-            [disabled]="!isLoginTokenRequestSent && confirmForm.invalid"
-            class="btn text-white"
+            [disabled]="confirmForm.invalid"
+            class="btn text-white w-100"
             style="background-color: var(--primary-purple)"
           >Zaloguj</button>
         </div>

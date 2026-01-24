@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   AlertComponent,
@@ -21,6 +21,7 @@ import {
 } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { ChatService } from '../../../core/services/chat.service';
+import { ResendCooldownService } from '../../../core/services/resend-cooldown.service';
 
 @Component({
   selector: 'app-two-factor-login',
@@ -39,48 +40,43 @@ import { ChatService } from '../../../core/services/chat.service';
     ReactiveFormsModule,
   ],
   templateUrl: './two-factor-login.component.html',
-  styleUrl: './two-factor-login.component.css',
 })
-export class TwoFactorLoginComponent {
+export class TwoFactorLoginComponent implements OnInit {
   private _authService = inject(AuthService);
+  private _cooldownService = inject(ResendCooldownService);
   private _router = inject(Router);
   private _formService = inject(FormsService);
   private _chatService = inject(ChatService);
   private _email!: UserLoginDataTwoFactorTokenRequest;
   readonly confirmForm = this._formService.getCodeVerificationForm();
-  isLoginTokenRequestSent = false;
   message = signal('');
   variant = signal<AlertVariant>('warning');
+  timer = signal<number>(0);
+  canResend = computed(() => this.timer() === 0);
 
   constructor() {
     const nav = this._router.getCurrentNavigation();
-    if (nav?.extras.state) {
-      if (!nav.extras.state['fromLogin']) {
-        void this._router.navigate(['/auth/login']);
-      }
+    const state = nav?.extras.state;
 
-      const email: UserLoginDataTwoFactorTokenRequest = {
-        email: nav.extras.state['email'],
-      };
-      this._email = email;
-
-      this._authService.loginTwoFactorToken(email).subscribe({
-        next: () => {
-          this.isLoginTokenRequestSent = true;
-        },
-        error: () => {
-          void this._router.navigate(['/auth/login'], {
-            state: {
-              message:
-                'Wystąpił błąd z weryfikacją dwuetapową. Spróbuj zalogować się ponownie.',
-              variant: 'warning',
-            },
-          });
-        },
-      });
-    } else {
+    if (!state?.['fromLogin'] || !state?.['email']) {
       void this._router.navigate(['/auth/login']);
+      return;
     }
+
+    this._email = { email: state['email'] };
+  }
+
+  ngOnInit(): void {
+    this.timer = this._cooldownService.init('two_factor_resend');
+
+    if (this.timer() === 0) {
+      this.sendTwoFactorToken();
+    }
+  }
+
+  onResend() {
+    if (!this.canResend()) return;
+    this.sendTwoFactorToken();
   }
 
   onTwoFactorLogin() {
@@ -99,10 +95,29 @@ export class TwoFactorLoginComponent {
         if (isDoctorOrPatient) {
           this._chatService.connect();
         }
+
+        this._cooldownService.clear('two_factor_resend');
         this._authService.redirectAfterLogin();
       },
       error: (err) => {
         this.message.set(err.message);
+      },
+    });
+  }
+
+  private sendTwoFactorToken() {
+    this._authService.loginTwoFactorToken(this._email).subscribe({
+      next: () => {
+        this._cooldownService.start('two_factor_resend', 120);
+      },
+      error: () => {
+        void this._router.navigate(['/auth/login'], {
+          state: {
+            message:
+              'Wystąpił błąd z weryfikacją dwuetapową. Spróbuj zalogować się ponownie.',
+            variant: 'warning',
+          },
+        });
       },
     });
   }

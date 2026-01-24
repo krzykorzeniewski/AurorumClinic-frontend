@@ -25,6 +25,7 @@ import {
   MatLabel,
   MatSuffix,
 } from '@angular/material/input';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-create-absence-dialog',
@@ -44,6 +45,7 @@ import {
     MatDialogContent,
     MatDialogTitle,
     MatSuffix,
+    InputRefDirective,
   ],
   templateUrl: './create-absence-dialog.component.html',
   styleUrl: './create-absence-dialog.component.css',

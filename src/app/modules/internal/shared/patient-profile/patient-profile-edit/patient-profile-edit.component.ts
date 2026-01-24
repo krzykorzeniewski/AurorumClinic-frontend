@@ -26,6 +26,7 @@ import {
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-patient-profile-edit',
@@ -42,9 +43,9 @@ import { AlertComponent } from '../../../../shared/components/alert/alert.compon
     MatDatepickerModule,
     NgIf,
     AlertComponent,
+    InputRefDirective,
   ],
   templateUrl: './patient-profile-edit.component.html',
-  styleUrl: './patient-profile-edit.component.css',
 })
 export class PatientProfileEditComponent implements OnInit {
   private _patientService = inject(PatientService);

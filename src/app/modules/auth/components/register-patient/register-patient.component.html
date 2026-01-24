@@ -9,6 +9,7 @@
             id="firstname-patient-aurorum"
             matInput
             placeholder="Jan"
+            appInputRef
             [formControl]="controls.firstName" />
           @if (controls.firstName.invalid) {
             <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
@@ -22,6 +23,7 @@
             id="surname-patient-aurorum"
             matInput
             placeholder="Kowalski"
+            appInputRef
             [formControl]="controls.surname" />
           @if (controls.surname.invalid) {
             <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
@@ -53,6 +55,7 @@
             id="pesel-patient-aurorum"
             matInput
             autocomplete="off"
+            appInputRef
             [formControl]="controls.pesel" />
           @if (hasPesel() && controls.pesel.invalid) {
             <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>

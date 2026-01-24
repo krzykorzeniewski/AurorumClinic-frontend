@@ -24,7 +24,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
   ],
   templateUrl: './newsletter-details.component.html',
-  styleUrl: './newsletter-details.component.css',
 })
 export class NewsletterDetailsComponent {
   private _newsletterService = inject(NewsletterService);

@@ -33,7 +33,6 @@ import { MatIcon } from '@angular/material/icon';
     ReactiveFormsModule,
   ],
   templateUrl: './password-recovery-form.component.html',
-  styleUrl: './password-recovery-form.component.css',
 })
 export class PasswordRecoveryFormComponent implements OnInit {
   private _authService = inject(AuthService);

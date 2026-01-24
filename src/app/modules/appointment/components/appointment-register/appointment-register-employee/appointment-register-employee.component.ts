@@ -14,7 +14,6 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [AppointmentRegisterComponent, NgIf],
   templateUrl: './appointment-register-employee.component.html',
-  styleUrl: '../appointment-register.component.css',
 })
 export class AppointmentRegisterEmployeeComponent {
   private _appointmentService = inject(AppointmentService);

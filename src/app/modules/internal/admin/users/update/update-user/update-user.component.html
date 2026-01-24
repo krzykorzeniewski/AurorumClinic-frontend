@@ -11,6 +11,7 @@
           <input
             id="firstname-doctor-aurorum"
             matInput
+            appInputRef
             [value]="controls.firstName"
             [formControl]="controls.firstName" />
           @if (controls.firstName.invalid) {
@@ -24,6 +25,7 @@
           <input
             id="surname-doctor-aurorum"
             matInput
+            appInputRef
             [value]="controls.surname"
             [formControl]="controls.surname" />
           @if (controls.surname.invalid) {
@@ -55,6 +57,7 @@
           <input
             id="pesel-doctor-aurorum"
             matInput
+            appInputRef
             [value]="controls.pesel"
             [formControl]="controls.pesel" />
           @if (hasPesel() && controls.pesel.invalid) {

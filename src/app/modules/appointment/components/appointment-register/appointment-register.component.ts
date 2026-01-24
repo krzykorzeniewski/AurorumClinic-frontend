@@ -42,7 +42,6 @@ import { PatientService } from '../../../core/services/patient.service';
     MatError,
   ],
   templateUrl: './appointment-register.component.html',
-  styleUrl: './appointment-register.component.css',
 })
 export class AppointmentRegisterComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);

@@ -43,4 +43,11 @@ export const AUTH_ROUTES: Routes = [
         (c) => c.TwoFactorLoginComponent,
       ),
   },
+  {
+    path: 'email-resend',
+    loadComponent: () =>
+      import('./components/email-resend/email-resend.component').then(
+        (c) => c.EmailResendComponent,
+      ),
+  },
 ];

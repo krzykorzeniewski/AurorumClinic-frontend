@@ -29,6 +29,7 @@ import {
   FullService,
   UpdateService,
 } from '../../../../core/models/service.model';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-edit-service-dialog',
@@ -46,6 +47,7 @@ import {
     MatLabel,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './edit-service-dialog.component.html',
 })

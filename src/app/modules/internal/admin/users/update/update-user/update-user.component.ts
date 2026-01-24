@@ -29,6 +29,7 @@ import {
 } from '../../../../../core/models/user.model';
 import { UserService } from '../../../../../core/services/user.service';
 import { UserRole } from '../../../../../core/models/auth.model';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-update-user',
@@ -48,6 +49,7 @@ import { UserRole } from '../../../../../core/models/auth.model';
     MatSuffix,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './update-user.component.html',
 })

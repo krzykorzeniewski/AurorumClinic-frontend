@@ -16,7 +16,6 @@ import { GetPatientResponse } from '../../../../core/models/patient.model';
   standalone: true,
   imports: [NgIf, AppointmentRescheduleComponent],
   templateUrl: './appointment-reschedule-employee.component.html',
-  styleUrl: '../appointment-reschedule.component.css',
 })
 export class AppointmentRescheduleEmployeeComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);

@@ -20,6 +20,7 @@ import {
   UpdateOpinionPatient,
 } from '../../../core/models/opinion.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { InputRefDirective } from '../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-edit-opinion-patient',
@@ -39,9 +40,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NgIf,
     ReactiveFormsModule,
     RouterLink,
+    InputRefDirective,
   ],
   templateUrl: './edit-opinion.component.html',
-  styleUrl: './edit-opinion.component.css',
 })
 export class EditOpinionComponent {
   private _opinionService = inject(OpinionService);

@@ -32,7 +32,6 @@ import { AuthService } from '../../../core/services/auth.service';
     FormsModule,
   ],
   templateUrl: './password-recovery.component.html',
-  styleUrl: './password-recovery.component.css',
 })
 export class PasswordRecoveryComponent {
   private _authService = inject(AuthService);

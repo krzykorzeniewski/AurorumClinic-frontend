@@ -26,6 +26,7 @@ import { FormsService } from '../../../../core/services/forms.service';
 import { AbsenceService } from '../../../../core/services/absence.service';
 import { DoctorCreateAbsenceByEmployee } from '../../../../core/models/absences.model';
 import { toLocalISOString } from '../../../../shared/methods/dateTransform';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 @Component({
   selector: 'app-create-doctor-absence-dialog',
   standalone: true,
@@ -45,6 +46,7 @@ import { toLocalISOString } from '../../../../shared/methods/dateTransform';
     MatSuffix,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './create-doctor-absence-dialog.component.html',
   styleUrl: './create-doctor-absence-dialog.component.css',

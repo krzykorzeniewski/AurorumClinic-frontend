@@ -8,6 +8,7 @@
           <input
             id="firstname-patient-aurorum"
             matInput
+            appInputRef
             [value]="controls.firstName"
             [formControl]="controls.firstName" />
           @if (controls.firstName.invalid) {
@@ -21,6 +22,7 @@
           <input
             id="surname-patient-aurorum"
             matInput
+            appInputRef
             [value]="controls.surname"
             [formControl]="controls.surname" />
           @if (controls.surname.invalid) {
@@ -52,6 +54,7 @@
           <input
             id="pesel-patient-aurorum"
             matInput
+            appInputRef
             [value]="controls.pesel"
             [formControl]="controls.pesel" />
           @if (hasPesel() && controls.pesel.invalid) {

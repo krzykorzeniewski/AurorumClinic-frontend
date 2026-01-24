@@ -15,6 +15,7 @@ import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
 import { UserService } from '../../../../core/services/user.service';
 import { environment } from '../../../../../../environments/environment';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-profile-edit',
@@ -31,9 +32,9 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     MatCardContent,
     CdkTextareaAutosize,
     MatError,
+    InputRefDirective,
   ],
   templateUrl: './profile-edit.component.html',
-  styleUrl: './profile-edit.component.css',
 })
 export class ProfileEditComponent {
   private _userService = inject(UserService);

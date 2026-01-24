@@ -32,6 +32,7 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 import { Specialization } from '../../../../../core/models/specialization.model';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-update-doctor',
@@ -53,6 +54,7 @@ import { Specialization } from '../../../../../core/models/specialization.model'
     ReactiveFormsModule,
     MatOption,
     MatSelect,
+    InputRefDirective,
   ],
   templateUrl: './update-doctor.component.html',
 })

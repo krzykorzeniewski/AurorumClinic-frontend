@@ -20,6 +20,7 @@ import { AuthService } from '../../../../../core/services/auth.service';
 import { FormsService } from '../../../../../core/services/forms.service';
 import { Router } from '@angular/router';
 import { EmployeeRegisterRequest } from '../../../../../core/models/auth.model';
+import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-register-employee',
@@ -38,6 +39,7 @@ import { EmployeeRegisterRequest } from '../../../../../core/models/auth.model';
     MatSuffix,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './register-employee.component.html',
 })

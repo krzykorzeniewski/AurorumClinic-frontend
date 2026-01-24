@@ -25,6 +25,7 @@ import {
   MatLabel,
 } from '@angular/material/input';
 import { NgIf } from '@angular/common';
+import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
 
 @Component({
   selector: 'app-edit-specialization-dialog',
@@ -41,6 +42,7 @@ import { NgIf } from '@angular/common';
     MatLabel,
     NgIf,
     ReactiveFormsModule,
+    InputRefDirective,
   ],
   templateUrl: './edit-specialization-dialog.component.html',
 })

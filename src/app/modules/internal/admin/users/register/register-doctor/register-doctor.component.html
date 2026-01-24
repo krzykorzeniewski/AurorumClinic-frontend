@@ -9,6 +9,7 @@
             id="firstname-doctor-aurorum"
             matInput
             placeholder="Jan"
+            appInputRef
             [formControl]="controls.firstName" />
           @if (controls.firstName.invalid) {
             <mat-error>{{ getErrorMessage(controls.firstName) }}</mat-error>
@@ -22,6 +23,7 @@
             id="surname-doctor-aurorum"
             matInput
             placeholder="Kowalski"
+            appInputRef
             [formControl]="controls.surname" />
           @if (controls.surname.invalid) {
             <mat-error>{{ getErrorMessage(controls.surname) }}</mat-error>
@@ -53,6 +55,7 @@
             id="pesel-doctor-aurorum"
             matInput
             autocomplete="off"
+            appInputRef
             [formControl]="controls.pesel" />
           @if (hasPesel() && controls.pesel.invalid) {
             <mat-error>{{ getErrorMessage(controls.pesel) }}</mat-error>
@@ -81,6 +84,7 @@
             cdkTextareaAutosize
             cdkAutosizeMinRows="6"
             cdkAutosizeMaxRows="10"
+            appInputRef
             [formControl]="controls.description"></textarea>
           @if (controls.description.invalid) {
             <mat-error>{{ getErrorMessage(controls.description) }}</mat-error>
@@ -93,6 +97,7 @@
           <input
             id="education-doctor-aurorum"
             matInput
+            appInputRef
             [formControl]="controls.education" />
           @if (controls.education.invalid) {
             <mat-error>{{ getErrorMessage(controls.education) }}</mat-error>
@@ -105,6 +110,7 @@
           <input
             id="experience-doctor-aurorum"
             matInput
+            appInputRef
             [formControl]="controls.experience" />
           @if (controls.experience.invalid) {
             <mat-error>{{ getErrorMessage(controls.experience) }}</mat-error>

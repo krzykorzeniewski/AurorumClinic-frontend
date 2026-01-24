@@ -13,7 +13,6 @@ import { AppointmentRescheduleComponent } from '../appointment-reschedule.compon
   standalone: true,
   imports: [AppointmentRescheduleComponent, NgIf],
   templateUrl: './appointment-reschedule-patient.component.html',
-  styleUrl: '../appointment-reschedule.component.css',
 })
 export class AppointmentReschedulePatientComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);

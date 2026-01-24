@@ -12,7 +12,6 @@ import { forkJoin } from 'rxjs';
   standalone: true,
   imports: [DoctorAppointmentCardComponent, NgForOf],
   templateUrl: './search-result.component.html',
-  styleUrl: './search-result.component.css',
 })
 export class SearchResultComponent implements OnInit {
   private _appointmentService = inject(AppointmentService);

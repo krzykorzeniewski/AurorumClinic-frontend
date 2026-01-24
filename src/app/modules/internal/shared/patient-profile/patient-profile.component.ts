@@ -56,7 +56,6 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatOption,
   ],
   templateUrl: './patient-profile.component.html',
-  styleUrl: './patient-profile.component.css',
 })
 export class PatientProfileComponent
   implements OnInit, AfterViewInit, OnDestroy
