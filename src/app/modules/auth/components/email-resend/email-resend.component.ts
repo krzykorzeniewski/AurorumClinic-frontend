@@ -71,8 +71,8 @@ export class EmailResendComponent {
         this.message.set('Wysłano ponownie email weryfikacyjny');
         this._cooldownService.start('email_verify_resend', 120);
       },
-      error: () => {
-        void this._router.navigate(['/auth/login']);
+      error: (err) => {
+        this.message.set(err.message);
       },
     });
   }
