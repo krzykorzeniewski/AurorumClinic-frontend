@@ -313,6 +313,10 @@ export class AuthService {
         errorMsg = 'Podany kod wygasł. Spróbuj ponownie.';
       } else if (errorData.phoneNumber === 'Phone number is already taken') {
         errorMsg = 'Ten numer jest juz zajęty.';
+      } else if (errorData.email === 'already in use') {
+        errorMsg = 'Ten email jest juz zajęty.';
+      } else if (errorData.phoneNumber === 'already in use') {
+        errorMsg = 'Ten numer jest juz zajęty.';
       } else if (err.error.data.password) {
         errorMsg =
           'Hasło musi zawierać przynajmniej 10 znaków, zawierać 1 wielką literę, 1 małą literę oraz 1 cyfrę';
