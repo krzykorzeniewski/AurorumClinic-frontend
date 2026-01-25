@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Location, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsService } from '../../../../core/services/forms.service';
@@ -16,6 +16,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { environment } from '../../../../../../environments/environment';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
+import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 
 @Component({
   selector: 'app-profile-edit',
@@ -33,6 +34,7 @@ import { InputRefDirective } from '../../../../shared/directives/input-ref.direc
     CdkTextareaAutosize,
     MatError,
     InputRefDirective,
+    AlertComponent,
   ],
   templateUrl: './profile-edit.component.html',
 })
@@ -47,6 +49,7 @@ export class ProfileEditComponent {
   );
   imagePreview: string | null = null;
   selectedImage: File | null = null;
+  errorMessage = signal('');
 
   constructor() {
     const navigation = this._router.getCurrentNavigation();
@@ -118,6 +121,7 @@ export class ProfileEditComponent {
     if (this.profileForm.invalid) {
       return;
     }
+    this.errorMessage.set('');
 
     const formValue = this.profileForm.getRawValue();
 
@@ -134,6 +138,9 @@ export class ProfileEditComponent {
           void this._router.navigate(['/doctor/profile'], {
             state: { doctorId: response.data.doctorId },
           });
+        },
+        error: (err) => {
+          this.errorMessage.set(err.message);
         },
       });
   }

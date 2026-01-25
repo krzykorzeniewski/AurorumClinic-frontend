@@ -275,7 +275,13 @@ export class UserService {
       )
       .pipe(
         catchError((err) => {
-          return throwError(() => new Error(this.getErrorMessage(err)));
+          if (err.status === 0) {
+            return throwError(
+              () => new Error('Podane zdjęcie jest za duże, wybierz mniejsze.'),
+            );
+          } else {
+            return throwError(() => new Error(this.getErrorMessage(err)));
+          }
         }),
       );
   }
