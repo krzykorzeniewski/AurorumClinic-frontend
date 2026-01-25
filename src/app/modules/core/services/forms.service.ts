@@ -201,8 +201,8 @@ export class FormsService {
           ],
           nonNullable: true,
         }),
-        pwzNumber: new FormControl(null, {
-          validators: [Validators.maxLength(50), whitespaceValidator()],
+        pwzNumber: new FormControl<string>('', {
+          validators: [Validators.maxLength(50)],
           nonNullable: false,
         }),
         birthdate: new FormControl<Date | null>(null, {
