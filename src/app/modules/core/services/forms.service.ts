@@ -430,7 +430,7 @@ export class FormsService {
             nonNullable: true,
           },
         ),
-        pwzNumber: new FormControl(null, {
+        pwzNumber: new FormControl<string>(userData ? userData.pwzNumber : '', {
           validators: [Validators.maxLength(50)],
           nonNullable: false,
         }),
