@@ -1,6 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { catchError, forkJoin, map, switchMap, throwError } from 'rxjs';
 import { ApiResponse, PageableResponse } from '../models/api-response.model';
 import {
@@ -164,13 +168,8 @@ export class DoctorService {
         withCredentials: true,
       })
       .pipe(
-        catchError(() => {
-          return throwError(
-            () =>
-              new Error(
-                'Wystąpił błąd w trakcie aktualizowania danych. Spróbuj ponownie później.',
-              ),
-          );
+        catchError((err) => {
+          return throwError(() => new Error(this.getErrorMessage(err)));
         }),
       );
   }
@@ -351,5 +350,33 @@ export class DoctorService {
           );
         }),
       );
+  }
+
+  private getErrorMessage(err: HttpErrorResponse) {
+    let errorMsg: string;
+
+    if (err.status === 0 || (err.status >= 500 && err.status < 600)) {
+      errorMsg = 'Wystąpił błąd. Proszę spróbować później';
+    } else if (err.error?.status === 'fail' && err.status === 429) {
+      errorMsg =
+        'Hola hola, zwolnij trochę z wysyłaniem danych. Odsapnij i spróbuj ponownie za chwilę.';
+    } else if (err.error?.status === 'fail' && err.error?.data) {
+      const errorData = err.error.data;
+
+      if (errorData.phoneNumber === 'Phone number is already taken') {
+        errorMsg = 'Ten numer jest już zajęty.';
+      } else if (errorData.email === 'already in use') {
+        errorMsg = 'Ten email jest już zajęty.';
+      } else if (errorData.phoneNumber === 'already in use') {
+        errorMsg = 'Ten numer jest już zajęty.';
+      } else if (errorData.pwzNumber === 'already in use') {
+        errorMsg = 'Ten numer pwz jest już zajęty.';
+      } else {
+        errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
+      }
+    } else {
+      errorMsg = 'Wystąpił błąd. Spróbuj ponownie później';
+    }
+    return errorMsg;
   }
 }
