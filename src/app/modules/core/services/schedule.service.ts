@@ -293,6 +293,12 @@ export class ScheduleService {
       } else if (errorData.startedAt === 'Start date must be before end date') {
         errorMsg = 'Godzina rozpoczęcia musi być wcześniej niż zakończenia..';
       } else if (
+        errorData['startedAt,finishedAt'] ===
+        'Schedule has to last for at least the minimum service duration'
+      ) {
+        errorMsg =
+          'Grafik musi być w przedziale mieszczącym się w minimalnym czasie usługi.';
+      } else if (
         errorData.absence === 'Schedule overlaps with already existing absence'
       ) {
         errorMsg = 'Ten grafik koliduje w planie z nieobecnością.';
