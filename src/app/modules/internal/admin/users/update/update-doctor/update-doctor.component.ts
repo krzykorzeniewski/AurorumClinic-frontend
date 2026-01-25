@@ -33,6 +33,7 @@ import { MatSelect } from '@angular/material/select';
 import { EMPTY, expand, map, scan, takeLast } from 'rxjs';
 import { Specialization } from '../../../../../core/models/specialization.model';
 import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
+import { whitespaceValidator } from '../../../../../shared/validators/whitespace.validator';
 
 @Component({
   selector: 'app-update-doctor',
@@ -168,10 +169,12 @@ export class UpdateDoctorComponent {
         Validators.minLength(11),
         Validators.maxLength(11),
         Validators.required,
+        whitespaceValidator(),
       ]);
     }
 
     peselControl.updateValueAndValidity();
+    this.doctorForm.controls.birthdate.markAsTouched();
   }
 
   goBack() {

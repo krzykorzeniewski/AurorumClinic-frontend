@@ -27,6 +27,7 @@ import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { InputRefDirective } from '../../../../shared/directives/input-ref.directive';
+import { whitespaceValidator } from '../../../../shared/validators/whitespace.validator';
 
 @Component({
   selector: 'app-patient-profile-edit',
@@ -135,10 +136,12 @@ export class PatientProfileEditComponent implements OnInit {
         Validators.minLength(11),
         Validators.maxLength(11),
         Validators.required,
+        whitespaceValidator(),
       ]);
     }
 
     peselControl.updateValueAndValidity();
+    this.patientForm.controls.birthdate.markAsTouched();
   }
 
   goBack() {

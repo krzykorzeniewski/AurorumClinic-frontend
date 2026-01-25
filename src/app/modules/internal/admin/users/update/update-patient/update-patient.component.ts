@@ -29,6 +29,7 @@ import {
 } from '../../../../../core/models/patient.model';
 import { PatientService } from '../../../../../core/services/patient.service';
 import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
+import { whitespaceValidator } from '../../../../../shared/validators/whitespace.validator';
 
 @Component({
   selector: 'app-update-patient',
@@ -132,10 +133,12 @@ export class UpdatePatientComponent {
         Validators.minLength(11),
         Validators.maxLength(11),
         Validators.required,
+        whitespaceValidator(),
       ]);
     }
 
     peselControl.updateValueAndValidity();
+    this.patientForm.controls.birthdate.markAsTouched();
   }
 
   goBack() {

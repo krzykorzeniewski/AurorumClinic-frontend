@@ -30,6 +30,7 @@ import {
 import { UserService } from '../../../../../core/services/user.service';
 import { UserRole } from '../../../../../core/models/auth.model';
 import { InputRefDirective } from '../../../../../shared/directives/input-ref.directive';
+import { whitespaceValidator } from '../../../../../shared/validators/whitespace.validator';
 
 @Component({
   selector: 'app-update-user',
@@ -136,10 +137,12 @@ export class UpdateUserComponent {
         Validators.minLength(11),
         Validators.maxLength(11),
         Validators.required,
+        whitespaceValidator(),
       ]);
     }
 
     peselControl.updateValueAndValidity();
+    this.userForm.controls.birthdate.markAsTouched();
   }
 
   goBack() {
