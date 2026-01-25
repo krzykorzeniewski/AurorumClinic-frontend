@@ -133,6 +133,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.accordion.closeAll();
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });
@@ -163,6 +164,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.accordion.closeAll();
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });
@@ -193,6 +195,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.accordion.closeAll();
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });
@@ -218,6 +221,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.accordion.closeAll();
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });
@@ -235,6 +239,9 @@ export class ProfileComponent implements OnInit {
         this.variant.set('success');
         this.infoMessage.set(result.message);
         this.accordion.closeAll();
+      } else {
+        this.variant.set('warning');
+        this.infoMessage.set(result.message);
       }
     });
   }
@@ -251,6 +258,9 @@ export class ProfileComponent implements OnInit {
         this.variant.set('success');
         this.infoMessage.set(result.message);
         this.accordion.closeAll();
+      } else {
+        this.variant.set('warning');
+        this.infoMessage.set(result.message);
       }
     });
   }
@@ -267,6 +277,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.accordion.closeAll();
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });
@@ -285,6 +296,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.userResponse = null;
+        this.variant.set('warning');
         this.infoMessage.set(err.message);
       },
     });

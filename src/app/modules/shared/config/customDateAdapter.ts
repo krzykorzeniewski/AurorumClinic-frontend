@@ -3,18 +3,17 @@ import { NativeDateAdapter } from '@angular/material/core';
 
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
-  override parse(value: string): Date | null {
-    if (!value) return null;
+  override parse(value: string, parseFormat: string): Date | null {
+    if (parseFormat === 'HH:mm') {
+      const [hours, minutes] = value.split(':').map(Number);
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    }
 
-    const parts = value.split('.');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1; // miesiące od 0
-      const year = parseInt(parts[2], 10);
-
-      if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-        return new Date(year, month, day);
-      }
+    if (parseFormat === 'DD.MM.YYYY') {
+      const [day, month, year] = value.split('.').map(Number);
+      return new Date(year, month - 1, day);
     }
 
     return super.parse(value);
@@ -27,6 +26,13 @@ export class CustomDateAdapter extends NativeDateAdapter {
       const year = date.getFullYear();
       return `${day}.${month}.${year}`;
     }
+
+    if (displayFormat === 'HH:mm') {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+
     return super.format(date, displayFormat);
   }
 }

@@ -57,7 +57,12 @@ export class AppointmentRegisterEmployeeComponent {
         .registerPatientForAppointmentByEmployee(patientAppointment)
         .subscribe({
           next: () => {
-            void this._router.navigate(['/internal/patients']);
+            void this._router.navigate(['/internal/dashboard'], {
+              state: {
+                message: 'Pomyślnie utworzono wizytę dla pacjenta.',
+                status: 'success',
+              },
+            });
           },
         });
     }
