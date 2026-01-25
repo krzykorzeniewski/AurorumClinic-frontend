@@ -30,6 +30,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ScheduleAppointmentsListComponent } from './schedule-appointments-list/schedule-appointments-list.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../../core/services/auth.service';
+import { filter, forkJoin, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-schedule-details',
@@ -56,6 +58,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ScheduleDetailsComponent {
   private _scheduleService = inject(ScheduleService);
+  private _authService = inject(AuthService);
   private _snackBar = inject(MatSnackBar);
   private _doctorService = inject(DoctorService);
   private _formService = inject(FormsService);
@@ -81,27 +84,39 @@ export class ScheduleDetailsComponent {
       return;
     }
 
-    this._scheduleService.getScheduleById(state.scheduleId).subscribe({
-      next: (res) => {
-        this.scheduleForm.patchValue({
-          services: res.services.map((s) => s.id),
-          date: new Date(res.startedAt.split('T')[0]),
-          startedAt: new Date(res.startedAt),
-          finishedAt: new Date(res.finishedAt),
-        });
-        this.schedule.set(res);
-        this.scheduleForm.disable();
-      },
-      error: () => {
-        void this._router.navigate(['/internal/my-schedules']);
-      },
-    });
+    this._authService.user$
+      .pipe(
+        take(1),
+        filter((user) => !!user),
+        switchMap((user) =>
+          forkJoin({
+            schedule: this._scheduleService.getScheduleById(state.scheduleId),
+            doctor: this._doctorService.getDoctorById(user.id),
+            specializations:
+              this._doctorService.getSpecializationsWithServices(),
+          }),
+        ),
+      )
+      .subscribe({
+        next: ({ schedule, doctor, specializations }) => {
+          this.scheduleForm.patchValue({
+            services: schedule.services.map((s) => s.id),
+            date: new Date(schedule.startedAt.split('T')[0]),
+            startedAt: new Date(schedule.startedAt),
+            finishedAt: new Date(schedule.finishedAt),
+          });
+          this.schedule.set(schedule);
+          this.scheduleForm.disable();
 
-    this._doctorService.getSpecializationsWithServices().subscribe({
-      next: (res) => {
-        this.specializations = res;
-      },
-    });
+          const doctorSpecIds = doctor.specializations.map((s) => s.id);
+          this.specializations = specializations.filter((spec) =>
+            doctorSpecIds.includes(spec.id),
+          );
+        },
+        error: () => {
+          void this._router.navigate(['/internal/my-schedules']);
+        },
+      });
   }
 
   goBack() {

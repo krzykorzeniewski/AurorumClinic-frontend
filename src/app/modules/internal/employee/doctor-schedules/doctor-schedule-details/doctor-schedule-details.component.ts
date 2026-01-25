@@ -32,6 +32,7 @@ import {
   MatTimepickerToggle,
 } from '@angular/material/timepicker';
 import { DoctorScheduleAppointmentsListComponent } from './doctor-schedule-appointments-list/doctor-schedule-appointments-list.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-schedule-details',
@@ -85,25 +86,27 @@ export class DoctorScheduleDetailsComponent {
       return;
     }
 
-    this._scheduleService.getDoctorScheduleById(state.scheduleId).subscribe({
-      next: (res) => {
+    forkJoin({
+      schedule: this._scheduleService.getDoctorScheduleById(state.scheduleId),
+      specializations: this._doctorService.getSpecializationsWithServices(),
+    }).subscribe({
+      next: ({ schedule, specializations }) => {
         this.scheduleForm.patchValue({
-          services: res.services.map((s) => s.id),
-          date: new Date(res.startedAt.split('T')[0]),
-          startedAt: new Date(res.startedAt),
-          finishedAt: new Date(res.finishedAt),
+          services: schedule.services.map((s) => s.id),
+          date: new Date(schedule.startedAt.split('T')[0]),
+          startedAt: new Date(schedule.startedAt),
+          finishedAt: new Date(schedule.finishedAt),
         });
-        this.schedule.set(res);
+        this.schedule.set(schedule);
         this.scheduleForm.disable();
+
+        const doctorSpecIds = schedule.doctor.specializations.map((s) => s.id);
+        this.specializations = specializations.filter((spec) =>
+          doctorSpecIds.includes(spec.id),
+        );
       },
       error: () => {
         void this._router.navigate(['/internal/schedules']);
-      },
-    });
-
-    this._doctorService.getSpecializationsWithServices().subscribe({
-      next: (res) => {
-        this.specializations = res;
       },
     });
   }
