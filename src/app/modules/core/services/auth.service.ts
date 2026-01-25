@@ -315,6 +315,8 @@ export class AuthService {
         errorMsg = 'Ten numer jest już zajęty.';
       } else if (errorData.email === 'already in use') {
         errorMsg = 'Ten email jest już zajęty.';
+      } else if (errorData.pwzNumber === 'already in use') {
+        errorMsg = 'Ten numer pwz jest już zajęty.';
       } else if (errorData.phoneNumber === 'already in use') {
         errorMsg = 'Ten numer jest już zajęty.';
       } else if (err.error.data.password) {
