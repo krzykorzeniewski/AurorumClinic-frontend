@@ -99,7 +99,8 @@ export class AppointmentService {
     const params = new HttpParams()
       .set('size', size)
       .set('page', page)
-      .set('date', toLocalISOString(date).split('T')[0]);
+      .set('date', toLocalISOString(date).split('T')[0])
+      .set('sort', 'started_at');
 
     return this._http
       .get<ApiResponse<PageableResponse<GetDailyAppointmentInfo>>>(
