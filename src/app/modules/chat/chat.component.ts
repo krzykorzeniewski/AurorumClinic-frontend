@@ -44,8 +44,16 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
       chat: Chat;
     };
     if (state?.chat) {
-      this._chatService.activeChat.set(state.chat);
-      this._chatService.chats.update((chat) => [...chat, state.chat]);
+      const existingChat = this._chatService
+        .chats()
+        .find((c) => c.id === state.chat.id);
+
+      if (existingChat) {
+        this._chatService.activeChat.set(existingChat);
+      } else {
+        this._chatService.chats.update((chats) => [...chats, state.chat]);
+        this._chatService.activeChat.set(state.chat);
+      }
     }
     effect(() => {
       this.messages();
@@ -54,7 +62,6 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
       }
     });
     this.checkScreenSize();
-    this._chatService.getAllChats();
     window.addEventListener('resize', () => this.onResize());
   }
 
